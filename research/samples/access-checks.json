@@ -1,0 +1,81 @@
+[
+  {
+    "name": "dubai-power-monthly.json",
+    "url": "https://power.larc.nasa.gov/api/temporal/monthly/point?parameters=T2M,RH2M&community=AG&longitude=55.2708&latitude=25.2048&start=2001&end=2025&format=JSON",
+    "status": 200,
+    "bytes": 10247,
+    "type": "application/json",
+    "shape": 7,
+    "sources": {
+      "title": "NASA/POWER Source Native Resolution Monthly and Annual",
+      "api": {
+        "version": "v2.10.0",
+        "name": "POWER Monthly and Annual API"
+      },
+      "sources": [
+        "MERRA2",
+        "POWER"
+      ],
+      "fill_value": -999.0,
+      "time_standard": "LST",
+      "start": "20010101",
+      "end": "20251231"
+    },
+    "parameters": {
+      "RH2M": {
+        "units": "%",
+        "longname": "Relative Humidity at 2 Meters"
+      },
+      "T2M": {
+        "units": "C",
+        "longname": "Temperature at 2 Meters"
+      }
+    },
+    "counts": {
+      "RH2M": 325,
+      "T2M": 325
+    }
+  },
+  {
+    "name": "same-particle-results.pdf",
+    "url": "https://ntrs.nasa.gov/api/citations/20130000422/downloads/20130000422.pdf",
+    "status": 200,
+    "bytes": 757824,
+    "type": "application/pdf",
+    "valid_signature": true
+  },
+  {
+    "name": "smoke-detector-reference.pdf",
+    "url": "https://ntrs.nasa.gov/api/citations/20205003817/downloads/ICES_Final_340.pdf",
+    "status": 200,
+    "bytes": 2115889,
+    "type": "application/pdf",
+    "valid_signature": true
+  },
+  {
+    "name": "portugal-modis-2023.csv",
+    "url": "https://firms.modaps.eosdis.nasa.gov/data/country/modis/2023/modis_2023_Portugal.csv",
+    "status": 200,
+    "bytes": 84920,
+    "type": "text/csv",
+    "header": "latitude,longitude,brightness,scan,track,acq_date,acq_time,satellite,instrument,confidence,version,bright_t31,frp,daynight,type",
+    "rows": 1062
+  },
+  {
+    "name": "portugal-viirs-2023.csv",
+    "url": "https://firms.modaps.eosdis.nasa.gov/data/country/viirs-snpp/2023/viirs-snpp_2023_Portugal.csv",
+    "status": 200,
+    "bytes": 231545,
+    "type": "text/csv",
+    "header": "latitude,longitude,bright_ti4,scan,track,acq_date,acq_time,satellite,instrument,confidence,version,bright_ti5,frp,daynight,type",
+    "rows": 2953
+  },
+  {
+    "name": "donki-sep-2024-may.json",
+    "url": "https://ccmc.gsfc.nasa.gov/DONKI-API/get/SEP?startDate=2024-05-01&endDate=2024-05-31",
+    "status": 200,
+    "bytes": 9415,
+    "type": "application/json",
+    "shape": 14
+  }
+]

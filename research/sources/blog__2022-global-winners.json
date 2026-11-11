@@ -1,0 +1,123 @@
+{
+  "url": "https://www.spaceappschallenge.org/blog/2022-global-winners/",
+  "status": 200,
+  "text": "Third-Party Link\nYou are being directed to a Third Party site. NASA is not responsible for how third-party sites use any information provided. Users are encouraged to review the privacy policy and/or terms and conditions of the Third Party sites to fully understand what information is collected and how it is used.\nJanuary\n\t\t\t\t31,\n\t\t\t\t2023\n2022 Global Winners\nMeet the 2022 NASA Space Apps Challenge Global Winners\nSpace Apps is excited to introduce the\n2022 Global Winners\n! In celebration of this year's theme, \"Make Space,\" each team creatively used open NASA data to develop projects available to the global community that solve real problems on Earth and space. Their projects include machine-learning pipelines, web applications, interactive games, and more! Keep reading to explore what makes each of this year's winning projects worthy of recognition.\nWant to learn more about the Global Winners? Stay tuned for the 2022 Global Winners video to hear about their NASA Space Apps experience and the impact their projects are having.\nThe Ten Winning Projects\n(pictured left to right above)\nTeam\nWhat's New?\n(Taipei, Taiwan)\nWinning the Best Use of Science award, What’s New? competed in the\nSave the Earth From Another Carrington Event!\nchallenge. Members of this team are currently working on their graduate theses in machine-based learning and worked with the artificial intelligence center at National Taiwan University. This team’s project proposed a machine-learning pipeline to predict the probability of a solar storm event.\nTeam\nStarflock\n(Cleveland, Ohio, USA)\nTeam Starflock, winner of the Best Use of Data award, participated in the\nTake Flight: Making the Most of NASA’s Airborne Data\nchallenge. The team looked at whether the chemistry of wildfire smoke differs based on its location. The goal was to better predict wildfires and the damage they cause and improve future fire prevention efforts.\nTeam\ntAMing particles\n(Vilnius, Lithuania)\nThe winning team of the Best Use of Technology award, tAMing particles, includes 3D-printing enthusiasts who work in the space industry designing CubeSats (very small satellites built from 10X10X10 cm units). Competing in the\nOutfitting a Mars Habitat: A 3D Print Challenge\n, they developed a set of interchangeable parts that would enable assembly of the needed systems on Mars. The team considered a wide variety of factors when developing their solution, such as waste removal systems, crew morale, and mechanical tools lost during landing.\nTeam\nSelene\n(Jamshedpur, India)\nThe winner of the Galactic Impact award, Selene, competed in the\nMake a Moonquake Map!\nchallenge. Team members created their first 3D project–a responsive web application that plots an animated seismic wave on a 3D globe of the Moon, based on a date provided by users. When a user inputs a day and year, the application fetches and displays details about moonquakes that occurred on that date.\nTeam\nMars 3D Home\n(Mendoza, Argentina)\nAwarded the Best Mission Concept, Mars 3D Home team developed a solution for the\nOutfitting a Mars Habitat: A 3D Print Challenge\n. The team members, who reside in different cities in Argentina, analyzed the Martian environment to determine the available resources and the basic requirements necessary for four astronauts to survive one year on Mars. Once their analysis was complete, the team designed the interior of the Martian habitat and several multifunctional tools and gadgets that would enable the astronauts to live comfortably.\nTeam\nTeam Diamonds\n(Cumilla, Bangladesh)\nReceiving the Most Inspirational Award, Team Diamonds competed in the\nTwinkle, Twinkle, Little Star\nchallenge. To address this challenge, the team built an interactive game called Diamond in the Sky that helps kids ages 10-12 to learn about stellar variability and the dynamic nature of the night sky. More specifically, the game aims to help kids recognize a star’s patterns and learn about its color and brightness.\nTeam\nMIMBI\n(Asunción, Paraguay)\nMIMBI, winner of the Best Storytelling Award, utilized literature, visuals, music, and public art to tackle the\nTurning STEM into STEAM\nchallenge. MIMBI utilizes QR codes to lead people to a web-based application. Once at the application, users participate in an interactive experience incorporating aspects of Paraguayan culture like woven texture, rhymes, music, and painting styles– all while learning about the first Paraguayan satellite, a huge milestone for their country.\nTeam\nStandard NCTU CS Student\n(Taoyuan, Taiwan)\nThe Standard National Chiao Tung University Computer Science Student team won the Global Connection Award for their project that addressed the\nTrack the Space Station in 3D\nchallenge by providing an open-source web application to track the International Space Station (ISS).\nThe main goal of their project is to provide an efficient yet vivid depiction of the orbiting ISS to enable users around the world to learn and even immerse themselves in the beauty of space!\nTeam\nEarth, Wind & Flare\n(Boston, Massachusetts, USA)\nTeam Earth, Wind, & Flare, winner of the Art & Technology Award, developed a solution to address the\nCreative Data Display with the Parker Solar Probe\nchallenge. Earth, Wind, & Flare built an Internet of Things device that explains space weather and its impact on Earth in an interactive and creative way. The device’s key elements include an LED matrix board to depict space weather, a variety of international space data sources, and a data display that incorporates visual and acoustic effects.\nTeam\nBrute Force\n(Nicosia, Cyprus)\nBrute Force, winner of the Local Impact Award, competed in the\nMake a Moonquake Map!\nChallenge. The team monitored the internal pulses of the Moon to understand its internal structure. Specifically, they analyzed data from the Apollo Passive Seismic Experiment and plotted seismic events. Then, they created a model of the Moon that included Passive Seismic Experiment stations and ripples indicating shallow moonquakes.\nCongratulations to these 10 Global Winners! It is remarkable to see these ideas come to life and be developed into innovative and impactful projects that may help solve real-world challenges on Earth and in space. To continue in the celebratory spirit, we look forward to inviting these Global Winners to a future Winners Trip!\nStay up to date on all things #SpaceApps by following us on social media!\n#SpaceApps\nTwitter:\n@SpaceApps\nInstagram:\n@nasa_spaceapps\nFacebook:\n@spaceappschallenge\nYouTube:\n@NASASpaceAppsChallenge\nConnect with #SpaceApps\nConnect with the #SpaceApps community via social media!\nspaceappschallenge\nspaceapps\n@nasa_spaceapps\nnasaspaceappschallenge",
+  "links": [
+    {
+      "text": "2022 Global Winners",
+      "url": "https://2022.spaceappschallenge.org/awards/"
+    },
+    {
+      "text": "What's New?",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/carrington-event/teams/whats-new/project"
+    },
+    {
+      "text": "Save the Earth From Another Carrington Event!",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/carrington-event/details"
+    },
+    {
+      "text": "Starflock",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/take-flight/teams/starflock-3/project"
+    },
+    {
+      "text": "Take Flight: Making the Most of NASA’s Airborne Data",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/take-flight/details"
+    },
+    {
+      "text": "tAMing particles",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/mars-habitat/teams/taming-particles/project"
+    },
+    {
+      "text": "Outfitting a Mars Habitat: A 3D Print Challenge",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/mars-habitat/details"
+    },
+    {
+      "text": "Selene",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/moonquake-map/teams/selene-5/project"
+    },
+    {
+      "text": "Make a Moonquake Map!",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/moonquake-map/details"
+    },
+    {
+      "text": "Mars 3D Home",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/mars-habitat/teams/mars-3d-home/project"
+    },
+    {
+      "text": "Outfitting a Mars Habitat: A 3D Print Challenge",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/mars-habitat/details"
+    },
+    {
+      "text": "Team Diamonds",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/twinkle-twinkle-little-star/teams/team-diamonds/project"
+    },
+    {
+      "text": "Twinkle, Twinkle, Little Star",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/twinkle-twinkle-little-star/details"
+    },
+    {
+      "text": "MIMBI",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/steam/teams/mimbi/project"
+    },
+    {
+      "text": "Turning STEM into STEAM",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/steam/details"
+    },
+    {
+      "text": "Standard NCTU CS Student",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/track-the-iss/teams/standard-nctu-cs-student/project"
+    },
+    {
+      "text": "Track the Space Station in 3D",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/track-the-iss/details"
+    },
+    {
+      "text": "Earth, Wind & Flare",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/creative-data-display/teams/earth-wind-flare/project"
+    },
+    {
+      "text": "Creative Data Display with the Parker Solar Probe",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/creative-data-display/details"
+    },
+    {
+      "text": "Brute Force",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/moonquake-map/teams/brute-force-5/project"
+    },
+    {
+      "text": "Make a Moonquake Map!",
+      "url": "https://2022.spaceappschallenge.org/challenges/2022-challenges/moonquake-map/details"
+    },
+    {
+      "text": "@SpaceApps",
+      "url": "https://twitter.com/spaceapps?lang=en"
+    },
+    {
+      "text": "@nasa_spaceapps",
+      "url": "https://www.instagram.com/nasa_spaceapps/"
+    },
+    {
+      "text": "@spaceappschallenge",
+      "url": "https://www.facebook.com/spaceappschallenge/"
+    },
+    {
+      "text": "@NASASpaceAppsChallenge",
+      "url": "https://www.youtube.com/c/nasaspaceappschallenge"
+    },
+    {
+      "text": "spaceappschallenge",
+      "url": "https://www.facebook.com/spaceappschallenge"
+    },
+    {
+      "text": "spaceapps",
+      "url": "https://www.twitter.com/spaceapps"
+    },
+    {
+      "text": "@nasa_spaceapps",
+      "url": "https://www.instagram.com/nasa_spaceapps"
+    },
+    {
+      "text": "nasaspaceappschallenge",
+      "url": "https://www.youtube.com/nasaspaceappschallenge"
+    }
+  ]
+}

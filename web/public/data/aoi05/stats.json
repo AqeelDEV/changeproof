@@ -1,0 +1,203 @@
+{
+  "schema_version": "1.0",
+  "area_id": "aoi05",
+  "name": "AOI05 Chinhangane, Mozambique",
+  "generated_utc": "2026-11-11T19:12:28Z",
+  "as_of_label": "17 Jan 2026, 03:42 UTC",
+  "release": "Beta",
+  "grid": {
+    "epsg": 32736,
+    "pixel_m": 30,
+    "width": 1771,
+    "height": 1522,
+    "bounds_4326": [
+      32.117067,
+      -24.212314,
+      32.641399,
+      -23.797815
+    ]
+  },
+  "scenes": [
+    {
+      "role": "before",
+      "granule_id": "NISAR_L2_PR_GCOV_009_114_A_166_4005_DHDH_A_20260105T034252_20260105T034303_X05010_N_P_J_001",
+      "track": 114,
+      "frame": 166,
+      "processing_version": "X05010",
+      "start_utc": "2026-01-05T03:42:52Z",
+      "end_utc": "2026-01-05T03:43:03Z",
+      "polarisations": [
+        "HH",
+        "HV"
+      ]
+    },
+    {
+      "role": "after",
+      "granule_id": "NISAR_L2_PR_GCOV_010_114_A_166_4005_DHDH_A_20260117T034253_20260117T034303_X05010_N_P_J_001",
+      "track": 114,
+      "frame": 166,
+      "processing_version": "X05010",
+      "start_utc": "2026-01-17T03:42:53Z",
+      "end_utc": "2026-01-17T03:43:03Z",
+      "polarisations": [
+        "HH",
+        "HV"
+      ]
+    }
+  ],
+  "reference": {
+    "source": "Copernicus EMS",
+    "activation": "EMSR857",
+    "aoi": "AOI05",
+    "product": "Delineation (DEL), monitoring 0, version 1",
+    "layer": "observedEventA",
+    "sensor": "Sentinel-1",
+    "observed_utc": "2026-01-17T03:18:00Z",
+    "observed_ha": 9702.9
+  },
+  "method": {
+    "name": "threshold",
+    "summary": "3x3 median filter on dB; HH on 17 Jan below that date's water threshold plus 1 dB; not water on 5 Jan (DSWx-S1); not permanent water (JRC occurrence >= 50%).",
+    "edge_buffer_px": 2,
+    "parameters": {
+      "baseline": "tuned_on_aoi06",
+      "polarisation": "HH",
+      "dark_offset_db": 1.0,
+      "drop_db": null,
+      "filter_px": 3,
+      "before": "dswx",
+      "water_threshold_db": {
+        "20260105": -16.09,
+        "20260117": -15.94
+      },
+      "background_change_db": 3.17,
+      "reference_water_ha": 2199,
+      "reference_land_ha": 236575,
+      "threshold_rule": "equal-error point between reference water (JRC >= 90% or DSWx-S1 5 Jan open water, one pixel in from the edge) and reference land (JRC 0% and DSWx-S1 5 Jan not water)",
+      "unclear_rise_db": 3.0,
+      "permanent_water_jrc_pct": 50,
+      "tuned_on": "aoi06"
+    }
+  },
+  "results": {
+    "flooded_ha": 11527.9,
+    "flooded_ha_in_mapped_area": 7819.1,
+    "hh_median_db_in_label": {
+      "before": -12.06,
+      "after": -15.86
+    }
+  },
+  "agreement": {
+    "iou": 0.5207,
+    "precision": 0.7653,
+    "recall": 0.6196,
+    "evaluated_ha": 62969.8
+  },
+  "coverage": {
+    "evaluated": 0.259571,
+    "outside_mapped_area": 0.72925,
+    "unclear": 0.005645,
+    "edge_excluded": 0.005029,
+    "no_data": 0.000504
+  },
+  "files": [
+    {
+      "file": "hh_20260105.png",
+      "format": "png",
+      "bounds_4326": [
+        32.117067,
+        -24.212344,
+        32.641283,
+        -23.797815
+      ]
+    },
+    {
+      "file": "hh_20260117.png",
+      "format": "png",
+      "bounds_4326": [
+        32.117067,
+        -24.212344,
+        32.641283,
+        -23.797815
+      ]
+    },
+    {
+      "file": "hv_20260105.png",
+      "format": "png",
+      "bounds_4326": [
+        32.117067,
+        -24.212344,
+        32.641283,
+        -23.797815
+      ]
+    },
+    {
+      "file": "hv_20260117.png",
+      "format": "png",
+      "bounds_4326": [
+        32.117067,
+        -24.212344,
+        32.641283,
+        -23.797815
+      ]
+    },
+    {
+      "file": "water_new.png",
+      "format": "png",
+      "bounds_4326": [
+        32.117067,
+        -24.212344,
+        32.641283,
+        -23.797815
+      ]
+    },
+    {
+      "file": "label.png",
+      "format": "png",
+      "bounds_4326": [
+        32.117067,
+        -24.212344,
+        32.641283,
+        -23.797815
+      ]
+    },
+    {
+      "file": "coverage.png",
+      "format": "png",
+      "bounds_4326": [
+        32.117067,
+        -24.212344,
+        32.641283,
+        -23.797815
+      ],
+      "legend": {
+        "0": "transparent: no NISAR data",
+        "1": "#1b9e77 at alpha 170: evaluated",
+        "2": "#bdbdbd at alpha 170: valid, outside the Copernicus mapped area",
+        "3": "#e6ab02 at alpha 170: unclear: HH rose, possible flooded vegetation",
+        "4": "#7570b3 at alpha 170: edge buffer, not scored"
+      }
+    },
+    {
+      "file": "data/aoi05/water_new_30m.tif",
+      "format": "geotiff"
+    },
+    {
+      "file": "data/aoi05/change_hh_db_30m.tif",
+      "format": "geotiff"
+    },
+    {
+      "file": "data/aoi05/coverage_30m.tif",
+      "format": "geotiff"
+    }
+  ],
+  "limits": [
+    "NISAR Beta data: not fully calibrated. The 17 Jan scene is about 3 dB brighter overall, so each date gets its own water threshold.",
+    "Agreement with Copernicus, not accuracy: the reference is a Sentinel-1 (C-band) map made 24 minutes before the NISAR pass, not ground truth.",
+    "Pixels where HH rose by more than 3 dB (possible flooded vegetation) are not scored. This method only finds open water.",
+    "Permanent water (JRC occurrence >= 50%) is never counted as flood.",
+    "A 2-pixel band along the Copernicus mapped-area edge is not scored. Flood polygon edges are scored.",
+    "Thresholds come from reference water and land on each date, not from the Copernicus label.",
+    "This rule's settings were chosen on AOI06 (frame 165, Copernicus AOI06) and applied to AOI05 once, unchanged."
+  ]
+}

@@ -7,7 +7,10 @@ Changes in 1.1 (11 Nov 2026):
 - The grey HH/HV overlays are downsampled WebP, to cut about 15 MB per area.
 - `stats.json` accepts the `webp` format.
 
-The files written on 11 Nov still follow 1.0 until the pipeline is rerun.
+Addition on 12 Nov 2026, still version 1.1 (optional fields, so files without them stay valid):
+- `results.osm_buildings_in_new_water` and `results.osm_buildings_on_grid`: OpenStreetMap buildings (one point each) inside detected new water, and on the whole grid. The first is a lower bound, never a damage count.
+- `areas.json` lists every finished area.
+- The four old 1.0 grey PNGs in `web/public/data/aoi05/` (`hh_*.png`, `hv_*.png`) are still there but no longer listed in `stats.json`. Use the WebP files; the PNGs will be removed.
 
 ## Layout
 
@@ -15,7 +18,7 @@ Area ids are lower case, for example `aoi05`.
 
 ```
 data/<area>/                     GeoTIFFs, not served, not committed
-web/public/data/areas.json       ["aoi05"]
+web/public/data/areas.json       ["aoi05", "aoi06", "aoi01"]
 web/public/data/<area>/          what the app loads, committed
 ```
 
@@ -144,7 +147,10 @@ Rules: `coverage` shares are fractions of all grid pixels and sum to 1 (within 0
         "hh_median_db_in_label": {
           "type": "object", "required": ["before", "after"],
           "properties": { "before": { "type": "number" }, "after": { "type": "number" } }
-        }
+        },
+        "osm_buildings_in_new_water": { "type": "integer", "minimum": 0,
+                                        "description": "Optional. OSM buildings inside detected new water: a lower bound" },
+        "osm_buildings_on_grid": { "type": "integer", "minimum": 0, "description": "Optional. OSM buildings on the whole grid" }
       }
     },
     "agreement": {

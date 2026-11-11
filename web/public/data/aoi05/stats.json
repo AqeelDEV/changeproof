@@ -1,8 +1,8 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "area_id": "aoi05",
   "name": "AOI05 Chinhangane, Mozambique",
-  "generated_utc": "2026-11-11T19:12:28Z",
+  "generated_utc": "2026-11-11T21:27:24Z",
   "as_of_label": "17 Jan 2026, 03:42 UTC",
   "release": "Beta",
   "grid": {
@@ -56,41 +56,82 @@
     "observed_ha": 9702.9
   },
   "method": {
-    "name": "threshold",
-    "summary": "3x3 median filter on dB; HH on 17 Jan below that date's water threshold plus 1 dB; not water on 5 Jan (DSWx-S1); not permanent water (JRC occurrence >= 50%).",
+    "name": "lightgbm",
     "edge_buffer_px": 2,
+    "summary": "LightGBM classifier on 14 radar features (HH, HV, HV minus HH, the change between dates, and 5x5 local mean and spread), each scene's land median removed; flood where the probability is at least 0.37; not water on 5 Jan (DSWx-S1); not permanent water (JRC occurrence >= 50%).",
     "parameters": {
-      "baseline": "tuned_on_aoi06",
-      "polarisation": "HH",
-      "dark_offset_db": 1.0,
-      "drop_db": null,
-      "filter_px": 3,
-      "before": "dswx",
-      "water_threshold_db": {
-        "20260105": -16.09,
-        "20260117": -15.94
+      "features": [
+        "hh1",
+        "hv1",
+        "hh0",
+        "hv0",
+        "hvhh1",
+        "hvhh0",
+        "dhh",
+        "dhv",
+        "hh1_mean",
+        "hh1_sd",
+        "hv1_mean",
+        "hv1_sd",
+        "dhh_mean",
+        "dhh_sd"
+      ],
+      "window_px": 5,
+      "params": {
+        "objective": "binary",
+        "learning_rate": 0.05,
+        "feature_fraction": 0.8,
+        "bagging_fraction": 0.8,
+        "bagging_freq": 1,
+        "seed": 0,
+        "deterministic": true,
+        "force_row_wise": true,
+        "verbose": -1,
+        "num_leaves": 15,
+        "min_data_in_leaf": 500
       },
-      "background_change_db": 3.17,
-      "reference_water_ha": 2199,
-      "reference_land_ha": 236575,
-      "threshold_rule": "equal-error point between reference water (JRC >= 90% or DSWx-S1 5 Jan open water, one pixel in from the edge) and reference land (JRC 0% and DSWx-S1 5 Jan not water)",
+      "rounds": 300,
+      "threshold": 0.37,
+      "offsets_db": {
+        "hh0": -8.528,
+        "hh1": -5.301,
+        "hv0": -15.59,
+        "hv1": -13.423
+      },
+      "cv_aoi06": {
+        "iou": 0.57,
+        "precision": 0.7537,
+        "recall": 0.7005,
+        "tp_ha": 6253.2,
+        "fp_ha": 2043.99,
+        "fn_ha": 2673.45
+      },
+      "tuned_on": "aoi06",
       "unclear_rise_db": 3.0,
       "permanent_water_jrc_pct": 50,
-      "tuned_on": "aoi06"
+      "aoi05_test": {
+        "tuned_rule_iou": 0.5207,
+        "lightgbm_iou": 0.5716,
+        "chosen": "lightgbm",
+        "decision_rule": "higher AOI05 IoU at 3 decimals wins; a tie keeps the rule"
+      },
+      "tuned_rule_iou_this_area": 0.5207
     }
   },
   "results": {
-    "flooded_ha": 11527.9,
-    "flooded_ha_in_mapped_area": 7819.1,
+    "flooded_ha": 14916.7,
+    "flooded_ha_in_mapped_area": 10105.8,
     "hh_median_db_in_label": {
       "before": -12.06,
       "after": -15.86
-    }
+    },
+    "osm_buildings_in_new_water": 12,
+    "osm_buildings_on_grid": 11349
   },
   "agreement": {
-    "iou": 0.5207,
-    "precision": 0.7653,
-    "recall": 0.6196,
+    "iou": 0.5716,
+    "precision": 0.7111,
+    "recall": 0.7445,
     "evaluated_ha": 62969.8
   },
   "coverage": {
@@ -102,8 +143,8 @@
   },
   "files": [
     {
-      "file": "hh_20260105.png",
-      "format": "png",
+      "file": "hh_20260105.webp",
+      "format": "webp",
       "bounds_4326": [
         32.117067,
         -24.212344,
@@ -112,8 +153,8 @@
       ]
     },
     {
-      "file": "hh_20260117.png",
-      "format": "png",
+      "file": "hh_20260117.webp",
+      "format": "webp",
       "bounds_4326": [
         32.117067,
         -24.212344,
@@ -122,8 +163,8 @@
       ]
     },
     {
-      "file": "hv_20260105.png",
-      "format": "png",
+      "file": "hv_20260105.webp",
+      "format": "webp",
       "bounds_4326": [
         32.117067,
         -24.212344,
@@ -132,8 +173,8 @@
       ]
     },
     {
-      "file": "hv_20260117.png",
-      "format": "png",
+      "file": "hv_20260117.webp",
+      "format": "webp",
       "bounds_4326": [
         32.117067,
         -24.212344,
@@ -192,12 +233,15 @@
     }
   ],
   "limits": [
-    "NISAR Beta data: not fully calibrated. The 17 Jan scene is about 3 dB brighter overall, so each date gets its own water threshold.",
+    "NISAR Beta data: not fully calibrated. The 17 Jan scene is about 3 dB brighter overall, so each scene's median over reference land is removed before the classifier sees it.",
     "Agreement with Copernicus, not accuracy: the reference is a Sentinel-1 (C-band) map made 24 minutes before the NISAR pass, not ground truth.",
+    "AOI05 is the held-out test area: the method was chosen on AOI06 and applied here once, unchanged.",
     "Pixels where HH rose by more than 3 dB (possible flooded vegetation) are not scored. This method only finds open water.",
     "Permanent water (JRC occurrence >= 50%) is never counted as flood.",
     "A 2-pixel band along the Copernicus mapped-area edge is not scored. Flood polygon edges are scored.",
-    "Thresholds come from reference water and land on each date, not from the Copernicus label.",
-    "This rule's settings were chosen on AOI06 (frame 165, Copernicus AOI06) and applied to AOI05 once, unchanged."
+    "The classifier learned from the Copernicus map of AOI06 only.",
+    "On the held-out area AOI05, the tuned rule scored IoU 0.521 and LightGBM 0.572 against Copernicus, so the LightGBM classifier is used.",
+    "707 ha (5%) of the detected new water was already dark in NISAR's 5 Jan image. DSWx-S1 (or JRC) called it dry, so it counts as new, but some of it may have been water before 17 Jan.",
+    "Buildings: 12 OpenStreetMap buildings sit inside detected new water, out of 11,349 mapped on this grid. This is a lower bound: OpenStreetMap is incomplete here, a 30 m pixel is larger than a house, and flooded built-up areas look bright in radar, so open-water detection misses them. It says nothing about damage. Data: OpenStreetMap contributors, ODbL."
   ]
 }

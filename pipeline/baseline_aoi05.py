@@ -22,9 +22,8 @@ that rule is scored here too, unchanged. Nothing is tuned on AOI05.
   python pipeline\\baseline_aoi05.py
 
 Reads data/aoi05 (see docs/DATA_CONTRACT.md). Writes data/aoi05/stats_baseline.json and
-data/aoi05/disagreement_baseline.png. With a tuned rule, also writes that rule's contract outputs:
-water_new, change_hh and coverage GeoTIFFs in data/aoi05, and the PNG overlays and stats.json in
-web/public/data/aoi05.
+data/aoi05/disagreement_baseline.png. The contract outputs for the app are written by pipeline/make_outputs.py,
+which uses export() and the other helpers here for every area.
 """
 import itertools
 import json
@@ -63,14 +62,24 @@ COVERAGE_COLOURS = {1: ("#1b9e77", "evaluated"), 2: ("#bdbdbd", "valid, outside 
                     4: ("#7570b3", "edge buffer, not scored")}  # code 0, no NISAR data, stays transparent
 
 
-def load(folder):
-    """The inputs of one area folder, for example data/aoi05."""
+def load(folder, label=None):
+    """The inputs of one area folder, for example data/aoi05. label replaces the Copernicus label file if given."""
     def read(name):
         with rasterio.open(folder / name) as src:
             return src.read(1)
     return {"hh0": read(f"hh_{BEFORE}_db_30m.tif"), "hh1": read(f"hh_{AFTER}_db_30m.tif"),
-            "label": read(f"label_emsr857_{folder.name}_flood_30m.tif"), "jrc": read("jrc_occurrence_30m.tif"),
-            "dswx0": read(f"dswx_s1_wtr_{BEFORE}_30m.tif")}
+            "hv0": read(f"hv_{BEFORE}_db_30m.tif"), "hv1": read(f"hv_{AFTER}_db_30m.tif"),
+            "label": read(f"label_emsr857_{folder.name}_flood_30m.tif") if label is None else label,
+            "jrc": read("jrc_occurrence_30m.tif"), "dswx0": read(f"dswx_s1_wtr_{BEFORE}_30m.tif")}
+
+
+def before_water(d):
+    """Water before the flood: DSWx-S1 5 Jan open water or inundated vegetation. Where DSWx-S1 has no data and
+    d["jrc_x"] is set (AOI01 only), JRC occurrence >= jrc_x stands in for it."""
+    water = np.isin(d["dswx0"], DSWX_WATER)
+    if d.get("jrc_x"):
+        water |= (d["dswx0"] == 255) & (d["jrc"] >= d["jrc_x"]) & (d["jrc"] <= 100)
+    return water
 
 
 def eer_threshold(water, land):
@@ -89,11 +98,13 @@ def dilate(mask, r):
 
 def median_filter(a, px):
     """Median of each px x px window, ignoring NaN."""
-    r = px // 2
+    r, step = px // 2, 256  # in row strips, so large areas (AOI01) never copy every window at once
+    padded, out = np.pad(a, r, constant_values=np.nan), np.empty(a.shape, "float32")
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", RuntimeWarning)  # windows with no valid pixel give NaN
-        return np.nanmedian(sliding_window_view(np.pad(a, r, constant_values=np.nan), (px, px)),
-                            axis=(2, 3)).astype("float32")
+        for i in range(0, a.shape[0], step):
+            out[i:i + step] = np.nanmedian(sliding_window_view(padded[i:i + step + 2 * r], (px, px)), axis=(2, 3))
+    return out
 
 
 def filtered(d, key, px):
@@ -129,7 +140,7 @@ def detect(d, dark_offset_db=0.0, drop_db=None, filter_px=1, before="nisar+dswx"
     t0, t1 = eer_threshold(hh0[water_ref], hh0[land_ref]), eer_threshold(hh1[water_ref], hh1[land_ref])
     shift = float(np.median((hh1 - hh0)[land_ref]))
     with np.errstate(invalid="ignore"):  # NaN compares as False, and those pixels are not scored anyway
-        flood = valid & (hh1 < t1 + dark_offset_db) & ~np.isin(dswx0, DSWX_WATER) & ~permanent(jrc)
+        flood = valid & (hh1 < t1 + dark_offset_db) & ~before_water(d) & ~permanent(jrc)
         if "nisar" in before:
             flood &= ~(hh0 < t0)
         if drop_db:
@@ -169,6 +180,9 @@ _one = np.zeros((5, 5), bool)
 _one[2, 2] = True
 assert dilate(_one, 1).sum() == 9
 assert median_filter(np.where(_one, 99.0, 1.0), 3)[2, 2] == 1.0  # a lone outlier is removed
+_big = np.random.default_rng(0).normal(size=(600, 7)).astype("float32")
+assert np.allclose(median_filter(_big, 3), np.nanmedian(sliding_window_view(  # strips match one pass
+    np.pad(_big, 1, constant_values=np.nan), (3, 3)), axis=(2, 3)))
 assert score(np.array([1, 1, 0, 0], bool), np.array([1, 0, 1, 0], bool))["iou"] == 1 / 3
 
 CONTRACT_KEYS = {  # docs/DATA_CONTRACT.md, stats.json: these objects allow no other keys
@@ -181,17 +195,21 @@ CONTRACT_KEYS = {  # docs/DATA_CONTRACT.md, stats.json: these objects allow no o
     "agreement": ["iou", "precision", "recall", "evaluated_ha"],
     "coverage": ["evaluated", "outside_mapped_area", "unclear", "edge_excluded", "no_data"],
 }
+CONTRACT_OPTIONAL = {"results": ["osm_buildings_in_new_water", "osm_buildings_on_grid"]}  # added 12 Nov, still 1.1
 SCENE_KEYS = ["role", "granule_id", "track", "frame", "processing_version", "start_utc", "end_utc", "polarisations"]
 
 
 def check_contract(stats):
+    assert stats["schema_version"] == "1.1"
     for key, need in CONTRACT_KEYS.items():
-        have = set(stats if key is None else stats[key])
-        assert have == set(need), f"stats.{key}: keys differ from the contract: {have ^ set(need)}"
+        have, need = set(stats if key is None else stats[key]), set(need)
+        extra = have - need - set(CONTRACT_OPTIONAL.get(key, []))
+        assert need <= have and not extra, f"stats.{key}: keys differ from the contract: {(need - have) | extra}"
     assert all(set(s) == set(SCENE_KEYS) for s in stats["scenes"]) and len(stats["scenes"]) >= 2
     assert abs(sum(stats["coverage"].values()) - 1) < 1e-3, "coverage shares must sum to 1"
     assert all(0 <= stats["agreement"][k] <= 1 for k in ("iou", "precision", "recall"))
-    assert all("bounds_4326" in f for f in stats["files"] if f["format"] == "png")
+    assert all(f["format"] in ("png", "webp", "geotiff") for f in stats["files"])
+    assert all("bounds_4326" in f for f in stats["files"] if f["format"] in ("png", "webp"))
 
 
 def rgba(mask, colour, alpha=255):
@@ -201,15 +219,17 @@ def rgba(mask, colour, alpha=255):
     return img
 
 
-def export(d, pred, coverage, stats):
-    """Contract outputs for one rule: GeoTIFFs in data/aoi05, PNG overlays (EPSG:4326) and stats.json for the app."""
+def export(area, grid, d, pred, coverage, stats, legend=None):
+    """Contract 1.1 outputs for one area: GeoTIFFs in data/<area>, overlays (EPSG:4326, grey as half-resolution
+    WebP, classes as PNG) and stats.json in web/public/data/<area>. legend replaces coverage legend texts by code."""
+    folder = p.ROOT / "data" / area
     valid = np.isfinite(d["hh0"]) & np.isfinite(d["hh1"])
     water_new = np.where(valid, pred, 255).astype("uint8")
-    p.save(p.OUT / "water_new_30m.tif", water_new, 255)
-    p.save(p.OUT / "change_hh_db_30m.tif", (d["hh1"] - d["hh0"]).astype("float32"), np.nan)
-    p.save(p.OUT / "coverage_30m.tif", coverage, None)
+    p.save(folder / "water_new_30m.tif", water_new, 255, grid)
+    p.save(folder / "change_hh_db_30m.tif", (d["hh1"] - d["hh0"]).astype("float32"), np.nan, grid)
+    p.save(folder / "coverage_30m.tif", coverage, None, grid)
 
-    x0, y1, nx, ny = p.GRID
+    x0, y1, nx, ny = grid
     src_t = from_origin(x0, y1, p.PIX, p.PIX)
     dst_t, w, h = calculate_default_transform(p.CRS, "EPSG:4326", nx, ny, *array_bounds(ny, nx, src_t))
     bounds = [round(v, 6) for v in array_bounds(h, w, dst_t)]
@@ -220,39 +240,101 @@ def export(d, pred, coverage, stats):
                   dst_crs="EPSG:4326", dst_nodata=nodata, resampling=Resampling.nearest)
         return dst
 
-    pngs = {}
+    imgs = {}
     for pol, date in itertools.product(("hh", "hv"), (BEFORE, AFTER)):
-        with rasterio.open(p.OUT / f"{pol}_{date}_db_30m.tif") as src:
+        with rasterio.open(folder / f"{pol}_{date}_db_30m.tif") as src:
             db = warp(src.read(1), np.nan)
-        grey = (np.clip((np.nan_to_num(db, nan=-25) + 25) / 20, 0, 1) * 255).astype("uint8")  # -25 dB black, -5 white
-        pngs[f"{pol}_{date}.png"] = np.dstack([grey, grey, grey, np.where(np.isfinite(db), 255, 0).astype("uint8")])
-    pngs["water_new.png"] = rgba(warp(water_new, 255) == 1, "#1f78ff")
-    pngs["label.png"] = rgba(warp(d["label"], 255) == 1, "#e5382d")
+        grey = (np.clip((np.nan_to_num(db, nan=-25) + 25) / 25, 0, 1) * 255).astype("uint8")  # -25 dB black, 0 white
+        img = np.dstack([grey, grey, grey, np.where(np.isfinite(db), 255, 0).astype("uint8")])
+        # shortcut: with an odd width or height this stretches by under one 30 m pixel over the bounds; fine for display
+        imgs[f"{pol}_{date}.webp"] = img[::2, ::2]  # every second pixel, about 60 m (contract 1.1)
+    imgs["water_new.png"] = rgba(warp(water_new, 255) == 1, "#1f78ff")
+    imgs["label.png"] = rgba(warp(d["label"], 255) == 1, "#e5382d")
     cov = warp(coverage, 0)
-    pngs["coverage.png"] = sum(rgba(cov == code, colour, 170) for code, (colour, _) in COVERAGE_COLOURS.items())
+    imgs["coverage.png"] = sum(rgba(cov == code, colour, 170) for code, (colour, _) in COVERAGE_COLOURS.items())
 
-    web = WEB / "aoi05"
+    web = WEB / area
     web.mkdir(parents=True, exist_ok=True)
-    for name, img in pngs.items():
-        Image.fromarray(img, "RGBA").save(web / name, optimize=True)
-    files = [{"file": name, "format": "png", "bounds_4326": bounds} for name in pngs]
+    files = []
+    for name, img in imgs.items():
+        fmt = name.rsplit(".", 1)[1]
+        Image.fromarray(img, "RGBA").save(web / name, **({"quality": 80} if fmt == "webp" else {"optimize": True}))
+        files.append({"file": name, "format": fmt, "bounds_4326": bounds})
+    names = {c: txt for c, (_, txt) in COVERAGE_COLOURS.items()} | (legend or {})
     files[-1]["legend"] = {"0": "transparent: no NISAR data",
-                           **{str(c): f"{col} at alpha 170: {txt}" for c, (col, txt) in COVERAGE_COLOURS.items()}}
-    files += [{"file": f"data/aoi05/{n}", "format": "geotiff"}
+                           **{str(c): f"{col} at alpha 170: {names[c]}" for c, (col, _) in COVERAGE_COLOURS.items()}}
+    files += [{"file": f"data/{area}/{n}", "format": "geotiff"}
               for n in ("water_new_30m.tif", "change_hh_db_30m.tif", "coverage_30m.tif")]
     app = {**stats, "files": files}
     check_contract(app)
-    (web / "stats.json").write_text(json.dumps(app, indent=2), encoding="utf-8")
-    (WEB / "areas.json").write_text(json.dumps(["aoi05"]), encoding="utf-8")
-    print(f"Contract outputs written: 3 GeoTIFFs in {p.OUT}, {len(pngs)} PNGs and stats.json in {web}")
+    (web / "stats.json").write_text(json.dumps(app, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"Contract outputs written: 3 GeoTIFFs in {folder}, {len(imgs)} overlays and stats.json in {web}")
+    return app
 
 
-def scene(role, date):
-    gran = p.GRANULES[date]
+def scene(role, gran, frame=166):
     start, end, crid = re.search(r"_(\d{8}T\d{6})_(\d{8}T\d{6})_(X\d{5})_", gran).groups()
     iso = lambda s: datetime.strptime(s, "%Y%m%dT%H%M%S").strftime("%Y-%m-%dT%H:%M:%SZ")  # noqa: E731
-    return {"role": role, "granule_id": gran, "track": 114, "frame": 166, "processing_version": crid,
+    return {"role": role, "granule_id": gran, "track": 114, "frame": frame, "processing_version": crid,
             "start_utc": iso(start), "end_utc": iso(end), "polarisations": ["HH", "HV"]}
+
+
+SHARE_CODES = (("evaluated", 1), ("outside_mapped_area", 2), ("unclear", 3), ("edge_excluded", 4), ("no_data", 0))
+AOI05_REFERENCE = {"source": "Copernicus EMS", "activation": "EMSR857", "aoi": "AOI05",
+                   "product": "Delineation (DEL), monitoring 0, version 1", "layer": "observedEventA",
+                   "sensor": "Sentinel-1", "observed_utc": "2026-01-17T03:18:00Z", "observed_ha": p.EMS_OBSERVED_HA}
+
+
+def area_stats(area, name, grid, frame, granules, reference, method, d, pred, coverage, limits):
+    """stats.json for one area and one flood mask (files are added by the caller). Agreement is scored on
+    coverage code 1 only, against d["label"]."""
+    x0, y1, nx, ny = grid
+    bounds = [round(v, 6) for v in transform_bounds(p.CRS, "EPSG:4326", x0, y1 - ny * p.PIX, x0 + nx * p.PIX, y1)]
+    valid = np.isfinite(d["hh0"]) & np.isfinite(d["hh1"])
+    mapped, truth, ev = d["label"] != 255, d["label"] == 1, coverage == 1
+    s = score(pred[ev], truth[ev])
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        med = {"before": round(float(np.nanmedian(d["hh0"][truth])), 2),
+               "after": round(float(np.nanmedian(d["hh1"][truth])), 2)}
+    return {
+        "schema_version": "1.1", "area_id": area, "name": name,
+        "generated_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "as_of_label": "17 Jan 2026, 03:42 UTC", "release": "Beta",
+        "grid": {"epsg": p.EPSG, "pixel_m": p.PIX, "width": nx, "height": ny, "bounds_4326": bounds},
+        "scenes": [scene("before", granules[BEFORE], frame), scene("after", granules[AFTER], frame)],
+        "reference": reference, "method": method,
+        "results": {"flooded_ha": round(float((pred & valid).sum() * HA), 1),
+                    "flooded_ha_in_mapped_area": round(float((pred & valid & mapped).sum() * HA), 1),
+                    "hh_median_db_in_label": med},
+        "agreement": {"iou": round(float(s["iou"]), 4), "precision": round(float(s["precision"]), 4),
+                      "recall": round(float(s["recall"]), 4), "evaluated_ha": round(float(ev.sum() * HA), 1)},
+        "coverage": {k: round(float((coverage == c).mean()), 6) for k, c in SHARE_CODES},
+        "files": [], "limits": limits,
+    }
+
+
+def threshold_method(rule, info, label):
+    """The stats.json method block for a threshold rule."""
+    rule = {**RULE_DEFAULTS, **rule}
+    return {"name": "threshold", "summary": describe(rule), "edge_buffer_px": EDGE_PX,
+            "parameters": {"baseline": label, "polarisation": "HH", **rule, **info,
+                           "threshold_rule": "equal-error point between reference water "
+                                             f"(JRC >= {WATER_REF_PCT}% or DSWx-S1 5 Jan open water, one pixel in "
+                                             "from the edge) and reference land (JRC 0% and DSWx-S1 5 Jan not water)",
+                           "unclear_rise_db": RISE_DB, "permanent_water_jrc_pct": PERMANENT_PCT,
+                           "tuned_on": "aoi06" if label == "tuned_on_aoi06" else None}}
+
+
+LIMITS_COMMON = [
+    "NISAR Beta data: not fully calibrated. The 17 Jan scene is about 3 dB brighter overall, so each "
+    "date gets its own water threshold.",
+    f"Pixels where HH rose by more than {RISE_DB:g} dB (possible flooded vegetation) are not scored. "
+    "This method only finds open water.",
+    f"Permanent water (JRC occurrence >= {PERMANENT_PCT}%) is never counted as flood.",
+    f"A {EDGE_PX}-pixel band along the Copernicus mapped-area edge is not scored. Flood polygon edges are scored.",
+    "Thresholds come from reference water and land on each date, not from the Copernicus label.",
+]
 
 
 def main():
@@ -269,11 +351,10 @@ def main():
         rules["tuned_on_aoi06"] = json.loads(TUNED.read_text(encoding="utf-8"))["rule"]
     hh0, hh1, label = d["hh0"], d["hh1"], d["label"]
     valid = np.isfinite(hh0) & np.isfinite(hh1)
-    mapped, truth = label != 255, label == 1
+    truth = label == 1
     coverage = scoring(d)
     ev = coverage == 1
-    shares = {k: float((coverage == c).mean()) for k, c in
-              (("evaluated", 1), ("outside_mapped_area", 2), ("unclear", 3), ("edge_excluded", 4), ("no_data", 0))}
+    shares = {k: float((coverage == c).mean()) for k, c in SHARE_CODES}
     flood, info = {}, {}
     for name, rule in rules.items():
         flood[name], info[name] = detect(d, **rule)
@@ -287,63 +368,21 @@ def main():
     print(f"Copernicus observed flood in the scored area: {(truth & ev).sum() * HA:,.0f} ha "
           f"(whole layer on this grid: {truth.sum() * HA:,.0f} ha)")
 
-    x0, y1, nx, ny = p.GRID
-    bounds = [round(v, 6) for v in transform_bounds(p.CRS, "EPSG:4326", x0, y1 - ny * p.PIX, x0 + nx * p.PIX, y1)]
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", RuntimeWarning)
-        med = {"before": round(float(np.nanmedian(hh0[truth])), 2), "after": round(float(np.nanmedian(hh1[truth])), 2)}
     png = "disagreement_baseline.png"
     out, scores = {}, {}
     for name, pred in flood.items():
-        s = scores[name] = score(pred[ev], truth[ev])
-        rule = {**RULE_DEFAULTS, **rules[name]}
-        limits = [
-            "NISAR Beta data: not fully calibrated. The 17 Jan scene is about 3 dB brighter overall, so each "
-            "date gets its own water threshold.",
-            "Agreement with Copernicus, not accuracy: the reference is a Sentinel-1 (C-band) map made 24 "
-            "minutes before the NISAR pass, not ground truth.",
-            f"Pixels where HH rose by more than {RISE_DB:g} dB (possible flooded vegetation) are not scored. "
-            "This method only finds open water.",
-            f"Permanent water (JRC occurrence >= {PERMANENT_PCT}%) is never counted as flood.",
-            f"A {EDGE_PX}-pixel band along the Copernicus mapped-area edge is not scored. Flood polygon "
-            "edges are scored.",
-            "Thresholds come from reference water and land on each date, not from the Copernicus label.",
-        ]
+        scores[name] = score(pred[ev], truth[ev])
+        limits = [LIMITS_COMMON[0], "Agreement with Copernicus, not accuracy: the reference is a Sentinel-1 "
+                  "(C-band) map made 24 minutes before the NISAR pass, not ground truth.", *LIMITS_COMMON[1:]]
         if name == "tuned_on_aoi06":
             limits.append("This rule's settings were chosen on AOI06 (frame 165, Copernicus AOI06) and applied "
                           "to AOI05 once, unchanged.")
-        out[name] = {
-            "schema_version": "1.0", "area_id": "aoi05", "name": "AOI05 Chinhangane, Mozambique",
-            "generated_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "as_of_label": "17 Jan 2026, 03:42 UTC", "release": "Beta",
-            "grid": {"epsg": p.EPSG, "pixel_m": p.PIX, "width": nx, "height": ny, "bounds_4326": bounds},
-            "scenes": [scene("before", BEFORE), scene("after", AFTER)],
-            "reference": {"source": "Copernicus EMS", "activation": "EMSR857", "aoi": "AOI05",
-                          "product": "Delineation (DEL), monitoring 0, version 1", "layer": "observedEventA",
-                          "sensor": "Sentinel-1", "observed_utc": "2026-01-17T03:18:00Z",
-                          "observed_ha": p.EMS_OBSERVED_HA},
-            "method": {"name": "threshold", "summary": describe(rule), "edge_buffer_px": EDGE_PX,
-                       "parameters": {"baseline": name, "polarisation": "HH", **rule, **info[name],
-                                      "threshold_rule": "equal-error point between reference water "
-                                                        f"(JRC >= {WATER_REF_PCT}% or DSWx-S1 5 Jan open "
-                                                        "water, one pixel in from the edge) and reference "
-                                                        "land (JRC 0% and DSWx-S1 5 Jan not water)",
-                                      "unclear_rise_db": RISE_DB, "permanent_water_jrc_pct": PERMANENT_PCT,
-                                      "tuned_on": "aoi06" if name == "tuned_on_aoi06" else None}},
-            "results": {"flooded_ha": round(float((pred & valid).sum() * HA), 1),
-                        "flooded_ha_in_mapped_area": round(float((pred & valid & mapped).sum() * HA), 1),
-                        "hh_median_db_in_label": med},
-            "agreement": {"iou": round(float(s["iou"]), 4), "precision": round(float(s["precision"]), 4),
-                          "recall": round(float(s["recall"]), 4), "evaluated_ha": round(float(ev.sum() * HA), 1)},
-            "coverage": {k: round(v, 6) for k, v in shares.items()},
-            "files": [{"file": png, "format": "png", "bounds_4326": bounds,
-                       "note": "Check figure, one panel per rule in UTM 36S, not a map overlay"}],
-            "limits": limits,
-        }
+        out[name] = area_stats("aoi05", "AOI05 Chinhangane, Mozambique", p.GRID, 166, p.GRANULES, AOI05_REFERENCE,
+                               threshold_method(rules[name], info[name], name), d, pred, coverage, limits)
+        out[name]["files"] = [{"file": png, "format": "png", "bounds_4326": out[name]["grid"]["bounds_4326"],
+                               "note": "Check figure, one panel per rule in UTM 36S, not a map overlay"}]
         check_contract(out[name])
     (p.OUT / "stats_baseline.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
-    if "tuned_on_aoi06" in out:
-        export(d, flood["tuned_on_aoi06"], coverage, out["tuned_on_aoi06"])
 
     # Disagreement map: one panel per rule
     colours = ["#d9d9d9", "#7f7f7f", "#ffffff", "#009E73", "#E69F00", "#CC79A7", "#56B4E9"]

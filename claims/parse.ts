@@ -60,19 +60,26 @@ export interface Fields {
 
 // ---------- text
 
-interface Token { w: string; raw: string }
+interface Token { w: string; raw: string; clause: number }
 
 /** Accents stripped, lower case. */
 export function fold(s: string): string {
   return s.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 }
 
+const CLAUSE_END = /[;!?]|[.,]\s/; // a full stop or comma before a space; "17.01.2026" and "2,5" do not end a clause
+const CLAUSE_START = new Set(["mas", "but", "porem", "contudo", "todavia", "however", "although", "though", "embora"]);
+
 function tokens(s: string): Token[] {
   const out: Token[] = [];
   const spaced = s.replace(/(\p{Ll})(\p{Lu})/gu, "$1 $2").replace(/['’]s\b/g, ""); // #XaiXai -> Xai Xai; Chókwè's -> Chókwè
+  let clause = 0, prev = 0;
   for (const m of spaced.matchAll(/[\p{L}\p{N}]+(?:['’`´][\p{L}\p{N}]+)*/gu)) {
+    if (CLAUSE_END.test(spaced.slice(prev, m.index))) clause++;
+    prev = m.index! + m[0].length;
     const w = fold(m[0]).replace(/[^a-z0-9]/g, "");
-    if (w) out.push({ w, raw: m[0] });
+    if (w && CLAUSE_START.has(w)) clause++;
+    if (w) out.push({ w, raw: m[0], clause });
   }
   return out;
 }
@@ -300,6 +307,22 @@ function parseDate(folded: string, w: string[]): DateHit {
   return { kind: "none", from: null, to: null, text: null, dia: false };
 }
 
+// Relative words as days from an article's published day; weekend words are left unresolved.
+const RELATIVE_DAYS: Record<string, [number, number]> = {
+  today: [0, 0], tonight: [0, 0], now: [0, 0], currently: [0, 0], hoje: [0, 0], agora: [0, 0], atualmente: [0, 0], actualmente: [0, 0],
+  "right now": [0, 0], "this morning": [0, 0], "neste momento": [0, 0], "esta manha": [0, 0], "esta noite": [0, 0], "nesta altura": [0, 0],
+  yesterday: [-1, -1], ontem: [-1, -1], "last night": [-1, -1], anteontem: [-2, -2], tomorrow: [1, 1], amanha: [1, 1],
+  "this week": [-6, 0], "esta semana": [-6, 0], "last week": [-13, -7], "semana passada": [-13, -7],
+};
+
+/** A relative word (as the parser gives it in date_text) worked out from a published day (YYYY-MM-DD): "ontem" on 2026-01-19 is 2026-01-18. */
+export function resolveRelative(word: string, published: string): { from: string; to: string } | null {
+  const days = RELATIVE_DAYS[word], t = Date.parse(`${published}T00:00:00Z`);
+  if (!days || !/^\d{4}-\d{2}-\d{2}$/.test(published) || Number.isNaN(t)) return null;
+  const at = (n: number) => new Date(t + n * 86400000).toISOString().slice(0, 10);
+  return { from: at(days[0]), to: at(days[1]) };
+}
+
 // ---------- the parser
 
 export function parse(text: string, places: Places): Fields {
@@ -309,7 +332,13 @@ export function parse(text: string, places: Places): Fields {
   const en = w.filter((x) => EN_FN.has(x) || FLOOD_EN.has(x) || NEG_EN.has(x)).length;
   const pt = w.filter((x) => PT_FN.has(x) || FLOOD_PT.has(x) || NEG_PT.has(x)).length;
   const negators = new Set([...NEG_EN, ...NEG_PT, ...(en > pt ? ["no"] : [])]); // Portuguese "no" means "in the"
-  const negatedAt = (i: number) => w.slice(Math.max(0, i - 3), i).some((x, k) => negators.has(x) && !skip.has(Math.max(0, i - 3) + k));
+  const ptFlood = (x: string) => FLOOD_PT.has(x) || (x.length >= 6 && [...FLOOD_PT].some((c) => c.length >= 6 && distance(x, c) <= 1));
+  // A negator anywhere earlier in the same clause; "n" only directly before a Portuguese flood word ("n alagou").
+  const negatedAt = (i: number) => {
+    for (let j = i - 1; j >= 0 && toks[j].clause === toks[i].clause; j--)
+      if (!skip.has(j) && (negators.has(w[j]) || (w[j] === "n" && j === i - 1 && ptFlood(w[i])))) return true;
+    return false;
+  };
 
   // Flood and dry cues, in order of position; typos of flood words count (distance 1, words of 6+ letters).
   const cues: { at: number; dry: boolean }[] = [];

@@ -2,7 +2,12 @@
 // environment variables and is never logged. The model only fills fields; it never decides the verdict.
 import { CLAIM_TYPES, DATE_KINDS, findPlace, type Fields, type Places } from "./parse.ts";
 
-export interface ModelReply { status: "ok" | "disabled" | "timeout" | "error"; content: string | null; ms: number }
+export interface ModelReply {
+  status: "ok" | "disabled" | "timeout" | "error"; content: string | null; ms: number;
+  finish?: string | null; tokens?: number | null; reasoning_tokens?: number | null; http?: number; // recorded to explain cut-off or failed replies
+}
+
+const MAX_TOKENS = 1000; // hidden reasoning counts against this: at 200 it used up to 190 tokens and cut the JSON off
 
 const SYSTEM = `You extract fields from one short claim about the January 2026 floods in southern Mozambique.
 The claim may be in English or Portuguese, informal, with typos. Do not judge whether it is true.
@@ -26,6 +31,13 @@ export function timeoutMs(): number {
   return v > 0 ? v : 2500;
 }
 
+/** A short hash of everything that shapes a reply (model, prompt, limit), so recorded replies are kept apart per setting. */
+export function settingsKey(): string {
+  let h = 0x811c9dc5; // FNV-1a
+  for (const ch of [env().LLM_MODEL ?? "", MAX_TOKENS, SYSTEM].join("\n")) h = Math.imul(h ^ ch.codePointAt(0)!, 0x01000193) >>> 0;
+  return h.toString(16).padStart(8, "0");
+}
+
 /** Ask the model for the fields. Never throws; a missing setting or LLM_DISABLED=1 means no call. */
 export async function askModel(text: string, limit: number = timeoutMs()): Promise<ModelReply> {
   const { LLM_BASE_URL: base, LLM_MODEL: model, LLM_API_KEY: key, LLM_DISABLED: off } = env();
@@ -37,11 +49,13 @@ export async function askModel(text: string, limit: number = timeoutMs()): Promi
     const r = await fetch(`${base.replace(/\/+$/, "")}/chat/completions`, {
       method: "POST", signal: ctl.signal,
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
-      body: JSON.stringify({ model, temperature: 0, max_tokens: 200, messages: [{ role: "system", content: SYSTEM }, { role: "user", content: text }] }),
+      body: JSON.stringify({ model, temperature: 0, max_tokens: MAX_TOKENS, messages: [{ role: "system", content: SYSTEM }, { role: "user", content: text }] }),
     });
-    const js = r.ok ? await r.json() : null;
-    const content = js?.choices?.[0]?.message?.content;
-    return typeof content === "string" && content ? { status: "ok", content, ms: Date.now() - t0 } : { status: "error", content: null, ms: Date.now() - t0 };
+    if (!r.ok) return { status: "error", content: null, ms: Date.now() - t0, http: r.status };
+    const js = await r.json(), choice = js?.choices?.[0], content = choice?.message?.content;
+    const meta = { finish: choice?.finish_reason ?? null, tokens: js?.usage?.completion_tokens ?? null,
+      reasoning_tokens: js?.usage?.completion_tokens_details?.reasoning_tokens ?? null };
+    return typeof content === "string" && content ? { status: "ok", content, ms: Date.now() - t0, ...meta } : { status: "error", content: null, ms: Date.now() - t0, ...meta };
   } catch {
     return { status: ctl.signal.aborted ? "timeout" : "error", content: null, ms: Date.now() - t0 };
   } finally {
@@ -52,8 +66,8 @@ export async function askModel(text: string, limit: number = timeoutMs()): Promi
 const ISO = /^\d{4}-\d{2}-\d{2}$/;
 const isDate = (v: unknown): v is string => typeof v === "string" && ISO.test(v) && !Number.isNaN(Date.parse(v));
 
-/** The model's reply as fields, or why it cannot be used: "invalid" (not the schema) or "off_list" (place not on the list). */
-export function validate(content: string, places: Places): Fields | "invalid" | "off_list" {
+/** The model's reply as fields, or why it cannot be used: "invalid" (not the schema), "off_list" (names a place not on the list) or "no_place". */
+export function validate(content: string, places: Places): Fields | "invalid" | "off_list" | "no_place" {
   let o: Record<string, unknown>;
   try {
     o = JSON.parse(content.slice(content.indexOf("{"), content.lastIndexOf("}") + 1));
@@ -69,7 +83,8 @@ export function validate(content: string, places: Places): Fields | "invalid" | 
     : kind === "period" ? isDate(from) && isDate(to) && from <= to
     : from === null && to === null;
   if (!dates) return "invalid";
-  const match = typeof place === "string" ? findPlace(place, places) : null;
+  if (place === null || !place.trim()) return "no_place";
+  const match = findPlace(place, places);
   if (!match) return "off_list";
   return {
     place_id: match.place.id, place_text: place as string, polarity, date_kind: kind as Fields["date_kind"],

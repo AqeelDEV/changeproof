@@ -10,33 +10,52 @@
  "cache": {
   "chokwe was under water on 17 january": {
    "status": "ok",
-   "content": "```json\n{\"place\": \"Chókwè\", \"polarity\": \"positive\", \"date_kind\": \"day\", \"date_from\": \"2026-01-17\", \"date_to\": \"2026-01-17\", \"claim_type\": \"flood\", \"quantifier",
-   "ms": 2522
+   "content": "```json\n{\"place\": \"Chókwè\", \"polarity\": \"positive\", \"date_kind\": \"day\", \"date_from\": \"2026-01-17\", \"date_to\": \"2026-01-17\", \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 1.0}\n```",
+   "ms": 653,
+   "finish": "stop",
+   "tokens": 84,
+   "reasoning_tokens": 0
   },
   "xai xai nao alagou": {
    "status": "ok",
-   "content": "{\"place\": \"Xai Xai\", \"polarity\": \"negative\", \"date_kind\": \"none\", \"date_",
-   "ms": 2512
+   "content": "```json\n{\"place\": \"Xai Xai\", \"polarity\": \"negative\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 1.0}\n```",
+   "ms": 761,
+   "finish": "stop",
+   "tokens": 64,
+   "reasoning_tokens": 0
   },
   "xai xai was under water on 25 jan": {
    "status": "ok",
-   "content": "{\"place\": \"Xai-Xai\", \"polarity\": \"positive\", \"date_kind\": \"day\", \"date_from\": \"2026-01-25\", \"date_to\": \"2026-01-25\", \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 0.95}",
-   "ms": 2336
+   "content": "```json\n{\"place\": \"Xai-Xai\", \"polarity\": \"positive\", \"date_kind\": \"day\", \"date_from\": \"2026-01-25\", \"date_to\": \"2026-01-25\", \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 1.0}\n```",
+   "ms": 645,
+   "finish": "stop",
+   "tokens": 85,
+   "reasoning_tokens": 0
   },
   "homes were destroyed in chokwe": {
    "status": "ok",
-   "content": "{\"place\": \"Chókwè\", \"polarity\": \"positive\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"damage\", \"quantifier\": null, \"confidence\": 0.9}",
-   "ms": 3117
+   "content": "```json\n{\"place\": \"Chókwè\", \"polarity\": \"positive\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"damage\", \"quantifier\": null, \"confidence\": 1.0}\n```",
+   "ms": 729,
+   "finish": "stop",
+   "tokens": 64,
+   "reasoning_tokens": 0
   },
   "maputo was flooded": {
    "status": "ok",
-   "content": "{\"place\": \"Maputo\", \"polarity\": \"positive\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 1.0}",
-   "ms": 2998
+   "content": "```json\n{\"place\": \"Maputo\", \"polarity\": \"positive\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 1.0}\n```",
+   "ms": 690,
+   "finish": "stop",
+   "tokens": 62,
+   "reasoning_tokens": 0
   },
   "massingir ficou debaixo de agua ontem": {
    "status": "ok",
-   "content": "```json\n{\"place\": \"Massingir\", \"polarity\": \"positive\", \"date_kind\": \"relative\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 0.95}\n```",
-   "ms": 2952
+   "content": "```json\n{\"place\": \"Massingir\", \"polarity\": \"positive\", \"date_kind\": \"relative\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 1.0}\n```",
+   "ms": 591,
+   "finish": "stop",
+   "tokens": 63,
+   "reasoning_tokens": 0
   }
- }
+ },
+ "settings": "7dcbac70"
 }

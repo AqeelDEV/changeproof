@@ -21,11 +21,73 @@ Where things stand:
    - The optional building fields in `results` (see `docs/DATA_CONTRACT.md`, 12 Nov addition).
    - AOI06, where 35% of the grid has no NISAR data.
 4. **`pipeline/__pycache__` is tracked in git.** Add `__pycache__/` to `.gitignore` and untrack it. It was outside tonight's folders, so it is not done.
-5. **Claims: first run done (41 of 45 verdicts on both paths).** See "claim checker and its first test run". Next: the fixes after it, the published claims, then the move into `web/lib/`.
+5. **Claims: first run done (41 of 45 verdicts on both paths).** After the fixes the rerun gets 42 of 45 with the parser alone; it is not a clean test (see "fixes after the first claim run"). Next:
+   - put the published claims into `claims/real_claims.json` and run them;
+   - choose the model, which trades speed against fields;
+   - move the code into `web/lib/`.
 
 Keep in mind:
 - AOI05 has now been scored three times: the rule (11 Nov), LightGBM v1 (12 Nov, the clean test) and LightGBM v2 (12 Nov, the post-fix rerun, labelled as such). Do not tune anything else on AOI05.
 - AOI01 can no longer check the land-median definition independently.
+
+## Done, 12 Nov: fixes after the first claim run (after fixes, not a clean test)
+
+**What changed** (the thresholds and the verdict rules did not):
+
+1. **"n".** It counts as a negator only directly before a Portuguese flood word ("n alagou", "n inundou", "n inundado"). Before anything else it is not one, for example "Rua n 5" or "flooded n destroyed". Bare "no" is still a negator only in English claims.
+2. **Negation scope.** A negator anywhere earlier in the same clause now negates the cue. Before, it had to be within three words.
+   - A clause ends at a full stop or comma followed by a space, at ";", "!" or "?", and before "mas", "but", "porém", "contudo", "todavia", "however", "although", "though" and "embora".
+   - Dots and commas inside numbers ("17.01.2026", "2,5") do not end a clause.
+3. **The model.**
+   - **The cause, now confirmed.** Three calls at max_tokens 200 returned finish reason "length". In those calls, 147 to 190 of the 196 completion tokens went on hidden reasoning, so the JSON was cut off.
+   - **The fix.** max_tokens is now 1000. Each reply records its finish reason, its completion and reasoning tokens, and the HTTP status when a call fails.
+   - **Recorded replies.** These are kept apart by a settings key, a hash of the model, the token limit and the prompt, so a new `LLM_MODEL` records afresh.
+     - The first run's replies stay under "first run 12 Nov (max_tokens 200)".
+     - The demo replies are recorded again whenever the settings change. `claims/demo.json` now holds the lighter model's replies (key 7dcbac70).
+   - **What did not change.** The prompt is the same. Validation only changed to tell "no place named" apart from "a place not on the list", and the status shown is still `off_list` for both.
+4. **Published claims** (`claims/real_claims.json`). Each entry has `quote`, `source`, `link`, `published`, and optionally `refers_to` and `place_hint`.
+   - **Relative words** are worked out from `published`:
+
+     | Words | Day read |
+     |---|---|
+     | today, hoje, agora, now | the published day |
+     | yesterday, ontem, last night | the day before |
+     | anteontem | two days before |
+     | tomorrow, amanhã | the day after |
+     | this week, esta semana | the seven days to the article |
+     | last week, semana passada | the seven days before those |
+
+     Weekend words are left unresolved. For example, "ontem" in an article published on 19 Jan is 18 Jan, so it is not observable. The reasons give the reading.
+   - **`place_hint`** is used only when the quote names no listed place and the model did not name a place off the list. The reasons then say the place "was taken from the article, not the quote".
+     - The limit: with no model reply, a quote naming an unlisted place looks the same as one naming none. That is why `place_hint` should only be set by hand, on quotes that name no place.
+   - **`refers_to`** is used only when the quote has no date and no relative word that `published` resolves.
+
+**Checks:**
+- `rules.ts` passes 77 of 77, which includes 20 new checks for the four changes above.
+- The type check passes.
+
+**Rerun, 12 Nov** (after fixes, not a clean test; I ran it here, with the endpoint and models set in the shell only):
+
+| Run | Fields correct | Verdict correct | Model replies within 2,500 ms | Fields came from |
+|---|---|---|---|---|
+| Parser alone | 45 of 45 | 42 of 45 (clean 28 of 30, messy 14 of 15) | n/a | parser 45 |
+| Parser plus the first model (key 71f8063d) | 44 of 45 | 42 of 45 (clean 28 of 30, messy 14 of 15) | 12 of 45 (median 2,828 ms, slowest 4,514 ms) | parser 34, model 11 |
+| Parser plus the lighter model (key 7dcbac70) | 40 of 45 | 41 of 45 (clean 28 of 30, messy 13 of 15) | 45 of 45 (median 691 ms, slowest 1,094 ms) | model 42, parser 2, conflict 1 |
+
+- **No cut-off replies.** The finish reason was "stop" for all 45 replies from both models, and no reply was invalid.
+- **Palmeira, in every run.** c10, c15 and m07 still fail, because NISAR and Copernicus disagree there (see the first run below). c15's polarity is now right.
+- **m13 "Macuachane n alagou".**
+  - It is now right with the parser alone and with the first model.
+  - The lighter model read it as flooding while the parser read no flooding. That is a conflict, so the verdict is not provable, as the rules say.
+- **Quantifier differences that change no verdict.**
+  - First model: c28 ("two metres").
+  - Lighter model: c19 ("destroyed"), c24 ("2000"), c28 ("two metres"), m11 ("Muitas") and m12 ("ate ao telhado").
+  - The cause: the prompt asks for "the amount claimed", and the model reads that more widely than the parser does.
+  - Not changed: a prompt line that limits it to how much of the place flooded would likely fix these, but it would be fitted to these test claims.
+- **The trade-off between the two models.**
+  - The first model's fields are close to the parser's, but 33 of 45 replies miss 2,500 ms, so the parser decides most claims.
+  - The lighter model answers every claim in time. It costs one conflict (m13) and puts more into the quantifier.
+- **Published claims:** none yet.
 
 ## Done, 12 Nov: claim checker and its first test run
 

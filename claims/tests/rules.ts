@@ -6,7 +6,8 @@
 //   node claims/tests/rules.ts
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { parse, type Fields, type Place, type Places } from "../parse.ts";
+import { check, type Result } from "../check.ts";
+import { parse, resolveRelative, type Fields, type Place, type Places } from "../parse.ts";
 import { isDry, isWet, verdict } from "../verdict.ts";
 
 const places: Places = JSON.parse(readFileSync(new URL("../../data/places.json", import.meta.url), "utf8"));
@@ -17,6 +18,7 @@ const day = (d: string): Partial<Fields> => ({ date_kind: "day", date_from: d, d
 let n = 0;
 const is = (got: unknown, want: unknown, label: string) => { assert.equal(got, want, label); n++; };
 const v = (fields: Fields, ps: Places = places, other?: Fields) => verdict(fields, ps, other).verdict;
+const nameOf = (r: Result) => places.places.find((p) => p.id === r.fields.place_id)?.name ?? null;
 
 // 1. Real places, by hand.
 is(v(f("Chókwè")), "supported", "Chókwè: 42.1% new water of valid, 1,191 ha: wet");
@@ -81,11 +83,37 @@ is(v(f("Macuachane"), places, f("Macuachane", { polarity: "negative" })), "not p
 is(v(f("Macuachane", day("2026-01-25")), places, f("Maconguele", day("2026-01-25"))), "not observable", "both readings fail the date gate");
 is(v(f("Machubo"), places, f("Macuachane")), "not provable", "one reading passes the gates");
 
-// 6. Portuguese "no" is "in the"; English "no" is a negator; bare "n" is not one.
+// 6. Negation (changed after the first run). Portuguese "no" is "in the"; English "no" is a negator; "n" is one only
+// directly before a Portuguese flood word; a negator reaches the cue anywhere earlier in the same clause.
 is(parse("No flooding in Maconguele", places).polarity, "negative", "English no");
 is(parse("cheias no distrito de Maconguele", places).polarity, "positive", "Portuguese no");
 is(parse("Maconguele nao alagou", places).polarity, "negative", "nao");
-is(parse("Maconguele n alagou", places).polarity, "positive", "bare n is not a negator");
+is(parse("Maconguele n alagou", places).polarity, "negative", "n directly before alagou");
+is(parse("Maconguele n inundado", places).polarity, "negative", "n directly before inundado");
+is(parse("Rua n 5 alagada em Maconguele", places).polarity, "positive", "n as an abbreviation is not a negator");
+is(parse("Maconguele flooded n destroyed", places).polarity, "positive", "n before an English word is not a negator");
+is(parse("Maconguele nao foi afectada pelas cheias", places).polarity, "negative", "negator four words before the cue");
+is(parse("Sem energia, Maconguele alagou", places).polarity, "positive", "a comma ends the clause");
+is(parse("Nao sei mas Maconguele alagou", places).polarity, "positive", "mas ends the clause");
+is(parse("Not sure. Maconguele flooded", places).polarity, "positive", "a full stop ends the clause");
+is(parse("Nao houve a 17.01.2026 cheias em Maconguele", places).polarity, "negative", "dots inside a date do not end the clause");
 is(parse("Maconguele nao alagou, fake news", places).polarity, "negative", "fake news keeps a negative claim negative");
+
+// 7. Published claims: relative dates from the published date, and the article's place only when the quote names none.
+process.env.LLM_DISABLED = "1";
+is(JSON.stringify(resolveRelative("ontem", "2026-01-19")), '{"from":"2026-01-18","to":"2026-01-18"}', "ontem in an article of 19 Jan");
+is(JSON.stringify(resolveRelative("this week", "2026-01-19")), '{"from":"2026-01-13","to":"2026-01-19"}', "this week: the seven days to the article");
+is(resolveRelative("fim de semana", "2026-01-19"), null, "a weekend is left unresolved");
+const r1 = await check("Macuachane ficou alagada ontem", places, { published: "2026-01-18" });
+is(r1.fields.date_from, "2026-01-17", "ontem on 18 Jan is 17 Jan");
+is(r1.verdict, "supported", "and 17 Jan is judged");
+is(r1.reasons.some((x) => x.includes('"ontem" in an article published 2026-01-18')), true, "the reasons say how the date was read");
+is((await check("Macuachane ficou alagada ontem", places, { published: "2026-01-19" })).verdict, "not observable", "ontem on 19 Jan is 18 Jan");
+is((await check("Macuachane ficou alagada hoje", places, { published: "2026-01-17", date: "2026-01-25" })).verdict, "supported", "a resolved relative word wins over refers_to");
+is((await check("Macuachane ficou alagada", places, { published: "2026-01-19", date: "2026-01-16" })).fields.date_from, "2026-01-16", "no date: refers_to");
+const r2 = await check("A aldeia ficou debaixo de agua", places, { place_hint: "Macuachane" });
+is(nameOf(r2), "Macuachane", "no place in the quote: the hint");
+is(r2.reasons.some((x) => x.includes("taken from the article, not the quote")), true, "the reasons say so");
+is(nameOf(await check("Maconguele ficou debaixo de agua", places, { place_hint: "Macuachane" })), "Maconguele", "the quote's place wins over the hint");
 
 console.log(`rules.ts: ${n} of ${n} checks passed`);

@@ -1,136 +1,164 @@
 "use client";
 
-import { useState } from "react";
-import { checkClaim, SAMPLES } from "../lib/checkClaim";
-import type { ClaimPlace, ClaimResult } from "./types";
+import { useEffect, useRef, useState } from "react";
+import { checkClaim, PRESETS, PUBLISHED, type ClaimOpts, type PublishedClaim } from "../lib/checkClaim";
+import { dateRead, NUMBER_LABELS, reportMarkdown, showNumber } from "../lib/report";
+import type { ClaimPlace, ClaimRequest, ClaimResult, Stats } from "./types";
 
-const PRESETS = Object.keys(SAMPLES);
-const IS_SAMPLE = new Set(Object.values(SAMPLES));
+const MEANING: Record<string, string> = {
+  supported: "The data shows it, inside the time and area NISAR covered.",
+  contradicted: "The data shows otherwise, inside the time and area NISAR covered.",
+  "not observable": "The claim falls outside the time or area NISAR covered.",
+  "not provable": "Inside the time and area, but radar cannot settle it.",
+};
 
-// Any evidence shape as rows: {a: {b: 1}, c: [{d: 2}]} -> [["a.b", 1], ["c[1].d", 2]]
-function flatten(v: unknown, key = ""): [string, string][] {
-  if (Array.isArray(v)) return v.flatMap((x, i) => flatten(x, `${key}[${i + 1}]`));
-  if (v && typeof v === "object")
-    return Object.entries(v).flatMap(([k, x]) => flatten(x, key ? `${key}.${k}` : k));
-  return [[key || "value", v === null ? "none" : String(v)]];
-}
+const optsOf = (c: PublishedClaim): ClaimOpts => ({ published: c.published, date: c.refers_to ?? undefined, place_hint: c.place_hint });
 
-export default function ClaimPanel({ onPlace }: { onPlace: (p: ClaimPlace) => void }) {
+export default function ClaimPanel({ areas, request, onPlace }: {
+  areas: Stats[];
+  request: ClaimRequest | null; // a claim asked for from outside the panel: a map marker or a tour step
+  onPlace: (p: ClaimPlace) => void;
+}) {
   const [text, setText] = useState("");
   const [result, setResult] = useState<ClaimResult | null>(null);
-  const [miss, setMiss] = useState(false);
+  const [source, setSource] = useState<PublishedClaim | null>(null);
+  const [busy, setBusy] = useState(false);
+  const seq = useRef(0);
 
-  async function run(t: string) {
+  async function run(t: string, opts: ClaimOpts = {}, src: PublishedClaim | null = null) {
+    if (!t.trim()) return;
+    const n = ++seq.current;
     setText(t);
-    const r = await checkClaim(t);
+    setBusy(true);
+    const r = await checkClaim(t, opts);
+    if (n !== seq.current) return; // a newer claim was asked meanwhile
+    setBusy(false);
+    setSource(src);
     setResult(r);
-    setMiss(!r && t.trim() !== "");
-    if (r?.fields.place) onPlace(r.fields.place); // zoom straight away; the card click zooms again
+    if (r.fields.place) onPlace(r.fields.place); // zoom straight away; the card click zooms again
   }
 
-  const place = result?.fields.place;
-  const f = result?.fields;
+  useEffect(() => {
+    if (!request) return;
+    const src = PUBLISHED.find((c) => c.quote === request.text) ?? null;
+    run(request.text, src ? optsOf(src) : {}, src);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run only when a new request arrives
+  }, [request]);
+
+  const f = result?.fields, place = f?.place, e = result?.evidence;
+  const area = areas.find((a) => a.area_id === place?.area);
+
+  function download() {
+    if (!result) return;
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([reportMarkdown(result, area, location.href, source ?? undefined)], { type: "text/markdown" }));
+    a.download = `changeproof-${(place?.name ?? "claim").normalize("NFD").replace(/[^a-zA-Z0-9]+/g, "-").toLowerCase()}-report.md`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
 
   return (
     <section className="claims">
-      <h2>Check a claim</h2>
+      <h2 className="no-print">Check a flood claim</h2>
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
+        className="no-print"
+        onSubmit={(ev) => {
+          ev.preventDefault();
           run(text);
         }}
       >
-        <input
-          aria-label="Claim"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="e.g. Chókwè was flooded on 17 January"
-        />
-        <button type="submit">Check</button>
+        <input aria-label="Claim" maxLength={300} value={text} onChange={(ev) => setText(ev.target.value)}
+          placeholder="e.g. Chókwè was flooded on 17 January" />
+        <button type="submit" disabled={busy}>{busy ? "Checking" : "Check"}</button>
       </form>
-      <div className="presets">
+      <div className="presets no-print">
         {PRESETS.map((p) => (
-          <button key={p} type="button" onClick={() => run(p)}>
-            {p}
-          </button>
+          <button key={p} type="button" onClick={() => run(p)}>{p}</button>
         ))}
       </div>
-      {miss && <p className="tag">The live checker is not connected yet. Try one of the examples.</p>}
 
       {result && f && (
-        <div
-          className={`result${place ? " clickable" : ""}`}
-          {...(place && {
-            role: "button",
-            tabIndex: 0,
-            title: `Zoom the map to ${place.name}`,
-            onClick: () => onPlace(place),
-            onKeyDown: (e: React.KeyboardEvent) => (e.key === "Enter" || e.key === " ") && onPlace(place),
-          })}
-        >
-          {IS_SAMPLE.has(result) && <span className="sample">Sample result</span>}
-          <p className="headline">{result.headline}</p>
+        <div className={`result r-${result.verdict.replace(" ", "-")}`} aria-live="polite">
+          <p className="print-only"><b>ChangeProof evidence report</b></p>
+          <p className="quote">“{result.claim}”</p>
+          {source && (
+            <p className="tag">
+              {source.source}, published {source.published}. <a href={source.link} target="_blank" rel="noreferrer">Source</a>
+            </p>
+          )}
           <p>
             <span className={`verdict v-${result.verdict.replace(" ", "-")}`}>{result.verdict}</span>{" "}
-            <span className="tag">as of {result.as_of}</span>
+            <span className="tag">as of {result.as_of}, NISAR Beta data</span>
           </p>
+          <p className="tag">{MEANING[result.verdict]}</p>
+          <p className="headline">{result.headline}</p>
           <ul>
             {result.reasons.map((r) => (
               <li key={r}>{r}</li>
             ))}
           </ul>
-          <h3>What the claim says</h3>
-          <table>
-            <tbody>
-              <tr>
-                <td>Place</td>
-                <td>{place ? `${place.name} (${place.area}, ${place.buffer_m / 1000} km around it)` : "none matched"}</td>
-              </tr>
-              <tr>
-                <td>Polarity</td>
-                <td>{f.polarity}</td>
-              </tr>
-              <tr>
-                <td>Date</td>
-                <td>
-                  {f.date_kind}
-                  {f.date_from && `: ${f.date_from}${f.date_to && f.date_to !== f.date_from ? ` to ${f.date_to}` : ""}`}
-                  {f.date_kind === "since" && " onwards"}
-                </td>
-              </tr>
-              <tr>
-                <td>Type</td>
-                <td>{f.claim_type}</td>
-              </tr>
-              <tr>
-                <td>Quantifier</td>
-                <td>{f.quantifier ?? "none"}</td>
-              </tr>
-              <tr>
-                <td>Confidence</td>
-                <td>{f.confidence}</td>
-              </tr>
-            </tbody>
-          </table>
-          <p className="tag">
-            Fields from: {result.path} (model: {result.model_status})
-          </p>
-          <details>
-            <summary>Evidence</summary>
-            <table className="mono">
+          <div className="actions no-print">
+            {place && <button type="button" onClick={() => onPlace(place)}>Show {place.name} on the map</button>}
+            <button type="button" onClick={download}>Export report (.md)</button>
+            <button type="button" onClick={() => window.print()}>Print / save as PDF</button>
+          </div>
+
+          <details open>
+            <summary>How the claim was read</summary>
+            <table>
               <tbody>
-                {flatten(result.evidence).map(([k, v]) => (
-                  <tr key={k}>
-                    <td>{k}</td>
-                    <td>{v}</td>
-                  </tr>
-                ))}
+                <tr><td>Place</td><td>{place ? `${place.name} (${place.area}), ${place.buffer_m / 1000} km around it` : "none matched"}</td></tr>
+                <tr><td>Says</td><td>{f.polarity === "negative" ? "it did not happen" : "it happened"}</td></tr>
+                <tr><td>Date</td><td>{dateRead(f)}</td></tr>
+                <tr><td>Type</td><td>{f.claim_type}</td></tr>
+                <tr><td>Amount</td><td>{f.quantifier ?? "none"}</td></tr>
               </tbody>
             </table>
+            <p className="tag">
+              Fields from: {result.path} (model: {result.model_status}). The model only fills these fields. Fixed rules on
+              the measured numbers give the verdict.
+            </p>
           </details>
-          {place && <p className="tag">Click this card to zoom the map to {place.name}.</p>}
+
+          {e && (
+            <details className="evidence">
+              <summary>Evidence: numbers, Copernicus, scenes</summary>
+              <table>
+                <tbody>
+                  {Object.entries(e.numbers).map(([k, v]) => (
+                    <tr key={k}><td>{NUMBER_LABELS[k] ?? k}</td><td>{showNumber(k, v)}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+              <h3>Copernicus EMS at this place</h3>
+              <ul>{e.copernicus.map((c) => <li key={c}>{c}</li>)}</ul>
+              <h3>Buildings</h3>
+              <p>{e.buildings}</p>
+              <h3>NISAR scenes</h3>
+              {e.area.granules.map((g) => <p key={g} className="mono">{g}</p>)}
+              <h3>Caveats</h3>
+              <ul>{e.caveats.map((c) => <li key={c}>{c}</li>)}</ul>
+              {area && (
+                <>
+                  <h3>Limits for {area.name}</h3>
+                  <ul>{area.limits.map((l) => <li key={l}>{l}</li>)}</ul>
+                </>
+              )}
+            </details>
+          )}
         </div>
       )}
+
+      <div className="published no-print">
+        <h2>Published claims</h2>
+        <p className="tag">Short quotes from news and UN reports on the flood. Reported as they come out, never used to tune anything.</p>
+        {PUBLISHED.map((c) => (
+          <button key={c.quote} type="button" onClick={() => run(c.quote, optsOf(c), c)}>
+            “{c.quote}”
+            <span className="tag">{c.source}, {c.published}</span>
+          </button>
+        ))}
+      </div>
     </section>
   );
 }

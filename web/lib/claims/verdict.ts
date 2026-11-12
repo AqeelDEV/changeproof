@@ -1,4 +1,4 @@
-// Verdict rules: fixed thresholds on data/places.json only. Approved 12 Nov 2026 before any test claim was written;
+// Verdict rules: fixed thresholds on web/public/data/places.json only. Approved 12 Nov 2026 before any test claim was written;
 // never change them on test results.
 import type { Fields, Place, Places } from "./parse.ts";
 

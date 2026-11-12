@@ -1,0 +1,84 @@
+[
+  {
+    "quote": "submersão da ponte que liga Guijá a Chókwè",
+    "source": "AIM (Agência de Informação de Moçambique)",
+    "link": "https://aimnews.org/2026/01/16/drama-de-cheias-a-vista-chokwe-e-guija-submersos/",
+    "published": "2026-01-16",
+    "refers_to": "2026-01-15"
+  },
+  {
+    "quote": "Quase todos os bairros estão inundados",
+    "source": "O País",
+    "link": "https://opais.co.mz/cheias-avancam-sobre-chokwe-e-colocam-cidade-em-risco/",
+    "published": "2026-01-16",
+    "refers_to": "2026-01-16",
+    "place_hint": "Chókwè"
+  },
+  {
+    "quote": "pelo menos 12 pessoas, entre crianças e adolescentes, isoladas no topo de um autocarro",
+    "source": "AIM (Agência de Informação de Moçambique)",
+    "link": "https://aimnews.org/2026/01/18/cheias-chapo-alerta-as-populacoes-para-priorizarem-a-salvaguarda-da-vida/",
+    "published": "2026-01-17",
+    "refers_to": "2026-01-17",
+    "place_hint": "Chókwè"
+  },
+  {
+    "quote": "Mais de 100 pessoas foram resgatadas ontem de helicóptero",
+    "source": "Carta de Moçambique",
+    "link": "https://cartamz.com/destaque/48564/chokwe-volta-a-viver-o-drama-das-cheias-13-anos-depois/",
+    "published": "2026-01-19",
+    "refers_to": null,
+    "place_hint": "Chókwè"
+  },
+  {
+    "quote": "a água já começou a entrar na cidade do Xai-Xai",
+    "source": "Canal de Moçambique",
+    "link": "https://canal.co.mz/2026/01/20/cerca-de-cem-mil-pessoas-afectadas-pela-subida-do-nivel-do-rio-limpopo/",
+    "published": "2026-01-20",
+    "refers_to": null
+  },
+  {
+    "quote": "circulação encontra-se interrompida em vários troços rodoviários estratégicos, incluindo Macia–Chókwè",
+    "source": "O Económico",
+    "link": "https://www.oeconomico.com/cheias-em-gaza-e-maputo-agravam-crise-humanitaria-e-economica-na-epoca-chuvosa/",
+    "published": "2026-01-20",
+    "refers_to": "2026-01-20"
+  },
+  {
+    "quote": "The majority of the people affected, 75 percent, are in Gaza",
+    "source": "OCHA (Flash Update No. 4)",
+    "link": "https://www.unocha.org/publications/report/mozambique/mozambique-flash-update-no4-heavy-rains-and-floods-central-and-southern-mozambique-21-january-2026",
+    "published": "2026-01-21",
+    "refers_to": "2026-01-21"
+  },
+  {
+    "quote": "O Baixo Limpopo encontra-se severamente inundado",
+    "source": "AIM (Agência de Informação de Moçambique)",
+    "link": "https://aimnews.org/2026/01/30/cheias-no-limpopo-obrigam-centenas-de-pessoas-a-travessias-perigosas-rumo-a-maputo",
+    "published": "2026-01-30",
+    "refers_to": "2026-01-30",
+    "place_hint": "Xai-Xai"
+  },
+  {
+    "quote": "arrastado pelas águas em Chókwè",
+    "source": "Canal MZ",
+    "link": "https://canalmz.com/encontrado-corpo-de-vereador-sul-africano-desaparecido-nas-cheias-em-mocambique/",
+    "published": "2026-01-28",
+    "refers_to": null
+  },
+  {
+    "quote": "2.258 quilómetros quadrados ficaram submersos desde 15 de janeiro",
+    "source": "Lusa (via RTP)",
+    "link": "https://www.rtp.pt/noticias/mundo/cheias-nunca-vistas-em-chokwe-ocuparam-88-do-celeiro-de-mocambique-e-ameacam-com-fome_n1716946",
+    "published": "2026-02-07",
+    "refers_to": null,
+    "place_hint": "Chókwè"
+  },
+  {
+    "quote": "The flood waters of the Limpopo river have engulfed the town of Chokwe",
+    "source": "AIM (Agência de Informação de Moçambique)",
+    "link": "https://aimnews.org/?p=48272",
+    "published": "2026-01-17",
+    "refers_to": "2026-01-17"
+  }
+]

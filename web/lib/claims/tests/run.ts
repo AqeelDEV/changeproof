@@ -2,7 +2,7 @@
 // reports counts and every failure. Then: the places where the dry rule fires, the demo claims (from their cache,
 // no network) and the published claims in ../real_claims.json, which have no expected values.
 //
-//   node claims/tests/run.ts
+//   node web/lib/claims/tests/run.ts
 //
 // Model replies come from model_cache.json, kept apart per settings key (a hash of the model, prompt and token limit,
 // so a new LLM_MODEL records afresh). Missing ones are recorded first, with a 20 s timeout, when LLM_BASE_URL,
@@ -23,7 +23,7 @@ interface RealClaim { quote: string; source: string; link: string; published: st
 
 const here = (p: string) => new URL(p, import.meta.url);
 const read = (p: string) => JSON.parse(readFileSync(here(p), "utf8"));
-const places: Places = read("../../data/places.json");
+const places: Places = read("../../../public/data/places.json");
 const tests: TestClaim[] = read("claims.json").claims;
 const demo: { claims: string[]; settings?: string; cache: Record<string, CacheEntry> } = read("../demo.json");
 const real: RealClaim[] = read("../real_claims.json");

@@ -3,12 +3,12 @@
 For every city, town, village and suburb node on an area grid, this measures a disk around the node (3 km for a
 city or town, 1 km for a village or suburb): coverage shares, detected new water, open ground (valid, not unclear,
 not built-up), each Copernicus map, new water already dark on 5 Jan and OSM buildings. The claim checker in
-claims/ picks its verdict from these numbers only.
+web/lib/claims/ picks its verdict from these numbers only.
 
 It also prints, for each city and town, the verdict class at 1 km and at 3 km from coverage and built-up numbers
 only (never new water), to show what the larger buffer changes.
 
-Writes data/places.json. The raw Overpass reply is kept in data/osm_places_raw.json, so a rerun does not fetch again.
+Writes web/public/data/places.json. The raw Overpass reply is kept in data/osm_places_raw.json, so a rerun does not fetch again.
 
   python pipeline\\places.py
 """
@@ -28,10 +28,10 @@ import make_outputs as mo
 import prep_aoi05 as p
 
 DATA = p.ROOT / "data"
-RAW, OUT = DATA / "osm_places_raw.json", DATA / "places.json"
+RAW, OUT = DATA / "osm_places_raw.json", p.ROOT / "web" / "public" / "data" / "places.json"  # committed, so the app and the claim tests need no data/ folder
 RADIUS_M = {"city": 3000, "town": 3000, "village": 1000, "suburb": 1000}
 NAME_TAGS = ("name", "name:pt", "name:en", "alt_name", "old_name", "official_name", "short_name")
-# Thresholds of the dry rule in claims/verdict.ts, used here only for the buffer comparison report.
+# Thresholds of the dry rule in web/lib/claims/verdict.ts, used here only for the buffer comparison report.
 MIN_VALID, MIN_OPEN, MAX_UNCLEAR = 0.50, 0.50, 0.10
 FEP = {"file": "label_emsr857_aoi01_fep_flood_30m.tif", "product": "First Estimate Product (FEP)",
        "sensor": "Sentinel-1", "observed_utc": "2026-01-16T16:22:00Z"}

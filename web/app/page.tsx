@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import App from "./App";
-import { SAMPLES } from "../lib/checkClaim";
+import { PRESETS, runCheck } from "../lib/checkClaim";
 import { formatUtc, buildingsLimit, VERDICTS, PATHS, MODEL_STATUSES, type Optical, type Stats } from "./types";
 
 const DATA = path.join(process.cwd(), "public", "data");
@@ -32,28 +32,19 @@ function check(s: Stats, id: string) {
   if (formatUtc("2026-01-17T03:42:32Z") !== "17 Jan 2026, 03:42 UTC") fail("formatUtc is wrong");
 }
 
-// Build-time shape check of web/lib/sample_results.json, so the real checker's output can be held to the same test.
-function checkSamples() {
-  const PLACE_KEYS = ["id", "name", "area", "lon", "lat", "buffer_m"];
-  const FIELD_KEYS = ["place", "polarity", "date_from", "date_to", "date_kind", "claim_type", "quantifier", "confidence"];
-  for (const [claim, r] of Object.entries(SAMPLES)) {
+// Build-time check of the real checker: every preset claim must give a well-formed result, with no network
+// (their model replies are recorded in lib/claims/demo.json).
+async function checkPresets() {
+  for (const claim of PRESETS) {
+    const r = await runCheck(claim);
     const fail = (msg: string) => {
-      throw new Error(`web/lib/sample_results.json, "${claim}": ${msg}`);
+      throw new Error(`preset claim "${claim}": ${msg}`);
     };
-    for (const k of ["path", "model_status", "fields", "verdict", "as_of", "headline", "reasons", "evidence"])
-      if (!(k in r)) fail(`${k} missing`);
-    if (!VERDICTS.includes(r.verdict)) fail(`verdict "${r.verdict}" is not one of ${VERDICTS.join(", ")}`);
-    if (!PATHS.includes(r.path)) fail(`path "${r.path}" is not one of ${PATHS.join(", ")}`);
-    if (!MODEL_STATUSES.includes(r.model_status))
-      fail(`model_status "${r.model_status}" is not one of ${MODEL_STATUSES.join(", ")}`);
-    for (const k of FIELD_KEYS) if (!(k in r.fields)) fail(`fields.${k} missing`);
-    const p = r.fields.place;
-    if (p !== null && !PLACE_KEYS.every((k) => k in p)) fail(`fields.place needs ${PLACE_KEYS.join(", ")} or null`);
-    if (p && (typeof p.lon !== "number" || typeof p.lat !== "number" || typeof p.buffer_m !== "number"))
-      fail("fields.place lon, lat and buffer_m must be numbers");
-    if (!Array.isArray(r.reasons) || !r.reasons.length) fail("reasons empty");
-    if (r.as_of !== "17 Jan 2026, 03:42 UTC" || !r.headline.includes(`as of ${r.as_of}`))
-      fail('as_of must be "17 Jan 2026, 03:42 UTC" and appear in the headline');
+    if (!VERDICTS.includes(r.verdict)) fail(`verdict "${r.verdict}"`);
+    if (!PATHS.includes(r.path) || !MODEL_STATUSES.includes(r.model_status)) fail(`path "${r.path}" or model status "${r.model_status}"`);
+    if (!r.reasons.length) fail("reasons empty");
+    if (r.as_of !== "17 Jan 2026, 03:42 UTC" || !r.headline.includes(`as of ${r.as_of}`)) fail("as_of missing from the headline");
+    if (r.fields.place && r.evidence?.place.id !== r.fields.place.id) fail("evidence is for another place");
     if (/accura/i.test(JSON.stringify(r))) fail('says "accuracy"; use "agreement"');
   }
 }
@@ -70,8 +61,8 @@ function readOptical(id: string): Optical | undefined {
   return o;
 }
 
-export default function Page() {
-  checkSamples();
+export default async function Page() {
+  await checkPresets();
   const ids: string[] = JSON.parse(fs.readFileSync(path.join(DATA, "areas.json"), "utf8"));
   const areas = ids.map((id) => {
     const s: Stats = JSON.parse(fs.readFileSync(path.join(DATA, id, "stats.json"), "utf8"));

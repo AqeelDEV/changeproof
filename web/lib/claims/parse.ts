@@ -16,7 +16,7 @@ export interface Copernicus {
   flooded_share_open: number | null;
 }
 
-/** One entry of data/places.json (pipeline/places.py). Shares are fractions of the buffer unless named otherwise. */
+/** One entry of web/public/data/places.json (pipeline/places.py). Shares are fractions of the buffer unless named otherwise. */
 export interface Place {
   id: string;
   name: string;

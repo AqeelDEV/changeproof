@@ -1,6 +1,6 @@
 # Data contract
 
-What `pipeline/` outputs for the app. `web/` and `claims/` read these files and nothing else from the pipeline. Version 1.1.
+What `pipeline/` outputs for the app. `web/` and `web/lib/claims/` read these files and nothing else from the pipeline. Version 1.1.
 
 Changes in 1.1 (11 Nov 2026):
 - The grey stretch is now -25 to 0 dB, because the 17 Jan scene is about 3 dB brighter and washed out at -5 dB.
@@ -10,6 +10,7 @@ Changes in 1.1 (11 Nov 2026):
 Addition on 12 Nov 2026, still version 1.1 (optional fields, so files without them stay valid):
 - `results.osm_buildings_in_new_water` and `results.osm_buildings_on_grid`: OpenStreetMap buildings (one point each) inside detected new water, and on the whole grid. The first can be too high or too low, and is never a damage count. It can be too low because OSM is incomplete and radar open-water detection misses flooded built-up areas. It can be too high because a 30 m pixel is larger than a house, and some detected water may not be flood.
 - `areas.json` lists every finished area.
+- `web/public/data/places.json` (optional, written by `pipeline/places.py`): the 50 named places inside the three grids, each with the numbers measured in its buffer. The claim checker reads only this file. Fields: see `Place` in `web/lib/claims/parse.ts`.
 - The four old 1.0 grey PNGs in `web/public/data/aoi05/` (`hh_*.png`, `hv_*.png`) are still there but no longer listed in `stats.json`. Use the WebP files; the PNGs will be removed.
 
 ## Layout

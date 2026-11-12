@@ -42,8 +42,8 @@ Floods in southern Mozambique, January 2026, area AOI05 (Chinhangane). NISAR GCO
 | Folder | Holds | Reads | Writes |
 |---|---|---|---|
 | `pipeline/` | Python: NISAR crop, grids, masks, metrics, PNGs, stats | Earthdata, Copernicus | `data/<area>/`, `web/public/data/<area>/` |
-| `web/` | Next.js app | `web/public/data/`, `claims/` | nothing |
-| `claims/` | Claim parser, verdict rules, evidence report | stats files only | nothing |
+| `web/` | Next.js app | `web/public/data/` | nothing |
+| `web/lib/claims/` | Claim parser, verdict rules, evidence report | `web/public/data/places.json` only | nothing |
 | `data/` | Large rasters and raw downloads, not committed | | |
 | `docs/`, `research/` | Contract; review and notes | | |
 

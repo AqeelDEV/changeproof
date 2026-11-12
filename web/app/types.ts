@@ -1,3 +1,5 @@
+import type { Evidence } from "../lib/claims/verdict.ts";
+
 // Subset of the stats.json schema (docs/DATA_CONTRACT.md, version 1.1) that the app reads.
 export type Bounds = [number, number, number, number]; // [west, south, east, north]
 
@@ -56,11 +58,11 @@ export function formatUtc(iso: string): string {
 
 export const buildingsLimit = (s: Stats) => s.limits.find((l) => l.startsWith("Buildings:"));
 
-// Claim checker result (claims/), one per claim. fields.place is null when no place matched.
+// Claim checker result (lib/claims/), one per claim. fields.place is null when no place matched.
 export const VERDICTS = ["supported", "contradicted", "not observable", "not provable"] as const;
 export type Verdict = (typeof VERDICTS)[number];
 
-// The checker's vocabulary (claims/check.ts).
+// The checker's vocabulary (lib/claims/check.ts).
 export const PATHS = ["parser", "model", "conflict"] as const;
 export const MODEL_STATUSES = ["used", "cached", "ignored", "disabled", "timeout", "error", "invalid", "off_list"] as const;
 
@@ -74,6 +76,7 @@ export interface ClaimPlace {
 }
 
 export interface ClaimResult {
+  claim: string;
   path: (typeof PATHS)[number];
   model_status: (typeof MODEL_STATUSES)[number];
   fields: {
@@ -90,8 +93,11 @@ export interface ClaimResult {
   as_of: string;
   headline: string;
   reasons: string[];
-  evidence: unknown;
+  evidence: Evidence | null;
 }
+
+// A claim to run, asked for from outside the panel. A new object each time, so the same text can run twice.
+export interface ClaimRequest { text: string }
 
 // web/public/data/<area>/optical.json, written by pipeline/export_optical.py.
 export interface Optical {

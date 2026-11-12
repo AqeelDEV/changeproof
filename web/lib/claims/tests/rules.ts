@@ -1,16 +1,16 @@
 // Rule unit tests, written after the test claims were frozen. Part 1 applies the approved thresholds by hand to the
-// numbers in data/places.json (12 Nov 2026); the rest uses synthetic places at the threshold edges and checks the
+// numbers in web/public/data/places.json (12 Nov 2026); the rest uses synthetic places at the threshold edges and checks the
 // date, coverage, type and conflict rules and the "no" rule. If these pass and a claim test fails, the failure is a
 // disagreement between NISAR and the Copernicus-based expectation, not a bug.
 //
-//   node claims/tests/rules.ts
+//   node web/lib/claims/tests/rules.ts
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { check, type Result } from "../check.ts";
 import { parse, resolveRelative, type Fields, type Place, type Places } from "../parse.ts";
 import { isDry, isWet, verdict } from "../verdict.ts";
 
-const places: Places = JSON.parse(readFileSync(new URL("../../data/places.json", import.meta.url), "utf8"));
+const places: Places = JSON.parse(readFileSync(new URL("../../../public/data/places.json", import.meta.url), "utf8"));
 const id = (name: string) => places.places.find((p) => p.name === name)!.id;
 const f = (place: string | null, over: Partial<Fields> = {}): Fields => ({ place_id: place && id(place), place_text: place, polarity: "positive",
   date_kind: "none", date_from: null, date_to: null, date_text: null, claim_type: "flood", quantifier: null, confidence: 1, ...over });

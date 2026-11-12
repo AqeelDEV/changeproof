@@ -1,0 +1,2386 @@
+{
+ "generated_utc": "2026-11-12T06:28:44Z",
+ "as_of_label": "17 Jan 2026, 03:42 UTC",
+ "buffer_m": {
+  "city": 3000,
+  "town": 3000,
+  "village": 1000,
+  "suburb": 1000
+ },
+ "areas": {
+  "aoi05": {
+   "name": "AOI05 Chinhangane, Mozambique",
+   "release": "Beta",
+   "scenes": [
+    {
+     "role": "before",
+     "granule_id": "NISAR_L2_PR_GCOV_009_114_A_166_4005_DHDH_A_20260105T034252_20260105T034303_X05010_N_P_J_001",
+     "track": 114,
+     "frame": 166,
+     "processing_version": "X05010",
+     "start_utc": "2026-01-05T03:42:52Z",
+     "end_utc": "2026-01-05T03:43:03Z",
+     "polarisations": [
+      "HH",
+      "HV"
+     ]
+    },
+    {
+     "role": "after",
+     "granule_id": "NISAR_L2_PR_GCOV_010_114_A_166_4005_DHDH_A_20260117T034253_20260117T034303_X05010_N_P_J_001",
+     "track": 114,
+     "frame": 166,
+     "processing_version": "X05010",
+     "start_utc": "2026-01-17T03:42:53Z",
+     "end_utc": "2026-01-17T03:43:03Z",
+     "polarisations": [
+      "HH",
+      "HV"
+     ]
+    }
+   ],
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:18:00Z"
+    }
+   ]
+  },
+  "aoi06": {
+   "name": "AOI06 Palmeira, Mozambique",
+   "release": "Beta",
+   "scenes": [
+    {
+     "role": "before",
+     "granule_id": "NISAR_L2_PR_GCOV_009_114_A_165_4005_DHDH_A_20260105T034232_20260105T034253_X05010_N_P_J_001",
+     "track": 114,
+     "frame": 165,
+     "processing_version": "X05010",
+     "start_utc": "2026-01-05T03:42:32Z",
+     "end_utc": "2026-01-05T03:42:53Z",
+     "polarisations": [
+      "HH",
+      "HV"
+     ]
+    },
+    {
+     "role": "after",
+     "granule_id": "NISAR_L2_PR_GCOV_010_114_A_165_4005_DHDH_A_20260117T034232_20260117T034254_X05010_N_P_J_001",
+     "track": 114,
+     "frame": 165,
+     "processing_version": "X05010",
+     "start_utc": "2026-01-17T03:42:32Z",
+     "end_utc": "2026-01-17T03:42:54Z",
+     "polarisations": [
+      "HH",
+      "HV"
+     ]
+    }
+   ],
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:19:00Z"
+    }
+   ]
+  },
+  "aoi01": {
+   "name": "AOI01 Chibabel: Chókwè, Macia and Xai-Xai, Mozambique",
+   "release": "Beta",
+   "scenes": [
+    {
+     "role": "before",
+     "granule_id": "NISAR_L2_PR_GCOV_009_114_A_165_4005_DHDH_A_20260105T034232_20260105T034253_X05010_N_P_J_001",
+     "track": 114,
+     "frame": 165,
+     "processing_version": "X05010",
+     "start_utc": "2026-01-05T03:42:32Z",
+     "end_utc": "2026-01-05T03:42:53Z",
+     "polarisations": [
+      "HH",
+      "HV"
+     ]
+    },
+    {
+     "role": "after",
+     "granule_id": "NISAR_L2_PR_GCOV_010_114_A_165_4005_DHDH_A_20260117T034232_20260117T034254_X05010_N_P_J_001",
+     "track": 114,
+     "frame": 165,
+     "processing_version": "X05010",
+     "start_utc": "2026-01-17T03:42:32Z",
+     "end_utc": "2026-01-17T03:42:54Z",
+     "polarisations": [
+      "HH",
+      "HV"
+     ]
+    }
+   ],
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z"
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z"
+    }
+   ]
+  }
+ },
+ "places": [
+  {
+   "id": "node/561314912",
+   "name": "3 de Fevereio",
+   "place": "village",
+   "lon": 33.50986,
+   "lat": -24.95761,
+   "buffer_m": 1000,
+   "variants": [
+    "3 de Fevereio",
+    "3deFevereio"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 3497,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.7692,
+   "open_share": 0.2308,
+   "new_water_ha": 0.2,
+   "new_water_share": 0.0006,
+   "new_water_share_open": 0.0,
+   "dark_5jan_share": 0.0,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    }
+   ],
+   "osm_buildings": 1994,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/561057937",
+   "name": "Chaimite",
+   "place": "village",
+   "lon": 33.33199,
+   "lat": -24.66065,
+   "buffer_m": 1000,
+   "variants": [
+    "Chaimite"
+   ],
+   "area": "aoi01",
+   "in_scored_area": true,
+   "pixels": 3503,
+   "coverage": {
+    "evaluated": 0.7131,
+    "outside_mapped_area": 0.1536,
+    "unclear": 0.0106,
+    "edge_excluded": 0.1228,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 0.9894,
+   "new_water_ha": 30.5,
+   "new_water_share": 0.0968,
+   "new_water_share_open": 0.0978,
+   "dark_5jan_share": 0.056,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.0297,
+     "flooded_share_open": 0.03
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.1776,
+     "flooded_share_open": 0.1795
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/2092566526",
+   "name": "Chiaquelane",
+   "place": "village",
+   "lon": 33.12876,
+   "lat": -24.81022,
+   "buffer_m": 1000,
+   "variants": [
+    "Chiaquelane"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 3493,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.6799,
+   "open_share": 0.3201,
+   "new_water_ha": 0.0,
+   "new_water_share": 0.0,
+   "new_water_share_open": 0.0,
+   "dark_5jan_share": null,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    }
+   ],
+   "osm_buildings": 2541,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/475542804",
+   "name": "Chibuto",
+   "place": "town",
+   "lon": 33.53126,
+   "lat": -24.68864,
+   "buffer_m": 3000,
+   "variants": [
+    "Chibuto"
+   ],
+   "area": "aoi01",
+   "in_scored_area": true,
+   "pixels": 31427,
+   "coverage": {
+    "evaluated": 0.6392,
+    "outside_mapped_area": 0.258,
+    "unclear": 0.0402,
+    "edge_excluded": 0.0627,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.1404,
+   "open_share": 0.8365,
+   "new_water_ha": 78.1,
+   "new_water_share": 0.0276,
+   "new_water_share_open": 0.033,
+   "dark_5jan_share": 0.1417,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.0152,
+     "flooded_share_open": 0.0182
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.2539,
+     "flooded_share_open": 0.3035
+    }
+   ],
+   "osm_buildings": 6079,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/561314902",
+   "name": "Chicumbane",
+   "place": "town",
+   "lon": 33.54939,
+   "lat": -24.98103,
+   "buffer_m": 3000,
+   "variants": [
+    "Chicumbane"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 31421,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.4346,
+   "open_share": 0.5654,
+   "new_water_ha": 157.0,
+   "new_water_share": 0.0555,
+   "new_water_share_open": 0.0982,
+   "dark_5jan_share": 0.0481,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 0.3438,
+     "flooded_share": 0.2696,
+     "flooded_share_open": 0.3077
+    }
+   ],
+   "osm_buildings": 13619,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/3622224936",
+   "name": "Chicumbane",
+   "place": "village",
+   "lon": 33.62904,
+   "lat": -25.02132,
+   "buffer_m": 1000,
+   "variants": [
+    "Chicumbane"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 3489,
+   "coverage": {
+    "evaluated": 0.5279,
+    "outside_mapped_area": 0.1275,
+    "unclear": 0.1548,
+    "edge_excluded": 0.1897,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0613,
+   "open_share": 0.7948,
+   "new_water_ha": 34.7,
+   "new_water_share": 0.1106,
+   "new_water_share_open": 0.1388,
+   "dark_5jan_share": 0.557,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.033,
+     "flooded_share_open": 0.0411
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.1594,
+     "flooded_share_open": 0.2001
+    }
+   ],
+   "osm_buildings": 182,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/561058070",
+   "name": "Chinhacanine",
+   "place": "village",
+   "lon": 32.88263,
+   "lat": -24.39219,
+   "buffer_m": 1000,
+   "variants": [
+    "Chinhacanine"
+   ],
+   "area": "aoi01",
+   "in_scored_area": true,
+   "pixels": 3488,
+   "coverage": {
+    "evaluated": 0.7681,
+    "outside_mapped_area": 0.0161,
+    "unclear": 0.0811,
+    "edge_excluded": 0.1347,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.5132,
+   "open_share": 0.4791,
+   "new_water_ha": 87.8,
+   "new_water_share": 0.2798,
+   "new_water_share_open": 0.5841,
+   "dark_5jan_share": 0.001,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.2701,
+     "flooded_share_open": 0.5637
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.2638,
+     "flooded_share_open": 0.5506
+    }
+   ],
+   "osm_buildings": 1649,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/561318728",
+   "name": "Chipenhe",
+   "place": "village",
+   "lon": 33.4382,
+   "lat": -24.93815,
+   "buffer_m": 1000,
+   "variants": [
+    "Chipenhe"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 3492,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0252,
+   "open_share": 0.9748,
+   "new_water_ha": 0.0,
+   "new_water_share": 0.0,
+   "new_water_share_open": 0.0,
+   "dark_5jan_share": null,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    }
+   ],
+   "osm_buildings": 19,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/561318726",
+   "name": "Chissano",
+   "place": "village",
+   "lon": 33.35905,
+   "lat": -24.93494,
+   "buffer_m": 1000,
+   "variants": [
+    "Chissano"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 3486,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0075,
+   "open_share": 0.9925,
+   "new_water_ha": 0.0,
+   "new_water_share": 0.0,
+   "new_water_share_open": 0.0,
+   "dark_5jan_share": null,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    }
+   ],
+   "osm_buildings": 4,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/2130849762",
+   "name": "Chókwè",
+   "place": "town",
+   "lon": 33.00368,
+   "lat": -24.52493,
+   "buffer_m": 3000,
+   "variants": [
+    "Chókwè",
+    "Chokwe"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 31427,
+   "coverage": {
+    "evaluated": 0.1901,
+    "outside_mapped_area": 0.5956,
+    "unclear": 0.0003,
+    "edge_excluded": 0.214,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.449,
+   "open_share": 0.551,
+   "new_water_ha": 1191.0,
+   "new_water_share": 0.4211,
+   "new_water_share_open": 0.7485,
+   "dark_5jan_share": 0.0172,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.486,
+     "flooded_share": 0.6885,
+     "flooded_share_open": 0.7553
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 0.9257,
+     "flooded_share": 0.5094,
+     "flooded_share_open": 0.8164
+    }
+   ],
+   "osm_buildings": 26564,
+   "osm_buildings_in_new_water": 27
+  },
+  {
+   "id": "node/2508977585",
+   "name": "Conhane",
+   "place": "village",
+   "lon": 33.09838,
+   "lat": -24.66726,
+   "buffer_m": 1000,
+   "variants": [
+    "Conhane"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 3498,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.3676,
+   "open_share": 0.6324,
+   "new_water_ha": 15.7,
+   "new_water_share": 0.0497,
+   "new_water_share_open": 0.0787,
+   "dark_5jan_share": 0.0,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.3165,
+     "flooded_share_open": 0.4028
+    }
+   ],
+   "osm_buildings": 1591,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/1425359836",
+   "name": "Elija",
+   "place": "town",
+   "lon": 33.72805,
+   "lat": -25.03315,
+   "buffer_m": 3000,
+   "variants": [
+    "Elija"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 31403,
+   "coverage": {
+    "evaluated": 0.8625,
+    "outside_mapped_area": 0.0439,
+    "unclear": 0.083,
+    "edge_excluded": 0.0106,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.6225,
+   "open_share": 0.3529,
+   "new_water_ha": 0.1,
+   "new_water_share": 0.0,
+   "new_water_share_open": 0.0,
+   "dark_5jan_share": 0.0,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.9561,
+     "flooded_share": 0.0,
+     "flooded_share_open": 0.0
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 0.9561,
+     "flooded_share": 0.0,
+     "flooded_share_open": 0.0
+    }
+   ],
+   "osm_buildings": 18770,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/561058033",
+   "name": "Guija",
+   "place": "village",
+   "lon": 33.0262,
+   "lat": -24.50148,
+   "buffer_m": 1000,
+   "variants": [
+    "Guija"
+   ],
+   "area": "aoi01",
+   "in_scored_area": true,
+   "pixels": 3490,
+   "coverage": {
+    "evaluated": 0.312,
+    "outside_mapped_area": 0.1556,
+    "unclear": 0.004,
+    "edge_excluded": 0.5284,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.6487,
+   "open_share": 0.351,
+   "new_water_ha": 123.6,
+   "new_water_share": 0.3934,
+   "new_water_share_open": 0.751,
+   "dark_5jan_share": 0.0371,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.4072,
+     "flooded_share_open": 0.8204
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.4539,
+     "flooded_share_open": 0.902
+    }
+   ],
+   "osm_buildings": 3114,
+   "osm_buildings_in_new_water": 159
+  },
+  {
+   "id": "node/2090312829",
+   "name": "Hokwe",
+   "place": "village",
+   "lon": 33.17304,
+   "lat": -24.68709,
+   "buffer_m": 1000,
+   "variants": [
+    "Hokwe"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 3484,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.5964,
+   "open_share": 0.4036,
+   "new_water_ha": 24.8,
+   "new_water_share": 0.0789,
+   "new_water_share_open": 0.1935,
+   "dark_5jan_share": 0.0,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.3367,
+     "flooded_share_open": 0.7994
+    }
+   ],
+   "osm_buildings": 3008,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/561318721",
+   "name": "Incaia",
+   "place": "village",
+   "lon": 33.21472,
+   "lat": -24.96587,
+   "buffer_m": 1000,
+   "variants": [
+    "Incaia"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 3486,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 1.0,
+   "new_water_ha": 0.0,
+   "new_water_share": 0.0,
+   "new_water_share_open": 0.0,
+   "dark_5jan_share": null,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/1425359822",
+   "name": "Incoluane",
+   "place": "town",
+   "lon": 32.9209,
+   "lat": -25.06394,
+   "buffer_m": 3000,
+   "variants": [
+    "Incoluane"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 31417,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0021,
+   "open_share": 0.9979,
+   "new_water_ha": 823.5,
+   "new_water_share": 0.2912,
+   "new_water_share_open": 0.2919,
+   "dark_5jan_share": 0.1721,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    }
+   ],
+   "osm_buildings": 16,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/561058084",
+   "name": "Javanhane",
+   "place": "village",
+   "lon": 33.16489,
+   "lat": -24.5611,
+   "buffer_m": 1000,
+   "variants": [
+    "Javanhane"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 3488,
+   "coverage": {
+    "evaluated": 0.215,
+    "outside_mapped_area": 0.2107,
+    "unclear": 0.0011,
+    "edge_excluded": 0.5731,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 0.9989,
+   "new_water_ha": 199.0,
+   "new_water_share": 0.6339,
+   "new_water_share_open": 0.6343,
+   "dark_5jan_share": 0.0,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.5645,
+     "flooded_share_open": 0.5649
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.6932,
+     "flooded_share_open": 0.6937
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/1425359823",
+   "name": "Macandene",
+   "place": "village",
+   "lon": 33.62814,
+   "lat": -25.01417,
+   "buffer_m": 1000,
+   "variants": [
+    "Macandene"
+   ],
+   "area": "aoi01",
+   "in_scored_area": true,
+   "pixels": 3495,
+   "coverage": {
+    "evaluated": 0.3376,
+    "outside_mapped_area": 0.2246,
+    "unclear": 0.0996,
+    "edge_excluded": 0.3382,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 0.9004,
+   "new_water_ha": 92.5,
+   "new_water_share": 0.2941,
+   "new_water_share_open": 0.326,
+   "dark_5jan_share": 0.4922,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.1185,
+     "flooded_share_open": 0.1303
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.3402,
+     "flooded_share_open": 0.3765
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/561058042",
+   "name": "Macarretane (Aldeia da Barragem)",
+   "place": "village",
+   "lon": 32.87076,
+   "lat": -24.40819,
+   "buffer_m": 1000,
+   "variants": [
+    "Macarretane (Aldeia da Barragem)",
+    "Macarretane(AldeiadaBarragem)",
+    "Macarretane",
+    "Aldeia da Barragem",
+    "AldeiadaBarragem"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 3489,
+   "coverage": {
+    "evaluated": 0.2324,
+    "outside_mapped_area": 0.2109,
+    "unclear": 0.002,
+    "edge_excluded": 0.5546,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.3356,
+   "open_share": 0.6629,
+   "new_water_ha": 144.9,
+   "new_water_share": 0.4615,
+   "new_water_share_open": 0.6079,
+   "dark_5jan_share": 0.0043,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.4566,
+     "flooded_share_open": 0.5292
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.4147,
+     "flooded_share_open": 0.5607
+    }
+   ],
+   "osm_buildings": 2121,
+   "osm_buildings_in_new_water": 132
+  },
+  {
+   "id": "node/561318715",
+   "name": "Macia",
+   "place": "town",
+   "lon": 33.09421,
+   "lat": -25.02985,
+   "buffer_m": 3000,
+   "variants": [
+    "Macia"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 31403,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.617,
+   "open_share": 0.383,
+   "new_water_ha": 1.0,
+   "new_water_share": 0.0004,
+   "new_water_share_open": 0.0009,
+   "dark_5jan_share": 0.0,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    }
+   ],
+   "osm_buildings": 16363,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/1425359818",
+   "name": "Magul",
+   "place": "town",
+   "lon": 33.01428,
+   "lat": -25.05694,
+   "buffer_m": 3000,
+   "variants": [
+    "Magul"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 31417,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0035,
+   "open_share": 0.9965,
+   "new_water_ha": 102.8,
+   "new_water_share": 0.0363,
+   "new_water_share_open": 0.0365,
+   "dark_5jan_share": 0.0701,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    }
+   ],
+   "osm_buildings": 15,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/561322964",
+   "name": "Mimbiri",
+   "place": "village",
+   "lon": 32.93047,
+   "lat": -25.06598,
+   "buffer_m": 1000,
+   "variants": [
+    "Mimbiri"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 3486,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 1.0,
+   "new_water_ha": 120.8,
+   "new_water_share": 0.385,
+   "new_water_share_open": 0.385,
+   "dark_5jan_share": 0.0633,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/561057929",
+   "name": "Mohambe",
+   "place": "village",
+   "lon": 33.29516,
+   "lat": -24.63602,
+   "buffer_m": 1000,
+   "variants": [
+    "Mohambe"
+   ],
+   "area": "aoi01",
+   "in_scored_area": true,
+   "pixels": 3493,
+   "coverage": {
+    "evaluated": 0.5016,
+    "outside_mapped_area": 0.2516,
+    "unclear": 0.0312,
+    "edge_excluded": 0.2156,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 0.9688,
+   "new_water_ha": 95.7,
+   "new_water_share": 0.3043,
+   "new_water_share_open": 0.3141,
+   "dark_5jan_share": 0.0216,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.0578,
+     "flooded_share_open": 0.0597
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.3095,
+     "flooded_share_open": 0.3194
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/561314941",
+   "name": "Muzingane",
+   "place": "village",
+   "lon": 33.50867,
+   "lat": -24.8734,
+   "buffer_m": 1000,
+   "variants": [
+    "Muzingane"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 3504,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.8761,
+   "open_share": 0.1239,
+   "new_water_ha": 0.0,
+   "new_water_share": 0.0,
+   "new_water_share_open": 0.0,
+   "dark_5jan_share": null,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.0534,
+     "flooded_share_open": 0.4309
+    }
+   ],
+   "osm_buildings": 3929,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/561057940",
+   "name": "Poiombo",
+   "place": "village",
+   "lon": 33.74374,
+   "lat": -24.92189,
+   "buffer_m": 1000,
+   "variants": [
+    "Poiombo"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 3482,
+   "coverage": {
+    "evaluated": 0.1249,
+    "outside_mapped_area": 0.8185,
+    "unclear": 0.0078,
+    "edge_excluded": 0.0488,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.6086,
+   "open_share": 0.3891,
+   "new_water_ha": 0.0,
+   "new_water_share": 0.0,
+   "new_water_share_open": 0.0,
+   "dark_5jan_share": null,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.1815,
+     "flooded_share": 0.0,
+     "flooded_share_open": 0.0
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 0.1815,
+     "flooded_share": 0.0,
+     "flooded_share_open": 0.0
+    }
+   ],
+   "osm_buildings": 1639,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/8383810991",
+   "name": "Secretaria Da Localidade de MuKotwene",
+   "place": "village",
+   "lon": 33.40505,
+   "lat": -24.68327,
+   "buffer_m": 1000,
+   "variants": [
+    "Secretaria Da Localidade de MuKotwene",
+    "SecretariaDaLocalidadedeMuKotwene"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 3499,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 1.0,
+   "new_water_ha": 77.2,
+   "new_water_share": 0.2452,
+   "new_water_share_open": 0.2452,
+   "dark_5jan_share": 0.5571,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.2518,
+     "flooded_share_open": 0.2518
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/561318723",
+   "name": "Shilluanhana",
+   "place": "village",
+   "lon": 33.28997,
+   "lat": -24.94981,
+   "buffer_m": 1000,
+   "variants": [
+    "Shilluanhana"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 3498,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 1.0,
+   "new_water_ha": 0.0,
+   "new_water_share": 0.0,
+   "new_water_share_open": 0.0,
+   "dark_5jan_share": null,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/561058111",
+   "name": "Siaia",
+   "place": "village",
+   "lon": 33.75835,
+   "lat": -24.9476,
+   "buffer_m": 1000,
+   "variants": [
+    "Siaia"
+   ],
+   "area": "aoi01",
+   "in_scored_area": true,
+   "pixels": 3493,
+   "coverage": {
+    "evaluated": 0.4744,
+    "outside_mapped_area": 0.4309,
+    "unclear": 0.0452,
+    "edge_excluded": 0.0495,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.6814,
+   "open_share": 0.3129,
+   "new_water_ha": 0.0,
+   "new_water_share": 0.0,
+   "new_water_share_open": 0.0,
+   "dark_5jan_share": null,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.5691,
+     "flooded_share": 0.0,
+     "flooded_share_open": 0.0
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 0.5691,
+     "flooded_share": 0.0,
+     "flooded_share_open": 0.0
+    }
+   ],
+   "osm_buildings": 1901,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/561058081",
+   "name": "Soresuanine",
+   "place": "village",
+   "lon": 33.09914,
+   "lat": -24.53256,
+   "buffer_m": 1000,
+   "variants": [
+    "Soresuanine"
+   ],
+   "area": "aoi01",
+   "in_scored_area": false,
+   "pixels": 3495,
+   "coverage": {
+    "evaluated": 0.0609,
+    "outside_mapped_area": 0.2432,
+    "unclear": 0.0014,
+    "edge_excluded": 0.6944,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 0.9986,
+   "new_water_ha": 134.8,
+   "new_water_share": 0.4286,
+   "new_water_share_open": 0.4292,
+   "dark_5jan_share": 0.0,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.3505,
+     "flooded_share_open": 0.351
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.5405,
+     "flooded_share_open": 0.5413
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/335077559",
+   "name": "Xai-Xai",
+   "place": "city",
+   "lon": 33.64073,
+   "lat": -25.04448,
+   "buffer_m": 3000,
+   "variants": [
+    "Xai-Xai",
+    "Xai Xai",
+    "XaiXai"
+   ],
+   "area": "aoi01",
+   "in_scored_area": true,
+   "pixels": 31428,
+   "coverage": {
+    "evaluated": 0.7202,
+    "outside_mapped_area": 0.063,
+    "unclear": 0.1189,
+    "edge_excluded": 0.0978,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.2647,
+   "open_share": 0.6318,
+   "new_water_ha": 181.1,
+   "new_water_share": 0.064,
+   "new_water_share_open": 0.1006,
+   "dark_5jan_share": 0.2376,
+   "copernicus": [
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.0065,
+     "flooded_share_open": 0.01
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.068,
+     "flooded_share_open": 0.1066
+    }
+   ],
+   "osm_buildings": 11970,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/3802605204",
+   "name": "Chibotane",
+   "place": "village",
+   "lon": 32.22505,
+   "lat": -23.85671,
+   "buffer_m": 1000,
+   "variants": [
+    "Chibotane"
+   ],
+   "area": "aoi05",
+   "in_scored_area": true,
+   "pixels": 3494,
+   "coverage": {
+    "evaluated": 0.7825,
+    "outside_mapped_area": 0.1457,
+    "unclear": 0.0266,
+    "edge_excluded": 0.0452,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.2533,
+   "open_share": 0.7281,
+   "new_water_ha": 62.9,
+   "new_water_share": 0.2001,
+   "new_water_share_open": 0.2697,
+   "dark_5jan_share": 0.0973,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:18:00Z",
+     "mapped_share": 0.8543,
+     "flooded_share": 0.2707,
+     "flooded_share_open": 0.3837
+    }
+   ],
+   "osm_buildings": 898,
+   "osm_buildings_in_new_water": 2
+  },
+  {
+   "id": "node/3805378637",
+   "name": "Chipanzo",
+   "place": "village",
+   "lon": 32.49631,
+   "lat": -24.04132,
+   "buffer_m": 1000,
+   "variants": [
+    "Chipanzo"
+   ],
+   "area": "aoi05",
+   "in_scored_area": true,
+   "pixels": 3502,
+   "coverage": {
+    "evaluated": 0.9949,
+    "outside_mapped_area": 0.0,
+    "unclear": 0.0051,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 0.9949,
+   "new_water_ha": 10.5,
+   "new_water_share": 0.0334,
+   "new_water_share_open": 0.0336,
+   "dark_5jan_share": 0.0171,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:18:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.012,
+     "flooded_share_open": 0.0121
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/3802683916",
+   "name": "Cunze",
+   "place": "village",
+   "lon": 32.37267,
+   "lat": -23.95131,
+   "buffer_m": 1000,
+   "variants": [
+    "Cunze"
+   ],
+   "area": "aoi05",
+   "in_scored_area": true,
+   "pixels": 3484,
+   "coverage": {
+    "evaluated": 0.7336,
+    "outside_mapped_area": 0.2167,
+    "unclear": 0.0069,
+    "edge_excluded": 0.0428,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 0.9931,
+   "new_water_ha": 0.7,
+   "new_water_share": 0.0023,
+   "new_water_share_open": 0.0023,
+   "dark_5jan_share": 0.625,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:18:00Z",
+     "mapped_share": 0.7833,
+     "flooded_share": 0.0015,
+     "flooded_share_open": 0.0015
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/1426307246",
+   "name": "Guijá",
+   "place": "town",
+   "lon": 32.55731,
+   "lat": -24.11304,
+   "buffer_m": 3000,
+   "variants": [
+    "Guijá",
+    "Guija"
+   ],
+   "area": "aoi05",
+   "in_scored_area": true,
+   "pixels": 31407,
+   "coverage": {
+    "evaluated": 0.979,
+    "outside_mapped_area": 0.0,
+    "unclear": 0.021,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 0.979,
+   "new_water_ha": 0.3,
+   "new_water_share": 0.0001,
+   "new_water_share_open": 0.0001,
+   "dark_5jan_share": 1.0,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:18:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.0,
+     "flooded_share_open": 0.0
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/475542806",
+   "name": "Mabalane",
+   "place": "town",
+   "lon": 32.6232,
+   "lat": -23.84631,
+   "buffer_m": 3000,
+   "variants": [
+    "Mabalane"
+   ],
+   "area": "aoi05",
+   "in_scored_area": false,
+   "pixels": 31413,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 0.8643,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.1357
+   },
+   "valid_share": 0.8643,
+   "built_up_share": 0.0085,
+   "open_share": 0.8559,
+   "new_water_ha": 251.6,
+   "new_water_share": 0.103,
+   "new_water_share_open": 0.104,
+   "dark_5jan_share": 0.0533,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:18:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    }
+   ],
+   "osm_buildings": 53,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/3805378639",
+   "name": "Macaringue",
+   "place": "village",
+   "lon": 32.59272,
+   "lat": -24.12396,
+   "buffer_m": 1000,
+   "variants": [
+    "Macaringue"
+   ],
+   "area": "aoi05",
+   "in_scored_area": true,
+   "pixels": 3490,
+   "coverage": {
+    "evaluated": 0.9404,
+    "outside_mapped_area": 0.0,
+    "unclear": 0.0596,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 0.9404,
+   "new_water_ha": 40.2,
+   "new_water_share": 0.1281,
+   "new_water_share_open": 0.1362,
+   "dark_5jan_share": 0.1074,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:18:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.1619,
+     "flooded_share_open": 0.1703
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/3805378638",
+   "name": "Maconguele",
+   "place": "village",
+   "lon": 32.51944,
+   "lat": -24.08652,
+   "buffer_m": 1000,
+   "variants": [
+    "Maconguele"
+   ],
+   "area": "aoi05",
+   "in_scored_area": true,
+   "pixels": 3486,
+   "coverage": {
+    "evaluated": 0.9874,
+    "outside_mapped_area": 0.0,
+    "unclear": 0.0126,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 0.9874,
+   "new_water_ha": 1.1,
+   "new_water_share": 0.0034,
+   "new_water_share_open": 0.0035,
+   "dark_5jan_share": 0.8333,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:18:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.0,
+     "flooded_share_open": 0.0
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/3802666729",
+   "name": "Macuachane",
+   "place": "village",
+   "lon": 32.31176,
+   "lat": -23.94601,
+   "buffer_m": 1000,
+   "variants": [
+    "Macuachane"
+   ],
+   "area": "aoi05",
+   "in_scored_area": true,
+   "pixels": 3493,
+   "coverage": {
+    "evaluated": 0.9771,
+    "outside_mapped_area": 0.0,
+    "unclear": 0.0229,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 0.9771,
+   "new_water_ha": 94.4,
+   "new_water_share": 0.3003,
+   "new_water_share_open": 0.3065,
+   "dark_5jan_share": 0.245,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:18:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.2588,
+     "flooded_share_open": 0.2646
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/3805378641",
+   "name": "Maguezi",
+   "place": "village",
+   "lon": 32.55093,
+   "lat": -23.9773,
+   "buffer_m": 1000,
+   "variants": [
+    "Maguezi"
+   ],
+   "area": "aoi05",
+   "in_scored_area": false,
+   "pixels": 3490,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 1.0,
+   "new_water_ha": 0.2,
+   "new_water_share": 0.0006,
+   "new_water_share_open": 0.0006,
+   "dark_5jan_share": 0.0,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:18:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/2519077112",
+   "name": "Massingir",
+   "place": "town",
+   "lon": 32.16099,
+   "lat": -23.92143,
+   "buffer_m": 3000,
+   "variants": [
+    "Massingir"
+   ],
+   "area": "aoi05",
+   "in_scored_area": true,
+   "pixels": 31413,
+   "coverage": {
+    "evaluated": 0.8775,
+    "outside_mapped_area": 0.0946,
+    "unclear": 0.0103,
+    "edge_excluded": 0.0176,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.287,
+   "open_share": 0.7075,
+   "new_water_ha": 81.5,
+   "new_water_share": 0.0288,
+   "new_water_share_open": 0.0372,
+   "dark_5jan_share": 0.2693,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:18:00Z",
+     "mapped_share": 0.9054,
+     "flooded_share": 0.0158,
+     "flooded_share_open": 0.0216
+    }
+   ],
+   "osm_buildings": 8224,
+   "osm_buildings_in_new_water": 10
+  },
+  {
+   "id": "node/3802713118",
+   "name": "Munhamane",
+   "place": "village",
+   "lon": 32.47591,
+   "lat": -24.00765,
+   "buffer_m": 1000,
+   "variants": [
+    "Munhamane"
+   ],
+   "area": "aoi05",
+   "in_scored_area": true,
+   "pixels": 3490,
+   "coverage": {
+    "evaluated": 0.9562,
+    "outside_mapped_area": 0.0103,
+    "unclear": 0.0095,
+    "edge_excluded": 0.0241,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 0.9905,
+   "new_water_ha": 0.4,
+   "new_water_share": 0.0014,
+   "new_water_share_open": 0.0014,
+   "dark_5jan_share": 0.2,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:18:00Z",
+     "mapped_share": 0.9897,
+     "flooded_share": 0.0,
+     "flooded_share_open": 0.0
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/3805378980",
+   "name": "Nkumba",
+   "place": "village",
+   "lon": 32.56961,
+   "lat": -23.93477,
+   "buffer_m": 1000,
+   "variants": [
+    "Nkumba"
+   ],
+   "area": "aoi05",
+   "in_scored_area": false,
+   "pixels": 3493,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 1.0,
+   "new_water_ha": 89.5,
+   "new_water_share": 0.2846,
+   "new_water_share_open": 0.2846,
+   "dark_5jan_share": 0.002,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:18:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/3805378982",
+   "name": "Nyanga",
+   "place": "village",
+   "lon": 32.53162,
+   "lat": -23.83833,
+   "buffer_m": 1000,
+   "variants": [
+    "Nyanga"
+   ],
+   "area": "aoi05",
+   "in_scored_area": false,
+   "pixels": 3490,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 1.0,
+   "new_water_ha": 32.7,
+   "new_water_share": 0.104,
+   "new_water_share_open": 0.104,
+   "dark_5jan_share": 0.1625,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:18:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/3805378640",
+   "name": "Psitama",
+   "place": "village",
+   "lon": 32.57675,
+   "lat": -24.03285,
+   "buffer_m": 1000,
+   "variants": [
+    "Psitama"
+   ],
+   "area": "aoi05",
+   "in_scored_area": false,
+   "pixels": 3488,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 1.0,
+   "new_water_ha": 4.3,
+   "new_water_share": 0.0138,
+   "new_water_share_open": 0.0138,
+   "dark_5jan_share": 0.0,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:18:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/3805378981",
+   "name": "Thlavene",
+   "place": "village",
+   "lon": 32.568,
+   "lat": -23.89222,
+   "buffer_m": 1000,
+   "variants": [
+    "Thlavene"
+   ],
+   "area": "aoi05",
+   "in_scored_area": false,
+   "pixels": 3494,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 1.0,
+   "new_water_ha": 1.0,
+   "new_water_share": 0.0031,
+   "new_water_share_open": 0.0031,
+   "dark_5jan_share": 0.0,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:18:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/1425223003",
+   "name": "Cafine",
+   "place": "village",
+   "lon": 32.90133,
+   "lat": -25.08182,
+   "buffer_m": 1000,
+   "variants": [
+    "Cafine"
+   ],
+   "area": "aoi06",
+   "in_scored_area": false,
+   "pixels": 3493,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0072,
+   "open_share": 0.9928,
+   "new_water_ha": 76.5,
+   "new_water_share": 0.2433,
+   "new_water_share_open": 0.2451,
+   "dark_5jan_share": 0.0035,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:19:00Z",
+     "mapped_share": 0.0,
+     "flooded_share": null,
+     "flooded_share_open": null
+    }
+   ],
+   "osm_buildings": 2,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/1425212559",
+   "name": "Chidona",
+   "place": "town",
+   "lon": 32.8028,
+   "lat": -25.12628,
+   "buffer_m": 3000,
+   "variants": [
+    "Chidona"
+   ],
+   "area": "aoi06",
+   "in_scored_area": true,
+   "pixels": 31424,
+   "coverage": {
+    "evaluated": 0.9722,
+    "outside_mapped_area": 0.0,
+    "unclear": 0.0278,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0,
+   "open_share": 0.9722,
+   "new_water_ha": 969.7,
+   "new_water_share": 0.3429,
+   "new_water_share_open": 0.3527,
+   "dark_5jan_share": 0.0084,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:19:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.3181,
+     "flooded_share_open": 0.3268
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/3731949300",
+   "name": "Machubo",
+   "place": "village",
+   "lon": 32.87516,
+   "lat": -25.50602,
+   "buffer_m": 1000,
+   "variants": [
+    "Machubo"
+   ],
+   "area": "aoi06",
+   "in_scored_area": false,
+   "pixels": 3504,
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 0.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 1.0
+   },
+   "valid_share": 0.0,
+   "built_up_share": 0.0,
+   "open_share": 0.0,
+   "new_water_ha": 0.0,
+   "new_water_share": null,
+   "new_water_share_open": null,
+   "dark_5jan_share": null,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:19:00Z",
+     "mapped_share": 0.9991,
+     "flooded_share": 0.3416,
+     "flooded_share_open": null
+    }
+   ],
+   "osm_buildings": 0,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/561322959",
+   "name": "Palmeira",
+   "place": "town",
+   "lon": 32.86979,
+   "lat": -25.26151,
+   "buffer_m": 3000,
+   "variants": [
+    "Palmeira"
+   ],
+   "area": "aoi06",
+   "in_scored_area": true,
+   "pixels": 31411,
+   "coverage": {
+    "evaluated": 0.9092,
+    "outside_mapped_area": 0.0,
+    "unclear": 0.0908,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0011,
+   "open_share": 0.9081,
+   "new_water_ha": 32.2,
+   "new_water_share": 0.0114,
+   "new_water_share_open": 0.0126,
+   "dark_5jan_share": 0.0838,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:19:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.0065,
+     "flooded_share_open": 0.0072
+    }
+   ],
+   "osm_buildings": 4,
+   "osm_buildings_in_new_water": 0
+  },
+  {
+   "id": "node/1425212560",
+   "name": "Taninga",
+   "place": "town",
+   "lon": 32.8452,
+   "lat": -25.1701,
+   "buffer_m": 3000,
+   "variants": [
+    "Taninga"
+   ],
+   "area": "aoi06",
+   "in_scored_area": true,
+   "pixels": 31415,
+   "coverage": {
+    "evaluated": 0.9276,
+    "outside_mapped_area": 0.0,
+    "unclear": 0.0724,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
+   "valid_share": 1.0,
+   "built_up_share": 0.0049,
+   "open_share": 0.9229,
+   "new_water_ha": 566.4,
+   "new_water_share": 0.2003,
+   "new_water_share_open": 0.2171,
+   "dark_5jan_share": 0.0143,
+   "copernicus": [
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:19:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.1956,
+     "flooded_share_open": 0.2119
+    }
+   ],
+   "osm_buildings": 76,
+   "osm_buildings_in_new_water": 0
+  }
+ ]
+}

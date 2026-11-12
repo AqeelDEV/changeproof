@@ -52,6 +52,8 @@ export default function App({ areas, optical }: { areas: Stats[]; optical: Recor
         </div>
         <aside>
           <ClaimPanel
+            areas={areas}
+            request={null}
             onPlace={(p) => {
               if (areas.some((a) => a.area_id === p.area)) setId(p.area);
               setFocus(placeBounds(p)); // a new array each click, so a second click zooms again

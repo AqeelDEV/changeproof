@@ -54,7 +54,7 @@ Say:
 - If asked about a number, say where it comes from. The areas' stats files hold every figure shown.
 - Do not say "accuracy", "lives saved" or "damage".
 
-## B. Ten judge questions, short answers
+## B. Eleven judge questions, short answers
 
 1. **Why not just use Copernicus or OPERA?**
 For this flood you should, and we do. They are our reference. Copernicus is on demand: it was activated on 17 January, a week into the event, and covers only the areas requested. OPERA has no NISAR water product for January 2026. Neither answers a claim. ChangeProof does that last step and adds NISAR's L-band as a second look.
@@ -85,6 +85,9 @@ No. It only fills fields: place, date and type. It is optional and the app works
 
 10. **Does it generalise?**
 Unproven. It is one event and one track. Validated NISAR data only began in October 2026, and an OPERA NISAR water product can replace our detector when it covers events like this one. The claim logic does not depend on our detector.
+
+11. **Why "not supported" and not "false"?**
+Radar can show new open water, but it cannot show its absence under buildings, crops or trees. So the tool backs claims, and never refutes them on silence.
 
 ## C. 30-second video shot list
 

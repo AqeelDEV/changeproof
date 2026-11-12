@@ -1,6 +1,7 @@
 // The evidence report for one checked claim, as Markdown. Every number comes from the checker's result or the
 // area's stats.json; nothing is worked out here.
 import type { ClaimResult, Stats } from "../app/types";
+import { shownVerdict } from "./claims/verdict.ts";
 
 export const NUMBER_LABELS: Record<string, string> = {
   valid_share: "NISAR data on both dates, share of the area",
@@ -32,7 +33,7 @@ export function reportMarkdown(r: ClaimResult, area: Stats | undefined, url: str
     "",
     `**Claim:** "${r.claim}"`,
     ...(source ? [`**Published by:** ${source.source}, ${source.published}, ${source.link}`] : []),
-    `**Verdict:** ${r.verdict}, as of ${r.as_of} (NISAR ${e?.area.release ?? "Beta"} data)`,
+    `**Verdict:** ${shownVerdict(r.verdict, f.polarity)}, as of ${r.as_of} (NISAR ${e?.area.release ?? "Beta"} data)`,
     "",
     r.headline,
     "",

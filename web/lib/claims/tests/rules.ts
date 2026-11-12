@@ -71,7 +71,7 @@ for (const type of ["impact", "damage", "built_up", "vegetation", "depth", "exte
   is(v(f("Macuachane", { claim_type: type })), "not provable", `${type} is not provable`);
 is(v(f("Macuachane", { claim_type: "impact", ...day("2026-01-25") })), "not observable", "the date gate comes before the type");
 is(v(f(null)), "not observable", "no place: not observable");
-is(verdict(f("Maconguele"), places).headline, "No new open water detected within 1 km of Maconguele: contradicted as of 17 Jan 2026, 03:42 UTC (NISAR Beta)", "dry headline");
+is(verdict(f("Maconguele"), places).headline, "No new open water detected within 1 km of Maconguele: not supported as of 17 Jan 2026, 03:42 UTC (NISAR Beta)", "dry headline");
 is(verdict(f("Chókwè"), places).headline, "Flooding within 3 km of Chókwè: supported as of 17 Jan 2026, 03:42 UTC (NISAR Beta), 42% of the area newly under open water", "wet headline");
 is(verdict(f("Macuachane", { polarity: "negative" }), places).headline.startsWith("Flooding within 1 km of Macuachane: contradicted"), true, "wet contradiction keeps the flooding form");
 is(verdict(f("Maconguele"), places).reasons.some((r) => r.includes("under crops, trees or between buildings")), true, "dry reasons name what open water misses");

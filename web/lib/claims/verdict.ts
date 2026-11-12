@@ -3,6 +3,10 @@
 import type { Fields, Place, Places } from "./parse.ts";
 
 export type Verdict = "supported" | "contradicted" | "not observable" | "not provable";
+/** The label people see. A positive claim is contradicted only by the dry rule, which rests on no open water seen,
+ * so it shows as "not supported"; a negative claim contradicted by water seen keeps "contradicted". */
+export const shownVerdict = (v: Verdict, polarity: Fields["polarity"]) =>
+  v === "contradicted" && polarity === "positive" ? "not supported" : v;
 
 export const THRESHOLDS = {
   min_valid_share: 0.5, // NISAR data on both dates, share of the buffer
@@ -173,7 +177,7 @@ export function verdict(f: Fields, places: Places, other?: Fields): Judgement {
     reasons.push(`Not enough to settle it: ${why.join("; ")}.`);
   }
   const headline = dry
-    ? `No new open water detected within ${km(p)} of ${p.name}: ${v} ${tail}`
+    ? `No new open water detected within ${km(p)} of ${p.name}: ${shownVerdict(v, f.polarity)} ${tail}`
     : `Flooding within ${km(p)} of ${p.name}: ${v} ${tail}, ${pct(p.new_water_share)} of the area newly under open water`;
   return { verdict: v, headline, reasons, evidence: evidence(p, places) };
 }

@@ -24,7 +24,7 @@ const CLASS_LAYERS = [
 // What NISAR can say about a place, by the checker's own rules (lib/claims/verdict.ts).
 const PLACE_STATES = {
   wet: { colour: "#1f78ff", text: "new open water: a flood claim is supported" },
-  dry: { colour: "#ffffff", text: "no new open water: a flood claim is contradicted" },
+  dry: { colour: "#ffffff", text: "no new open water seen: a flood claim is not supported" },
   open: { colour: "#f0b429", text: "cannot settle it" },
   blind: { colour: "#8a8f98", text: "too little NISAR data" },
 } as const;

@@ -23,16 +23,17 @@ We do not claim a better flood map than Copernicus. Copernicus is our reference.
 - Export an evidence report with granule IDs, numbers and limits.
 - Follow a five-step guided tour. Markers show 50 places.
 
-## The four verdicts
+## The verdicts
 
 | Verdict | Meaning |
 |---|---|
 | Supported | The data shows it, inside the time and area covered. |
-| Contradicted | The data shows otherwise, inside the time and area covered. |
+| Not supported | NISAR saw no new open water at this place on its pass. That is not proof it stayed dry. |
+| Contradicted | The data shows otherwise, inside the time and area covered: new open water was seen where a claim says there was no flood. |
 | Not observable | The claim falls outside the time or area NISAR covered. |
 | Not provable | Inside the time and area, but radar cannot settle it (for example "homes were destroyed"). |
 
-"Contradicted" is never returned for something outside the time or area window.
+"Not supported" and "Contradicted" are never returned for something outside the time or area window. Radar can show new open water, but not its absence under buildings, crops or trees, so a flood claim is never called false on silence. Map markers: "no new open water seen: a flood claim is not supported".
 
 ## Data used
 

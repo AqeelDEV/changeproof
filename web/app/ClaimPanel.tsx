@@ -3,11 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { checkClaim, PRESETS, PUBLISHED, type ClaimOpts, type PublishedClaim } from "../lib/checkClaim";
 import { dateRead, NUMBER_LABELS, reportMarkdown, showNumber } from "../lib/report";
+import { shownVerdict } from "../lib/claims/verdict.ts";
 import type { ClaimPlace, ClaimRequest, ClaimResult, Stats } from "./types";
 
 const MEANING: Record<string, string> = {
   supported: "The data shows it, inside the time and area NISAR covered.",
   contradicted: "The data shows otherwise, inside the time and area NISAR covered.",
+  "not supported": "NISAR saw no new open water at this place on its pass. That is not proof it stayed dry.",
   "not observable": "The claim falls outside the time or area NISAR covered.",
   "not provable": "Inside the time and area, but radar cannot settle it.",
 };
@@ -87,10 +89,10 @@ export default function ClaimPanel({ areas, request, onPlace }: {
             </p>
           )}
           <p>
-            <span className={`verdict v-${result.verdict.replace(" ", "-")}`}>{result.verdict}</span>{" "}
+            <span className={`verdict v-${result.verdict.replace(" ", "-")}`}>{shownVerdict(result.verdict, f.polarity)}</span>{" "}
             <span className="tag">as of {result.as_of}, NISAR Beta data</span>
           </p>
-          <p className="tag">{MEANING[result.verdict]}</p>
+          <p className="tag">{MEANING[shownVerdict(result.verdict, f.polarity)]}</p>
           <p className="headline">{result.headline}</p>
           <ul>
             {result.reasons.map((r) => (

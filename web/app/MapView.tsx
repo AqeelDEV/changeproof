@@ -44,8 +44,12 @@ export default function MapView({ area }: { area: Stats }) {
     // Own panes above the tiles (200), so the swipe clip cuts only the after-radar.
     for (const [name, z] of [["before", 410], ["after", 420], ["classes", 430]] as const)
       m.createPane(name).style.zIndex = String(z);
+    // Leaflet only tracks window resizes, so watch the container too (layout shifts, panes).
+    const ro = new ResizeObserver(() => m.invalidateSize());
+    ro.observe(divRef.current!);
     setMap(m);
     return () => {
+      ro.disconnect();
       m.remove();
       setMap(null);
     };

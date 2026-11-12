@@ -14,10 +14,11 @@ const toLeaflet = (b: Bounds): L.LatLngBoundsExpression => [
   [b[3], b[2]],
 ];
 
+// The flood layers show the 17 Jan result, so they sit in the swiped pane, right of the slider only.
 const CLASS_LAYERS = [
-  { file: "water_new.png", name: "Detected new water", colour: "#1f78ff" },
-  { file: "label.png", name: "Copernicus observed flood", colour: "#e5382d" },
-  { file: "coverage.png", name: "Coverage", colour: "" },
+  { file: "water_new.png", name: "Detected new water", colour: "#1f78ff", pane: "swiped" },
+  { file: "label.png", name: "Copernicus observed flood", colour: "#e5382d", pane: "swiped" },
+  { file: "coverage.png", name: "Coverage", colour: "", pane: "classes" },
 ];
 
 // What NISAR can say about a place, by the checker's own rules (lib/claims/verdict.ts).
@@ -58,8 +59,8 @@ export default function MapView({ area, focus, disk, view, onView, onClaim }: {
     m.attributionControl.addAttribution(
       "Flood label: Copernicus Emergency Management Service (EMSR857) | NISAR: NASA/ASF"
     );
-    // Own panes above the tiles (200), so the swipe clip cuts only the after-radar.
-    for (const [name, z] of [["before", 410], ["after", 420], ["classes", 430], ["places", 440]] as const)
+    // Own panes above the tiles (200), so the swipe clip cuts only the after-radar and the flood layers.
+    for (const [name, z] of [["before", 410], ["after", 420], ["swiped", 425], ["classes", 430], ["places", 440]] as const)
       m.createPane(name).style.zIndex = String(z);
     // Leaflet only tracks window resizes, so watch the container too (layout shifts, panes).
     const ro = new ResizeObserver(() => m.invalidateSize());
@@ -101,7 +102,7 @@ export default function MapView({ area, focus, disk, view, onView, onClaim }: {
       add(grey(left), "before");
       add(grey(day(after.start_utc)), "after");
     }
-    for (const c of CLASS_LAYERS) if (classes[c.file]) add(c.file, "classes");
+    for (const c of CLASS_LAYERS) if (classes[c.file]) add(c.file, c.pane);
     return () => layers.forEach((l) => l.remove());
   }, [map, area, left, after, pol, radarOn, classes]);
 
@@ -131,19 +132,22 @@ export default function MapView({ area, focus, disk, view, onView, onClaim }: {
   useEffect(() => {
     if (!map) return;
     const pane = map.getPane("after")!;
+    const swiped = map.getPane("swiped")!;
     const update = () => {
       const size = map.getSize();
       const nw = map.containerPointToLayerPoint([0, 0]);
       const se = map.containerPointToLayerPoint(size);
       const x = nw.x + size.x * split;
       pane.style.clipPath = `inset(${nw.y}px ${-se.x}px ${-se.y}px ${x}px)`;
+      // No slider is drawn while the radar is off, so the flood layers then show in full.
+      swiped.style.clipPath = radarOn ? pane.style.clipPath : "";
     };
     update();
     map.on("move zoom zoomend viewreset resize", update);
     return () => {
       map.off("move zoom zoomend viewreset resize", update);
     };
-  }, [map, split]);
+  }, [map, split, radarOn]);
 
   const legend = area.files.find((f) => f.file === "coverage.png")?.legend ?? {};
   const [open, setOpen] = useState(() => window.innerWidth > 860); // closed on a phone, where the box would hide the map

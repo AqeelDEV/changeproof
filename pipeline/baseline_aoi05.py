@@ -337,6 +337,23 @@ LIMITS_COMMON = [
 ]
 
 
+DISAGREE_COLOURS = ["#d9d9d9", "#7f7f7f", "#ffffff", "#009E73", "#E69F00", "#CC79A7", "#56B4E9"]
+DISAGREE_NAMES = ["Not scored (outside mapped area, edge, no data)", "Unclear: HH rose (possible flooded vegetation)",
+                  "Agree: not flooded", "Agree: flooded", "NISAR only", "Copernicus only",
+                  "Permanent water (JRC >= 50%)"]
+
+
+def disagreement_codes(coverage, pred, truth, perm):
+    """Index into DISAGREE_COLOURS per pixel."""
+    ev = coverage == 1
+    c = np.zeros(coverage.shape, "uint8")
+    c[coverage == 3] = 1
+    c[ev] = 2
+    c[ev & pred & truth], c[ev & pred & ~truth], c[ev & ~pred & truth] = 3, 4, 5
+    c[perm] = 6
+    return c
+
+
 def main():
     d = load(p.OUT)
     print("DSWx-S1 WTR, 5 Jan, class codes found in the file on the AOI05 grid:")
@@ -385,22 +402,16 @@ def main():
     (p.OUT / "stats_baseline.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
 
     # Disagreement map: one panel per rule
-    colours = ["#d9d9d9", "#7f7f7f", "#ffffff", "#009E73", "#E69F00", "#CC79A7", "#56B4E9"]
-    names = ["Not scored (outside mapped area, edge, no data)", "Unclear: HH rose (possible flooded vegetation)",
-             "Agree: not flooded", "Agree: flooded", "NISAR only", "Copernicus only", "Permanent water (JRC >= 50%)"]
     fig, axes = plt.subplots(1, len(flood), figsize=(9 * len(flood), 8.8), constrained_layout=True)
     for ax, (name, pred) in zip(axes, flood.items()):
-        c = np.zeros(coverage.shape, "uint8")
-        c[coverage == 3] = 1
-        c[ev] = 2
-        c[ev & pred & truth], c[ev & pred & ~truth], c[ev & ~pred & truth] = 3, 4, 5
-        c[permanent(d["jrc"]) & valid] = 6
-        ax.imshow(c, cmap=ListedColormap(colours), vmin=0, vmax=len(colours) - 1, interpolation="nearest")
+        c = disagreement_codes(coverage, pred, truth, permanent(d["jrc"]) & valid)
+        ax.imshow(c, cmap=ListedColormap(DISAGREE_COLOURS), vmin=0, vmax=len(DISAGREE_COLOURS) - 1,
+                  interpolation="nearest")
         s = scores[name]
         ax.set_title(f"'{name}': IoU {s['iou']:.2f}, precision {s['precision']:.2f}, recall {s['recall']:.2f}")
         ax.axis("off")
-    fig.legend(handles=[Patch(color=col, label=n) for col, n in zip(colours, names)], loc="outside lower center",
-               ncol=4, frameon=False)
+    fig.legend(handles=[Patch(color=col, label=n) for col, n in zip(DISAGREE_COLOURS, DISAGREE_NAMES)],
+               loc="outside lower center", ncol=4, frameon=False)
     fig.suptitle("AOI05: NISAR Beta, 5 to 17 Jan 2026, against the Copernicus EMSR857 observed flood "
                  "(Sentinel-1, 17 Jan 03:18 UTC)", fontsize=13)
     fig.savefig(p.OUT / png, dpi=130)

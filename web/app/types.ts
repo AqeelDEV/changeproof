@@ -55,3 +55,43 @@ export function formatUtc(iso: string): string {
 }
 
 export const buildingsLimit = (s: Stats) => s.limits.find((l) => l.startsWith("Buildings:"));
+
+// Claim checker result (claims/), one per claim. fields.place is null when no place matched.
+export const VERDICTS = ["supported", "contradicted", "not observable", "not provable"] as const;
+export type Verdict = (typeof VERDICTS)[number];
+
+export interface ClaimPlace {
+  id: string;
+  name: string;
+  area: string;
+  lon: number;
+  lat: number;
+  buffer_m: number;
+}
+
+export interface ClaimResult {
+  path: string;
+  model_status: string;
+  fields: {
+    place: ClaimPlace | null;
+    polarity: "positive" | "negative";
+    date_from: string | null;
+    date_to: string | null;
+    date_kind: string;
+    claim_type: string;
+    quantifier: string | null;
+    confidence: number;
+  };
+  verdict: Verdict;
+  as_of: string;
+  headline: string;
+  reasons: string[];
+  evidence: unknown;
+}
+
+// web/public/data/<area>/optical.json, written by pipeline/export_optical.py.
+export interface Optical {
+  area_id: string;
+  images: { file: string; date_utc: string; source: string; product_id: string; cloud: Record<string, number | string> }[];
+  note: string;
+}

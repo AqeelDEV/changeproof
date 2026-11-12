@@ -24,7 +24,7 @@ function legendRow(text: string): [string, string] {
   return [colour, i >= 0 ? text.slice(i + 2) : text];
 }
 
-export default function MapView({ area }: { area: Stats }) {
+export default function MapView({ area, focus }: { area: Stats; focus: Bounds | null }) {
   const divRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<L.Map | null>(null);
   const [pol, setPol] = useState<"hh" | "hv">("hh");
@@ -59,6 +59,11 @@ export default function MapView({ area }: { area: Stats }) {
     // The container may have been measured before layout, so re-read its size first.
     map?.invalidateSize().fitBounds(toLeaflet(area.grid.bounds_4326));
   }, [map, area]);
+
+  // After the area fit, so a claim that also switches area ends on the place.
+  useEffect(() => {
+    if (focus) map?.invalidateSize().fitBounds(toLeaflet(focus));
+  }, [map, focus]);
 
   const before = area.scenes.find((s) => s.role === "before")!;
   const after = area.scenes.find((s) => s.role === "after")!;

@@ -1,0 +1,32 @@
+{
+ "area_id": "aoi01",
+ "images": [
+  {
+   "file": "hls_20260119.webp",
+   "date_utc": "2026-01-19T07:32:31Z",
+   "source": "Sentinel-2C via NASA HLS (HLSS30 v2.0), true colour",
+   "product_id": "HLS.S30.T36JWT.2026019T073231.v2.0",
+   "cloud": {
+    "tile_covers_share_of_area": 0.7715,
+    "fmask_cloud_share": 0.0024,
+    "fmask_snow_ice_share": 0.9971,
+    "dswx_hls_snow_ice_share": 0.997,
+    "dswx_hls_cloud_share": 0.003,
+    "scope": "shares of the AOI01 pixels the HLS tile covers"
+   }
+  },
+  {
+   "file": "landsat_20260120.webp",
+   "date_utc": "2026-01-20T07:43:43Z",
+   "source": "Landsat 9 Collection 2 Level-2, USGS, preview from Microsoft Planetary Computer",
+   "product_id": "LC09_L2SP_167077_20260120_02_T2",
+   "pixel_m": 228,
+   "cloud": {
+    "scene_cloud_share": 0.9509,
+    "scene_land_cloud_share": 0.9578,
+    "scope": "whole Landsat scene (path 167, row 77), from USGS metadata"
+   }
+  }
+ ],
+ "note": "The nearest optical images (19 and 20 Jan) were clouded out. Radar saw through."
+}

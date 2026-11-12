@@ -1,7 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import App from "./App";
-import { formatUtc, buildingsLimit, type Stats } from "./types";
+import { SAMPLES } from "../lib/checkClaim";
+import { formatUtc, buildingsLimit, VERDICTS, type Optical, type Stats } from "./types";
 
 const DATA = path.join(process.cwd(), "public", "data");
 
@@ -31,12 +32,53 @@ function check(s: Stats, id: string) {
   if (formatUtc("2026-01-17T03:42:32Z") !== "17 Jan 2026, 03:42 UTC") fail("formatUtc is wrong");
 }
 
+// Build-time shape check of web/lib/sample_results.json, so the real checker's output can be held to the same test.
+function checkSamples() {
+  const PLACE_KEYS = ["id", "name", "area", "lon", "lat", "buffer_m"];
+  const FIELD_KEYS = ["place", "polarity", "date_from", "date_to", "date_kind", "claim_type", "quantifier", "confidence"];
+  for (const [claim, r] of Object.entries(SAMPLES)) {
+    const fail = (msg: string) => {
+      throw new Error(`web/lib/sample_results.json, "${claim}": ${msg}`);
+    };
+    for (const k of ["path", "model_status", "fields", "verdict", "as_of", "headline", "reasons", "evidence"])
+      if (!(k in r)) fail(`${k} missing`);
+    if (!VERDICTS.includes(r.verdict)) fail(`verdict "${r.verdict}" is not one of ${VERDICTS.join(", ")}`);
+    for (const k of FIELD_KEYS) if (!(k in r.fields)) fail(`fields.${k} missing`);
+    const p = r.fields.place;
+    if (p !== null && !PLACE_KEYS.every((k) => k in p)) fail(`fields.place needs ${PLACE_KEYS.join(", ")} or null`);
+    if (p && (typeof p.lon !== "number" || typeof p.lat !== "number" || typeof p.buffer_m !== "number"))
+      fail("fields.place lon, lat and buffer_m must be numbers");
+    if (!Array.isArray(r.reasons) || !r.reasons.length) fail("reasons empty");
+    if (r.as_of !== "17 Jan 2026, 03:42 UTC" || !r.headline.includes(`as of ${r.as_of}`))
+      fail('as_of must be "17 Jan 2026, 03:42 UTC" and appear in the headline');
+    if (/accura/i.test(JSON.stringify(r))) fail('says "accuracy"; use "agreement"');
+  }
+}
+
+// Optional optical.json (pipeline/export_optical.py): every listed image must exist.
+function readOptical(id: string): Optical | undefined {
+  const file = path.join(DATA, id, "optical.json");
+  if (!fs.existsSync(file)) return undefined;
+  const o: Optical = JSON.parse(fs.readFileSync(file, "utf8"));
+  if (o.area_id !== id || !o.images?.length) throw new Error(`${file}: area_id or images wrong`);
+  for (const im of o.images)
+    if (!fs.existsSync(path.join(DATA, id, im.file)) || !im.date_utc || !im.source || !im.cloud)
+      throw new Error(`${file}: ${im.file} missing or incomplete`);
+  return o;
+}
+
 export default function Page() {
+  checkSamples();
   const ids: string[] = JSON.parse(fs.readFileSync(path.join(DATA, "areas.json"), "utf8"));
   const areas = ids.map((id) => {
     const s: Stats = JSON.parse(fs.readFileSync(path.join(DATA, id, "stats.json"), "utf8"));
     check(s, id);
     return s;
   });
-  return <App areas={areas} />;
+  const optical: Record<string, Optical> = {};
+  for (const id of ids) {
+    const o = readOptical(id);
+    if (o) optical[id] = o;
+  }
+  return <App areas={areas} optical={optical} />;
 }

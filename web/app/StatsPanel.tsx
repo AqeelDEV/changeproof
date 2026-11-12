@@ -23,7 +23,7 @@ export default function StatsPanel({ area: s }: { area: Stats }) {
   const tag = IOU_TAG[s.area_id]?.(s);
 
   return (
-    <aside>
+    <>
       <h2>{s.name}</h2>
       <p className="banner">
         NISAR {s.release} data, as of {s.as_of_label}
@@ -133,6 +133,6 @@ export default function StatsPanel({ area: s }: { area: Stats }) {
           <li key={l}>{l}</li>
         ))}
       </ul>
-    </aside>
+    </>
   );
 }

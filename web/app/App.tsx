@@ -2,14 +2,24 @@
 
 import dynamic from "next/dynamic";
 import { useState } from "react";
+import ClaimPanel from "./ClaimPanel";
+import CloudCard from "./CloudCard";
 import StatsPanel from "./StatsPanel";
-import type { Stats } from "./types";
+import type { Bounds, ClaimPlace, Optical, Stats } from "./types";
 
 // Leaflet needs window, so the map is loaded on the client only.
 const MapView = dynamic(() => import("./MapView"), { ssr: false });
 
-export default function App({ areas }: { areas: Stats[] }) {
+// The disk the checker measured around a place, as [west, south, east, north].
+function placeBounds(p: ClaimPlace): Bounds {
+  const dLat = p.buffer_m / 111_320;
+  const dLon = dLat / Math.cos((p.lat * Math.PI) / 180);
+  return [p.lon - dLon, p.lat - dLat, p.lon + dLon, p.lat + dLat];
+}
+
+export default function App({ areas, optical }: { areas: Stats[]; optical: Record<string, Optical> }) {
   const [id, setId] = useState(areas[0].area_id);
+  const [focus, setFocus] = useState<Bounds | null>(null);
   const area = areas.find((a) => a.area_id === id) ?? areas[0];
 
   return (
@@ -32,9 +42,18 @@ export default function App({ areas }: { areas: Stats[] }) {
       </header>
       <main>
         <div className="map-col">
-          <MapView area={area} />
+          <MapView area={area} focus={focus} />
         </div>
-        <StatsPanel area={area} />
+        <aside>
+          <ClaimPanel
+            onPlace={(p) => {
+              if (areas.some((a) => a.area_id === p.area)) setId(p.area);
+              setFocus(placeBounds(p)); // a new array each click, so a second click zooms again
+            }}
+          />
+          {optical[area.area_id] && <CloudCard area={area} optical={optical[area.area_id]} />}
+          <StatsPanel area={area} />
+        </aside>
       </main>
     </>
   );

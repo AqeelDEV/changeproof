@@ -19,7 +19,7 @@ Updated Thursday 12 November 2026, afternoon, after the app was finished and pub
 
 Still open:
 1. ~~Three earlier dates.~~ Done (see above).
-2. **Model on the live site.** Add `LLM_BASE_URL`, `LLM_MODEL=google/gemini-2.5-flash-lite` and `LLM_API_KEY` in the Vercel project settings and redeploy. Until then live claims use the parser, and the six preset claims use their recorded replies.
+2. ~~Model on the live site.~~ Done: a typed claim on the live URL shows model status "used".
 3. Record the backup video and fill in the project page.
 
 Items 2 to 5 of the list below are done.

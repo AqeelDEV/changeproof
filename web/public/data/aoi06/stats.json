@@ -2,7 +2,7 @@
   "schema_version": "1.1",
   "area_id": "aoi06",
   "name": "AOI06 Palmeira, Mozambique",
-  "generated_utc": "2026-11-12T10:30:10Z",
+  "generated_utc": "2026-11-12T11:11:29Z",
   "as_of_label": "17 Jan 2026, 03:42 UTC",
   "release": "Beta",
   "grid": {
@@ -279,6 +279,26 @@
         32.940218,
         -25.059722
       ]
+    },
+    {
+      "file": "hh_20251224.webp",
+      "format": "webp",
+      "bounds_4326": [
+        32.718642,
+        -25.610371,
+        32.940218,
+        -25.059722
+      ]
+    },
+    {
+      "file": "hv_20251224.webp",
+      "format": "webp",
+      "bounds_4326": [
+        32.718642,
+        -25.610371,
+        32.940218,
+        -25.059722
+      ]
     }
   ],
   "limits": [
@@ -324,6 +344,21 @@
         "new_water": -12.35,
         "dry_land": -10.82,
         "permanent_water": -20.48
+      }
+    },
+    {
+      "date": "2025-12-24",
+      "role": "earlier",
+      "granule_id": "NISAR_L2_PR_GCOV_008_114_A_165_4005_DHDH_A_20251224T034231_20251224T034253_X05010_N_P_J_001",
+      "processing_version": "X05010",
+      "files": {
+        "hh": "hh_20251224.webp",
+        "hv": "hv_20251224.webp"
+      },
+      "hh_median_db": {
+        "new_water": -11.53,
+        "dry_land": -9.44,
+        "permanent_water": -19.96
       }
     },
     {

@@ -12,11 +12,13 @@ Updated Thursday 12 November 2026, afternoon, after the app was finished and pub
   - Not provable: built-up flooding, people on a bus, "a água já começou a entrar na cidade do Xai-Xai" (read as type "other"), "arrastado pelas águas", and the 2,258 km² extent.
 - **Added to the app:** evidence report export (Markdown, and print to PDF), a five-step tour, three tabs (claim, evidence, method and limits), markers for the 50 places coloured by the checker's own wet and dry rules, a "How to read the radar" card, and a date strip and chart that appear once an area has more than two dates.
 - **Time series, display only.** `stats.json` has an optional `series` (contract still 1.1): each NISAR date with its granule and the median HH over three fixed pixel sets. `make_outputs.py` was rerun: every existing PNG and WebP hash is unchanged, and apart from `generated_utc` and `series` each `stats.json` is equal to before. With the two dates fetched so far, median HH over the new water fell from -12.43 to -16.30 dB (AOI05), -12.53 to -17.70 dB (AOI06) and -14.71 to -18.21 dB (AOI01).
+- **Five NISAR dates for all three areas (30 Nov, 12 Dec, 24 Dec, 5 Jan, 17 Jan), display only.** The three earlier dates add WebP overlays and `series` entries; no method, threshold or score uses them, every earlier PNG and WebP hash is unchanged, and `check_contract` passes.
+- **Published claims checked against their pages on 12 Nov.** All 11 quotes appear word for word on the linked page with the recorded date, so none was dropped.
 - **Docs:** `README.md`, `docs/PITCH.md`, `docs/SUBMISSION.md`, slides at `/pitch.html`.
 - **Checks:** type check, 77 of 77 rule checks, 42 of 45 test verdicts with the parser alone (unchanged), `next build` with its build-time checks, the tour and the offline fallback in the browser.
 
 Still open:
-1. **Three earlier dates.** Run `.venv\Scripts\python.exe pipeline\fetch_all.py --series` with `EARTHDATA_TOKEN` set, then `pipeline\make_outputs.py`, rebuild and redeploy. The extra-date path in `baseline_aoi05.py` (extra WebP files, the processing-version sentence in the limits) has not run yet, so check its output when it does.
+1. ~~Three earlier dates.~~ Done (see above).
 2. **Model on the live site.** Add `LLM_BASE_URL`, `LLM_MODEL=google/gemini-2.5-flash-lite` and `LLM_API_KEY` in the Vercel project settings and redeploy. Until then live claims use the parser, and the six preset claims use their recorded replies.
 3. Record the backup video and fill in the project page.
 

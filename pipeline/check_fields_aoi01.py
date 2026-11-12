@@ -77,6 +77,7 @@ def main():
             "outline_col_row": polygons, "outline_lon_lat": lonlat, "outline_ha": ha(inside),
             "new_water_ha": ha(w), "share_of_aoi01_new_water": round(ha(w) / max(total_ha, 1), 3),
             "osm_buildings_in_new_water": n_in, "share_of_aoi01_buildings_in_new_water": round(n_in / max(total_bld, 1), 3),
+            "nisar_dark_on_5_jan_ha": ha(w & dark0),
             "of_this_new_water": {
                 "copernicus_18_jan_flooded": share(dl == 1, w), "copernicus_18_jan_dry": share(dl == 0, w),
                 "copernicus_18_jan_unmapped": share(dl == 255, w),

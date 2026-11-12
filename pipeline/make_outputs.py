@@ -98,11 +98,17 @@ def count_in(lon, lat, grid, mask):
     """Points inside the grid, and those of them on True pixels of mask. Returns (on mask, on grid)."""
     if not len(lon):
         return 0, 0
+    row, col = pixels(lon, lat, grid)
+    return int(mask[row, col].sum()), len(row)
+
+
+def pixels(lon, lat, grid):
+    """Row and column of each lon/lat point that falls on the grid."""
     x0, y1, nx, ny = grid
     xs, ys = transform("EPSG:4326", p.CRS, list(lon), list(lat))
     col, row = np.floor((np.array(xs) - x0) / p.PIX).astype(int), np.floor((y1 - np.array(ys)) / p.PIX).astype(int)
     inside = (row >= 0) & (row < ny) & (col >= 0) & (col < nx)
-    return int(mask[row[inside], col[inside]].sum()), int(inside.sum())
+    return row[inside], col[inside]
 
 
 def buildings(area, grid, flood):

@@ -6,7 +6,11 @@ Updated Thursday 12 November 2026, after the overnight run, the AOI01 checks and
 
 Where things stand:
 - LightGBM is the method for all three areas, now as v2. The only change from v1: the land median is taken over all valid pixels with JRC 0% occurrence.
-- **The headline test figure stays AOI05 IoU 0.572** (v1, the one clean test), against the tuned rule's 0.521. v2 scored 0.574 on AOI05 as a post-fix rerun, which is not a clean test.
+- **AOI05 headline, worded as in its `stats.json`: IoU 0.574 for the current model (v2), with "one clean test: 0.572" beside it.**
+  - 0.572 is v1, scored once on AOI05 before the fix: the one clean test.
+  - 0.574 is v2's post-fix rerun, which is not a clean test.
+  - The tuned rule scored 0.521.
+- **AOI01 totals, before you quote them.** v2 finds 75,951 ha of new water with 824 OSM buildings in it; the tuned rule finds 76,198 ha with 682. Of the 24,457 ha that v2 added over v1, 55% is outside the Copernicus maps, so nothing checks it. See "AOI01 totals, checked before quoting".
 - AOI01: v2 scores 0.835 against its reference. That is a diagnostic only, because the problem was found there. The published v1 figure was 0.718 and the rule scores 0.833. AOI01's `stats.json` gives all three.
 - Contract 1.1 outputs for all three areas were regenerated with v2, and `web/public/data/areas.json` lists all three.
 
@@ -22,6 +26,88 @@ Where things stand:
 Keep in mind:
 - AOI05 has now been scored three times: the rule (11 Nov), LightGBM v1 (12 Nov, the clean test) and LightGBM v2 (12 Nov, the post-fix rerun, labelled as such). Do not tune anything else on AOI05.
 - AOI01 can no longer check the land-median definition independently.
+
+## Done, 12 Nov: AOI01 totals, checked before quoting (no outputs changed)
+
+- **Script:** `pipeline/check_aoi01.py`, rerun after its edit, with a new part 4.
+  - It rebuilds v1 (the v1 model, the v1 land median, threshold 0.37) and asserts that this reproduces the published v1 figures: IoU 0.7179, 51,494 ha and 313 buildings.
+  - It asserts that v2 matches the published `water_new` and building count. Every assert passed.
+  - It rewrote `data/aoi01/check_aoi01.json` (replacing the v1-era file; the v1 results are in "AOI01 checks" below) and `disagreement_aoi01.png`, which now shows v2.
+- **Code changes, with no output changes.**
+  - `make_outputs.py` gains `pixels()`, which places points on the grid; `count_in()` now uses it.
+  - `check_fields_aoi01.py` also reports the dark-on-5-Jan hectares.
+  - Nothing in `web/public/data/` changed.
+
+### 1. Where v2's extra 24,457 ha and 511 buildings are
+
+- **The zones overlap, so the table has two layers.**
+  - The Copernicus zones split the valid pixels with no overlap: every pixel is in exactly one.
+  - Each zone is then split into where DSWx-S1 has data and the JRC-fallback area, where DSWx-S1 is missing and JRC 4% or more stands for water before the flood.
+  - The JRC-fallback area overlaps every Copernicus zone, so it is a column, not a row.
+- **One extra zone.** I added the edge buffer and unclear pixels inside the agreed area, which you didn't list, so that the zones cover every pixel.
+- **Rounding.** Hectares are rounded so the parts add up to the totals exactly.
+
+| Zone | v1 (ha) | v2 (ha) | Added (ha) | Added, DSWx-S1 present | Added, JRC-fallback area | Buildings, v1 to v2 | Added buildings | DSWx-S1 present | JRC-fallback area |
+|---|---|---|---|---|---|---|---|---|---|
+| Scored area | 4,812 | 6,503 | 1,691 | 980 | 711 | 3 to 8 | 5 | 3 | 2 |
+| Flooded on 16 Jan only | 601 | 935 | 334 | 224 | 110 | 76 to 195 | 119 | 119 | 0 |
+| Flooded on 18 Jan only | 10,057 | 15,913 | 5,856 | 1,154 | 4,702 | 50 to 170 | 120 | 35 | 85 |
+| Outside one or both Copernicus maps | 28,082 | 41,589 | 13,507 | 10,710 | 2,797 | 48 to 128 | 80 | 77 | 3 |
+| Edge buffer or unclear, inside the agreed area | 7,942 | 11,011 | 3,069 | 1,664 | 1,405 | 136 to 323 | 187 | 166 | 21 |
+| **Total** | **51,494** | **75,951** | **24,457** | 14,732 | 9,725 | **313 to 824** | **511** | 400 | 111 |
+
+- **Almost all of it is gained, not swapped.** The net 24,457 ha is 24,518 ha gained less 61 ha dropped.
+- **Little of it is checked.**
+  - 13,507 ha (55%) is outside the Copernicus maps, so nothing checks it.
+  - 5,856 ha (24%) is flooded on 18 Jan only. The later map agrees with it, but it is not scored.
+  - Only 1,691 ha (7%) is in the scored area.
+- **The JRC-fallback area** holds 9,725 ha (40%) of the added area and 111 of the added buildings.
+- **Buildings.**
+  - 187 of the 511 sit in the edge buffer and unclear pixels, and 119 in the "flooded on 16 Jan only" zone. That zone holds 195 buildings in only 935 ha of v2 water, so it is densely built.
+  - Only 5 sit in the scored area.
+
+### 2. The rule beside v2 on AOI01
+
+| Method | New water (ha) | OSM buildings in it |
+|---|---|---|
+| Tuned rule | 76,198 | 682 |
+| LightGBM v2 (published) | 75,951 | 824 |
+| LightGBM v1 (12 Nov, replaced) | 51,494 | 313 |
+
+The area is almost the same, but v2 has 142 more buildings in its water.
+
+### 3. v2 on AOI01 against the agreement label (a diagnostic)
+
+| Method | IoU | Precision | Recall | Found (ha) | Extra (ha) | Missed (ha) |
+|---|---|---|---|---|---|---|
+| LightGBM v2 | 0.835 | 0.879 | 0.944 | 5,715 | 788 | 342 |
+| Tuned rule | 0.833 | 0.871 | 0.951 | 5,758 | 857 | 299 |
+| LightGBM v1 | 0.718 | 0.944 | 0.750 | 4,542 | 270 | 1,515 |
+
+- **Misses.** v2 misses 158 ha of core flood and 184 ha of edge. v1 missed 922 ha and 592 ha.
+- **Threshold.** v2's best threshold on AOI01 would be 0.42, giving IoU 0.836 (in-sample), close to the 0.36 it uses. Under v1 the best was 0.14, so the fix removed the probability shift.
+- **Other diagnostics from the rerun (in-sample).** With AOI06's land median, v2 would score 0.817 on AOI01. With the v1 land median, it would score 0.737.
+
+### 4. Already dark on 5 Jan, inside each field outline
+
+| Area | v2 new water (ha) | Already dark on 5 Jan |
+|---|---|---|
+| Field grid downstream of Chókwè | 7,799 | 716 ha (9%) |
+| Field grids north-west of Xai-Xai | 2,622 | 525 ha (20%) |
+| Rest of AOI01 | 65,530 | 11,933 ha (18%) |
+| All of AOI01 | 75,951 | 13,174 ha (17%) |
+
+The Chókwè grid has half the share of the rest of AOI01. The Xai-Xai grids are about the same as the rest.
+
+### 5. Why the v1 land share is 30% here and 32% before
+
+- **32% is DSWx-S1's coverage:** the AOI01 pixels where DSWx-S1 has any value on 5 Jan, 32.1% of the grid. Every AOI01 pixel has NISAR data, so this is also 32.1% of valid pixels.
+- **30% is v1's land.** It also needed DSWx-S1 "not water" and JRC 0%, which removes:
+  - 1.0% where DSWx-S1 shows water (codes 1 and 3);
+  - 0.7% where DSWx-S1 shows no water but JRC is above 0% or has no value;
+  - 0.0% masked by DSWx-S1 (codes 250 and 251).
+  That leaves 30.3%.
+- **Both figures were right; they measure different things.** Earlier wording such as "the land median comes only from the 32% where DSWx-S1 has data" was loose: the land itself was 30%.
 
 ## Done, 12 Nov: land-median fix (LightGBM v2) and the AOI01 field check
 
@@ -65,8 +151,8 @@ You asked for this: adopt the all-JRC-0% land median for all three areas, with f
 - **The run.** `python pipeline\lgbm_aoi06.py --rerun` wrote `data/aoi05/test_lgbm_v2.json`. The file is labelled "post-fix rerun" and states the decision rule fixed before scoring. The script refuses to run again.
 - **The clean test is untouched.** `data/aoi05/test_lgbm_vs_rule.json` was not changed, and `--test` still refuses to run.
 - **Result:** IoU 0.5741, precision 0.7055, recall 0.7551. The v1 clean test gave 0.5716, 0.7111 and 0.7445. The rerun is above the rule's 0.521, so the method choice is not reopened.
-- **0.572 stays the headline figure.**
-  - AOI05's `stats.json` now carries the v2 agreement figures (0.574). Its limits say they come from the post-fix rerun and that 0.572 is the one clean test.
+- **Headline wording, matching AOI05's `stats.json`:** 0.574 for the current model, with "one clean test: 0.572" beside it.
+  - `stats.json` carries 0.574 as its agreement figure. Its limits say this comes from the post-fix rerun and that 0.572 is the one clean test.
   - `method.parameters.aoi05_test` holds both scores, with the rerun's label and note.
   - `make_outputs.py` stops if a rerun file ever says the choice is reopened.
 

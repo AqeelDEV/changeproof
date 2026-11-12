@@ -1,0 +1,111 @@
+@import "../tokens.css";
+
+/* The globe is the Space surface (docs/DESIGN.md). Type never sits on the image: it is on the dark space beside the
+   small Earth in the first two beats, and on a solid band below the picture from the dive onwards. */
+.globe { position: fixed; inset: 0; overflow: hidden; background: var(--space); color: var(--paper); font: 15px/1.5 var(--sans); }
+.globe p { margin: 0; }
+.globe button, .globe input { font: inherit; }
+.globe :focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+
+/* A still field of faint stars, behind the map. Plain white points; never on the ground. */
+.globe::before { content: ""; position: absolute; inset: 0; background:
+  radial-gradient(circle, #fff 0 .7px, transparent 1.2px) 7% 22% / 100% 100% no-repeat,
+  radial-gradient(circle, #cfd6ea 0 .6px, transparent 1.1px) 18% 58% / 100% 100% no-repeat,
+  radial-gradient(circle, #fff 0 .6px, transparent 1.1px) 31% 12% / 100% 100% no-repeat,
+  radial-gradient(circle, #cfd6ea 0 .7px, transparent 1.2px) 12% 84% / 100% 100% no-repeat,
+  radial-gradient(circle, #fff 0 .6px, transparent 1.1px) 38% 70% / 100% 100% no-repeat,
+  radial-gradient(circle, #cfd6ea 0 .6px, transparent 1.1px) 95% 78% / 100% 100% no-repeat,
+  radial-gradient(circle, #fff 0 .7px, transparent 1.2px) 26% 40% / 100% 100% no-repeat,
+  radial-gradient(circle, #cfd6ea 0 .6px, transparent 1.1px) 44% 30% / 100% 100% no-repeat,
+  radial-gradient(circle, #fff 0 .6px, transparent 1.1px) 3% 48% / 100% 100% no-repeat,
+  radial-gradient(circle, #cfd6ea 0 .7px, transparent 1.2px) 88% 92% / 100% 100% no-repeat; }
+.g-map { position: absolute; inset: 0; }
+.g-map canvas { outline: none; }
+
+/* Hidden until the timeline shows them. */
+.g-solid, .g-open p, .g-band > *, .g-word, .g-figs, .g-card, .g-cover { visibility: hidden; opacity: 0; }
+
+.g-solid { position: absolute; left: 0; right: 0; background: var(--space); }
+.g-topbg { top: 0; height: 44px; }
+.g-bandbg { bottom: 0; height: 32vh; }
+.g-cover { position: absolute; inset: 0; z-index: 9; background: var(--space); }
+
+.g-top { position: absolute; top: 0; left: 0; right: 0; height: 44px; display: flex; align-items: center; gap: 18px; padding: 0 4vw; }
+.g-top b { font: 600 20px/1 var(--serif); margin-right: auto; }
+.g-top a { color: var(--paper); font-size: 14px; text-underline-offset: 3px; }
+.g-skip { cursor: pointer; border: 0; border-radius: 4px; padding: 5px 14px; background: var(--sand); color: var(--ink); font-weight: 600; }
+.globe[data-mode="load"] .g-skip, .globe[data-mode="free"] .g-skip { display: none; }
+
+/* Beats one and two: large type on the dark space beside the Earth. */
+.g-open { position: absolute; left: 4vw; right: 4vw; bottom: 56px; pointer-events: none; }
+.g-open p { position: absolute; left: 0; bottom: 0; font: 500 min(8.6vw, 15.3vh)/1.04 var(--serif); letter-spacing: -0.02em; }
+.g-open .g-l2 { font-size: min(5.6vw, 10vh); max-width: 11em; }
+
+/* The band: large type during the flight, the claim input afterwards. */
+.g-band { position: absolute; left: 0; right: 0; bottom: 0; height: 32vh; padding: 0 4vw 30px; display: grid; align-items: center; }
+.g-band > * { grid-area: 1 / 1; min-width: 0; }
+.g-l3 { font: 500 min(5.6vw, 10vh)/1.04 var(--serif); letter-spacing: -0.02em; }
+.g-l4 { font: italic 400 min(4.6vw, 8.5vh)/1.15 var(--serif); }
+.g-l4.long { font-size: min(2.6vw, 4.8vh); max-width: 38em; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+.g-land { display: flex; flex-wrap: wrap; align-items: center; gap: 2vh 5vw; }
+.g-word { display: flex; align-items: center; gap: .18em; font: 600 min(9vw, 15vh)/1 var(--serif); letter-spacing: -0.02em; transform-origin: left center; will-change: transform, opacity; }
+.g-word .g-mark { width: .44em; height: .44em; }
+.g-figs { display: flex; gap: 4vw; }
+.g-figs b, .g-two b { display: block; font: 600 min(3.4vw, 6vh)/1.05 var(--sans); font-variant-numeric: tabular-nums; }
+.g-figs span { font-size: max(1.25vw, 13px); color: var(--space-soft); }
+
+.g-form { display: flex; flex-wrap: wrap; align-items: center; align-content: center; gap: 10px; }
+.g-form input { flex: 1 1 300px; max-width: 640px; min-width: 0; padding: 10px 12px; background: var(--paper); color: var(--ink); border: 1px solid var(--edge-space); border-radius: 4px; }
+.g-go { cursor: pointer; padding: 10px 22px; border: 1px solid var(--sand); border-radius: 4px; background: var(--sand); color: var(--ink); font-weight: 600; }
+.g-go:disabled { opacity: .6; cursor: default; }
+.g-link { cursor: pointer; margin-left: auto; padding: 4px 0; border: 0; background: none; color: var(--paper); font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+.g-chips { flex: 0 0 100%; display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 4px; scrollbar-width: thin; scrollbar-color: var(--edge-space) transparent; }
+/* A preset is a claim, so it speaks in the claim's voice. */
+.g-chips button { cursor: pointer; flex: none; padding: 5px 12px; background: none; color: var(--paper); border: 1px solid var(--edge-space); border-radius: 4px; font: italic 400 15px/1.3 var(--serif); transition: border-color .12s linear; }
+.g-chips button:hover:not(:disabled) { border-color: var(--paper); }
+.g-chips button:disabled { opacity: .6; cursor: default; }
+
+/* The verdict card: solid paper, a hard edge and a real shadow. The badge classes are the checker's own. */
+.globe .g-card { position: absolute; left: 3vw; top: calc(44px + 2.5vh); width: min(440px, 38vw); max-height: calc(68vh - 44px - 5vh); overflow: auto; margin: 0;
+  padding: 16px 18px 16px 20px; background: var(--paper); color: var(--ink); border: 1px solid var(--ink); border-left-width: 6px; border-radius: 2px;
+  box-shadow: 0 18px 48px -18px rgba(0, 0, 0, .7); font-size: 14px; line-height: 1.45; }
+.globe .g-card.r-supported { border-left-color: #2e8b47; }
+.globe .g-card.r-contradicted { border-left-color: #c62828; }
+.globe .g-card.r-not-observable { border-left-color: #888; }
+.globe .g-card.r-not-provable, .globe .g-card.r-not-supported { border-left-color: #c99a00; }
+.globe .g-card p { margin: 6px 0; }
+.globe .g-card :focus-visible { outline-color: var(--signal-deep); }
+.globe .quote { font: italic 400 20px/1.3 var(--serif); }
+.globe .verdict { display: inline-flex; align-items: center; gap: 8px; padding: 3px 14px 3px 10px; border-radius: 3px; font: 600 26px/1.1 var(--serif); text-transform: none; }
+.globe .verdict .g-mark { width: 16px; height: 16px; flex: none; }
+.globe .tag { color: var(--ink-soft); font-size: 13px; }
+.g-stamp { padding-left: 10px; border-left: 2px solid var(--signal-deep); color: var(--ink-soft); font-size: 13px; }
+.g-two { display: flex; gap: 28px; margin: 10px 0; }
+.g-two b { font-size: 28px; }
+.g-two span { color: var(--ink-soft); font-size: 13px; }
+.globe .actions { margin: 12px 0 0; gap: 8px; }
+.globe .actions button { padding: 8px 14px; font-size: 14px; font-weight: 600; border: 1px solid var(--edge); border-radius: 4px; background: var(--paper); color: var(--ink); }
+.globe .actions button.primary { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+.g-credit { position: absolute; left: 4vw; right: 4vw; bottom: 8px; font-size: 11.5px; line-height: 1.35; color: var(--space-soft); pointer-events: none; }
+
+/* Upright screens: the Earth above, the type below it, and the card as a sheet at the bottom. */
+@media (max-aspect-ratio: 4/5) {
+  .g-open { bottom: 76px; }
+  .g-open p { font-size: 12vw; }
+  .g-open .g-l2 { font-size: 9.2vw; }
+  .g-bandbg, .g-band { height: 34vh; }
+  .g-band { padding-bottom: 56px; }
+  .g-l3 { font-size: 7.4vw; }
+  .g-l4 { font-size: 7vw; }
+  .g-l4.long { font-size: 4.6vw; }
+  .g-word { font-size: 13vw; }
+  .g-figs { gap: 7vw; }
+  .g-figs b { font-size: 7vw; }
+  .g-link { margin-left: 0; }
+  .globe .g-card { left: 0; right: 0; top: auto; bottom: 0; width: auto; max-height: 58vh; z-index: 2; border-width: 1px 0 0; border-top: 6px solid var(--ink-soft); box-shadow: 0 -18px 48px -18px rgba(0, 0, 0, .7); }
+  .globe .g-card.r-supported { border-top-color: #2e8b47; }
+  .globe .g-card.r-contradicted { border-top-color: #c62828; }
+  .globe .g-card.r-not-observable { border-top-color: #888; }
+  .globe .g-card.r-not-provable, .globe .g-card.r-not-supported { border-top-color: #c99a00; }
+}

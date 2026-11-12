@@ -168,3 +168,10 @@ Data credits:
 - OPERA DSWx-S1 and DSWx-HLS (NASA JPL), HLS (NASA and USGS), Landsat (USGS).
 - JRC Global Surface Water (European Commission Joint Research Centre).
 - OpenStreetMap contributors, ODbL.
+- Cloud image on the globe (`/globe`): VIIRS Corrected Reflectance (True Colour), Suomi NPP, 17 January 2026. We acknowledge the use of imagery provided by services from NASA's Global Imagery Browse Services (GIBS), part of NASA's Earth Science Data and Information System (ESDIS). The tiles are bundled in `web/public/globe/` by `web/scripts/fetch-globe-assets.mjs`, so the globe makes no third-party request.
+
+Software and fonts:
+
+- MapLibre GL JS (BSD-3-Clause) draws the globe; Leaflet (BSD-2-Clause) draws the detailed map.
+- GSAP runs the globe's timeline. It is free to use under [GSAP's own standard licence](https://gsap.com/community/standard-license/), which is not an open-source licence. It is installed from npm and is not copied into this repository.
+- Fonts: Newsreader, Atkinson Hyperlegible Next and Atkinson Hyperlegible Mono, under the SIL Open Font Licence 1.1. The licence texts are in `web/public/fonts/`.

@@ -13,7 +13,8 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 a { color: #0b57d0; }
 
 header { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center; padding: 8px 16px; min-height: var(--header); background: var(--ink); color: #fff; }
-.brand { margin-right: auto; }
+.brand { margin-right: auto; flex: 1 1 240px; } /* the tagline wraps before the controls drop to a second row */
+header a { color: #fff; }
 header h1 { font: 700 20px/1.1 var(--serif); margin: 0; letter-spacing: .2px; }
 .brand p { margin: 2px 0 0; font-size: 12.5px; color: #c9ced6; }
 header select { padding: 3px 6px; border-radius: 4px; border: 0; max-width: 260px; }

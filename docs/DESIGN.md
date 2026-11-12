@@ -1,6 +1,6 @@
 # ChangeProof design
 
-One idea: **seen through cloud**. On 17 January 2026 southern Mozambique was under cloud. NISAR's radar looked through it at 03:42 UTC. Everything on screen follows from that: what the instrument saw, and what can honestly be written down about it.
+One idea: **seen through cloud**. On 17 January 2026 southern Mozambique was under cloud. Radar sees through cloud. NISAR passed at 03:42 UTC. Everything on screen follows from that: what the instrument saw, and what can honestly be written down about it.
 
 This file is the reference for the globe at `/globe`, the checker at `/`, the printed report and the slides. If a screen and this file disagree, fix the screen or change this file on purpose.
 
@@ -184,7 +184,7 @@ Pixel ratio capped, no blur anywhere, the sweep moved by transform only. If the 
 
 ## Components
 
-**Caption band (globe).** The picture fills the top two thirds of the screen. Below it is a solid band of the Space colour that carries the large type during the intro and the claim input and presets afterwards. Type never sits on the image, and the image is never darkened or tinted to carry type: white type on white cloud cannot be read, and a dimmed image is no longer what the satellite saw. Only the verdict card and "Skip" sit over the picture, both solid.
+**Caption band (globe).** In the first two beats the Earth is small and the large type sits on the dark space beside it; there is no band. From the dive onwards the picture fills the top two thirds of the screen, and below it is a solid band of the Space colour that carries the large type, and afterwards the claim input and presets. Type never sits on the image, and the image is never darkened or tinted to carry type: white type on white cloud cannot be read, and a dimmed image is no longer what the satellite saw. Only the verdict card and "Skip" sit over the picture, both solid.
 
 **Header and pass line.** Space surface. The name in Newsreader on the left, links on the right. Under it, the pass line: a 2 px lilac rule broken by the text "as of 17 Jan 2026, 03:42 UTC. NISAR Beta data." This replaces today's yellow Beta banner.
 
@@ -208,7 +208,8 @@ Truth:
 
 - The globe's surface is the real NASA VIIRS image of 17 January 2026, with its own time in the caption (early afternoon, hours after NISAR's pass). Nothing on screen says what the sky was at 03:42.
 - The NISAR image appears only where NISAR looked. No cloud-free image sits under it.
-- Parts of the daily image that are dark or streaked stay as they are, and the caption says why: "The far north is dark: no daylight there in January. Pale streaks are where one orbit meets the next."
+- Parts of the daily image that are dark or streaked stay as they are; nothing is filled in or retouched. The opening view is centred so that Africa, not the Atlantic seams, is in front, and the caption says what remains: "Pale streaks are where one orbit meets the next. The far north is dark: no daylight there in January."
+- The line about the radar is always "Radar sees through cloud. NISAR passed at 03:42 UTC."
 - When the data cannot see, the picture says so: a date that is not covered means no sweep, and the cloud stays.
 - Decoration (stars, the air glow, the sweep line) is plain, dim and never on the ground as if it were data.
 - Every number has a plain label and comes from the result. Verdicts say "as of 17 Jan 2026, 03:42 UTC" and "Beta". "Agreement with Copernicus", never "accuracy".

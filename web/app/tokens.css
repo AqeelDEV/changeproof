@@ -1,0 +1,10 @@
+/* Design tokens (docs/DESIGN.md). Two surfaces, Space and Report, and one signal colour used only as a thin line. */
+:root {
+  --space: #0a1024; --space-raised: #151d3a; --space-soft: #a9b0c6; --edge-space: #6c7699; --rule-space: #2b3560;
+  --sand: #f1eadc; --paper: #fbf8f1; --ink: #141a2e; --ink-soft: #565c6e; --edge: #757a8c; --rule: #d6ccb8;
+  --signal: #b79cff; --signal-deep: #5a35d6;
+  --water: #1f78ff; --ref: #e5382d;
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --sans: "Atkinson Hyperlegible Next", system-ui, "Segoe UI", sans-serif;
+  --mono: "Atkinson Hyperlegible Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}

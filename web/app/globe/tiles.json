@@ -1,0 +1,5 @@
+[
+  { "id": "world", "minzoom": 0, "maxzoom": 3, "bounds": [-180, -85.0511, 180, 85.0511] },
+  { "id": "africa", "minzoom": 4, "maxzoom": 5, "bounds": [5, -40, 60, 5] },
+  { "id": "mozambique", "minzoom": 6, "maxzoom": 9, "bounds": [31, -26.5, 35.5, -23] }
+]

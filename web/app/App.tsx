@@ -1,11 +1,12 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ClaimPanel from "./ClaimPanel";
 import CloudCard from "./CloudCard";
 import RadarCard from "./RadarCard";
 import StatsPanel, { IOU_TAG } from "./StatsPanel";
+import { claimParam } from "../lib/claimParam";
 import type { Bounds, ClaimPlace, ClaimRequest, MapState, Optical, Stats } from "./types";
 
 // Leaflet needs window, so the map is loaded on the client only.
@@ -70,6 +71,12 @@ export default function App({ areas, optical }: { areas: Stats[]; optical: Recor
   const [step, setStep] = useState<number | null>(null);
   const area = areas.find((a) => a.area_id === id) ?? areas[0];
 
+  // "/?claim=..." (the globe's "Open the detailed map") checks that claim straight away.
+  useEffect(() => {
+    const text = claimParam(location.search);
+    if (text) setRequest({ text });
+  }, []);
+
   function go(i: number) {
     const s = STEPS[i];
     setStep(i);
@@ -107,6 +114,7 @@ export default function App({ areas, optical }: { areas: Stats[]; optical: Recor
         <span className="banner">
           NISAR {area.release} data, as of {area.as_of_label}
         </span>
+        <a href="/globe">See the globe</a>
         <button type="button" className="tour-btn" onClick={() => go(0)}>
           Take the tour
         </button>

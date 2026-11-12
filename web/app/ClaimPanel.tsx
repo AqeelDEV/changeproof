@@ -15,6 +15,12 @@ const MEANING: Record<string, string> = {
   "not provable": "Inside the time and area, but radar cannot settle it.",
 };
 
+/** The one-line meaning under the badge. A dry-rule result shown as "not provable" has its own line. */
+export const meaningOf = (r: ClaimResult): string => {
+  const shown = shownVerdict(r.verdict, r.fields.polarity);
+  return MEANING[shown === "not provable" && r.verdict === "supported" ? "not provable, dry" : shown];
+};
+
 const optsOf = (c: PublishedClaim): ClaimOpts => ({ published: c.published, date: c.refers_to ?? undefined, place_hint: c.place_hint });
 
 export default function ClaimPanel({ areas, request, onPlace }: {
@@ -50,7 +56,7 @@ export default function ClaimPanel({ areas, request, onPlace }: {
 
   const f = result?.fields, place = f?.place, e = result?.evidence;
   const shown = result && f ? shownVerdict(result.verdict, f.polarity) : "";
-  const meaning = MEANING[shown === "not provable" && result?.verdict === "supported" ? "not provable, dry" : shown];
+  const meaning = result ? meaningOf(result) : "";
   const area = areas.find((a) => a.area_id === place?.area);
 
   function download() {

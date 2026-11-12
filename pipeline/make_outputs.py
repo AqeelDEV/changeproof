@@ -159,7 +159,7 @@ def method_block(chosen, test, rerun, rule, info, d):
 
 def run_area(area, chosen, test, rerun, rule, model, threshold):
     cfg, grid = AREAS[area], f.GRIDS[area]
-    limits_extra = []
+    limits_extra, building_range = [], ""
     if area == "aoi01":
         import rasterio
         with rasterio.open(DATA / area / "label_emsr857_aoi01_fep_flood_30m.tif") as s:
@@ -224,21 +224,36 @@ def run_area(area, chosen, test, rerun, rule, model, threshold):
                             "not a test score: the land-median problem was found on this area. Before the fix "
                             f"LightGBM scored {V1_IOU[area]:.3f} here, and the tuned rule scores {rule_iou:.3f}. "
                             "The method was chosen on AOI05, not here.")
-        parts = []
+        outside_ha = (pred & valid & ~both).sum() * b.HA  # not covered by both the 16 and 18 Jan maps
+        limits_extra.append(f"{outside_ha / new_ha:.0%} of the detected new water ({outside_ha:,.0f} ha of "
+                            f"{new_ha:,.0f} ha) lies outside the area that both Copernicus maps cover. It has no "
+                            "independent check yet.")
+        field = {}  # name -> (new water ha, buildings in it, ha of it already dark on 5 Jan)
         for name, polygons in FIELDS_AOI01.items():
             w = pred & valid & field_mask(pred.shape, polygons)
-            parts.append(f"{w.sum() * b.HA:,.0f} ha ({buildings(area, grid, w)[0]:,} buildings) lies in the field "
-                         f"grid{'s' if len(polygons) > 1 else ''} {name}")
-        limits_extra.append("The figures here may include irrigation. Of the detected new water, " + ", and ".join(parts) +
-                            ". These regular plots look irrigated, so a flooded field there may be irrigation rather "
-                            "than flood. The optical image of 19 Jan (HLS) is cloud-covered, so this is not resolved.")
+            field[name] = (w.sum() * b.HA, buildings(area, grid, w)[0], (w & dark0).sum() * b.HA)
+        (ck_ha, ck_n, _), (xx_ha, xx_n, xx_dark) = (field["on the south-west bank downstream of Chókwè"],
+                                                    field["north-west of Xai-Xai"])
+        limits_extra.append(
+            f"Some of the new water north-west of Xai-Xai may be irrigation, not flood: {xx_ha:,.0f} ha ({xx_n:,} "
+            f"buildings) lies in the field grids there, and about {xx_dark:,.0f} ha of it was already dark in NISAR's "
+            f"5 Jan image. Downstream of Chókwè, {ck_ha:,.0f} ha ({ck_n:,} buildings) lies in a field grid, but the "
+            "evidence leans towards flood water held in the fields, not irrigation: where the 18 Jan COSMO-SkyMed map "
+            "covers it, the map calls most of it flooded, and JRC has almost never seen water there. This is not "
+            "confirmed. The optical image of 19 Jan (HLS) is cloud-covered, so it could not settle either area.")
+        rule_n = buildings(area, grid, rule_pred & valid)[0]
+        low, high = sorted((rule_n, n_in))
+        building_range = (f" For this area the count is about {round(low, -1)} to {round(high, -1)} mapped buildings "
+                          "in detected water, depending on method.")
     limits_extra.append(f"{dark_ha:,.0f} ha ({dark_ha / new_ha:.0%}) of the detected new water was already dark in "
                         "NISAR's 5 Jan image. DSWx-S1 (or JRC) called it dry, so it counts as new, but some of it "
                         "may have been water before 17 Jan.")
     limits_extra.append(f"Buildings: {n_in:,} OpenStreetMap buildings sit inside detected new water, out of {n_grid:,} "
-                        "mapped on this grid. This is a lower bound: OpenStreetMap is incomplete here, a 30 m pixel "
-                        "is larger than a house, and flooded built-up areas look bright in radar, so open-water "
-                        "detection misses them. It says nothing about damage. Data: OpenStreetMap contributors, ODbL.")
+                        f"mapped on this grid.{building_range} The count can be too high or too low. Too low: "
+                        "OpenStreetMap is incomplete here, and flooded built-up areas look bright in radar, so "
+                        "open-water detection misses them. Too high: a 30 m pixel is larger than a house, so a "
+                        "building beside water can fall on a water pixel, and some detected water may not be flood. "
+                        "It says nothing about damage. Data: OpenStreetMap contributors, ODbL.")
     method = method_block(chosen, test, rerun, rule, info, d)
     method["parameters"]["tuned_rule_iou_this_area"] = rule_iou
     if chosen == "lightgbm":

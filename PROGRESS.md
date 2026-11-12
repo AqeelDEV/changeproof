@@ -1,6 +1,6 @@
 # Progress
 
-Updated Thursday 12 November 2026, after the overnight run, the AOI01 checks and the land-median fix. Submission is Saturday 14 November, 12:00 GST.
+Updated Thursday 12 November 2026, after the overnight run, the AOI01 checks, the land-median fix and the limits wording. Submission is Saturday 14 November, 12:00 GST.
 
 ## Start here tomorrow
 
@@ -10,11 +10,11 @@ Where things stand:
   - 0.572 is v1, scored once on AOI05 before the fix: the one clean test.
   - 0.574 is v2's post-fix rerun, which is not a clean test.
   - The tuned rule scored 0.521.
-- **AOI01 totals, before you quote them.** v2 finds 75,951 ha of new water with 824 OSM buildings in it; the tuned rule finds 76,198 ha with 682. Of the 24,457 ha that v2 added over v1, 55% is outside the Copernicus maps, so nothing checks it. See "AOI01 totals, checked before quoting".
+- **AOI01 totals, before you quote them.** v2 finds 75,951 ha of new water with 824 OSM buildings in it; the tuned rule finds 76,198 ha with 682. Of the 24,457 ha that v2 added over v1, 55% is outside the Copernicus maps, so nothing checks it. Of v2's whole 75,951 ha, 55% (41,589 ha) lies outside the area both Copernicus maps cover, and AOI01's limits say it has no independent check yet. See "AOI01 totals, checked before quoting" and "limits wording".
 - AOI01: v2 scores 0.835 against its reference. That is a diagnostic only, because the problem was found there. The published v1 figure was 0.718 and the rule scores 0.833. AOI01's `stats.json` gives all three.
 - Contract 1.1 outputs for all three areas were regenerated with v2, and `web/public/data/areas.json` lists all three.
 
-1. **AOI01's field grids may be irrigation.** They hold 7,799 ha of new water (81 buildings) downstream of Chókwè and 2,622 ha (23 buildings) north-west of Xai-Xai. HLS 19 Jan is all cloud, so it could not settle this, and AOI01's limits say the figures may include irrigation. To settle it you would need a clear optical image from early to mid January, or a map of the irrigation schemes. See "Field-shaped water in AOI01" below.
+1. **Irrigation: the caveat is now narrowed to the Xai-Xai fields.** The field grids north-west of Xai-Xai hold 2,622 ha of new water (23 buildings), and about 525 ha of it was already dark on 5 Jan. AOI01's limits say that part of it may be irrigation. The field grid downstream of Chókwè holds 7,799 ha (81 buildings), and the limits say the evidence leans towards flood water, not confirmed. HLS 19 Jan is all cloud, so it could not settle either. To settle it you would need a clear optical image from early to mid January, or a map of the irrigation schemes. See "Field-shaped water in AOI01" below.
 2. **Delete the four old grey PNGs** in `web/public/data/aoi05/` (`hh_20260105.png`, `hh_20260117.png`, `hv_20260105.png`, `hv_20260117.png`) once the web app uses the WebP files. They are kept for now because the app may still load them, but `stats.json` no longer lists them.
 3. **Check the web app reads the new files.** It needs to handle three things:
    - `areas.json` with three areas.
@@ -26,6 +26,28 @@ Where things stand:
 Keep in mind:
 - AOI05 has now been scored three times: the rule (11 Nov), LightGBM v1 (12 Nov, the clean test) and LightGBM v2 (12 Nov, the post-fix rerun, labelled as such). Do not tune anything else on AOI05.
 - AOI01 can no longer check the land-median definition independently.
+
+## Done, 12 Nov: limits wording (no method or number changes)
+
+- **Where.** The edits are in `pipeline/make_outputs.py`, so reruns keep them. I reran it for all three areas.
+- **Nothing but limits text changed.**
+  - In the three `stats.json` files, only `limits` and the `generated_utc` timestamp differ. Every other key is equal, including `results` and `agreement`.
+  - The SHA-256 of every other file in `web/public/data/` is unchanged. So are the `water_new`, `change_hh`, `coverage` and AOI01 `label_agree` GeoTIFFs in `data/`.
+  - `check_contract` passes on all three areas.
+- **1. Buildings, all three areas.** "This is a lower bound" is gone. The sentence now says the count can be too high or too low, and gives a reason for each:
+  - Too low: OSM is incomplete, and flooded built-up areas look bright in radar, so open-water detection misses them.
+  - Too high: a 30 m pixel is larger than a house, so a building beside water can fall on a water pixel, and some detected water may not be flood.
+  - AOI01 adds "about 680 to 820 mapped buildings in detected water, depending on method". The script works this out from the tuned rule's 682 and LightGBM's 824, rounded to the nearest 10.
+  - `osm_buildings_in_new_water` stays 15, 5 and 824.
+- **2. Irrigation caveat, AOI01.** It now covers the Xai-Xai field grids only: 2,622 ha of new water (23 buildings), about 525 ha of it already dark on 5 Jan. For the Chókwè grid (7,799 ha, 81 buildings) the limits say the evidence leans towards flood water held in the fields, and that this is not confirmed.
+  - The two reasons given for Chókwè come from `check_fields_aoi01.json`: where the 18 Jan map covers it, 52% of the water is called flooded and 5% dry (43% is unmapped), and JRC saw water at 2% of it.
+  - The 525 ha and the hectares are worked out in the script, not typed in. "Most" and "almost never" are typed in, and were checked against that JSON.
+- **3. AOI01, new water outside the Copernicus maps.**
+  - **55% (54.8%) of v2's 75,951 ha of new water, 41,589 ha, lies outside the area that both the 16 and 18 Jan maps cover.** The limits now say it has no independent check yet.
+  - It is the same as the table's "Outside one or both Copernicus maps" row (41,589 ha). Of that 41,589 ha, 33,787 ha (44.5% of the total) is outside both maps. The other 7,802 ha is inside the 18 Jan map only.
+  - Not the same as the earlier 55% (13,507 of the 24,457 ha that v2 added over v1). It is a different share that rounds the same.
+  - Pixels where the maps disagree are a separate 22% (16,848 ha) and are not in this figure.
+- **Not changed (outside the folders I was asked to touch).** `docs/DATA_CONTRACT.md` (lines 11 and 152) and `PROJECT_BRIEF.md` (line 36) still say "lower bound" for buildings. AOI01's first limit also still calls the agreement figure "a lower bound". That is about agreement, not buildings, so I left it.
 
 ## Done, 12 Nov: AOI01 totals, checked before quoting (no outputs changed)
 
@@ -209,7 +231,7 @@ You asked for this: adopt the all-JRC-0% land median for all three areas, with f
   - DSWx-S1 has no data here, so plots with JRC 4% or more already count as water before the flood and are excluded. Of the new water that remains, 23% has JRC 1 to 3%.
   - The 16 Jan Sentinel-1 map calls 77% of this water dry, and the 18 Jan map calls 74% flooded. Either the flood arrived after 16 Jan, or one map is wrong.
   - Part of it may well be irrigation.
-- **Limits text.** AOI01's `stats.json` now says the figures may include irrigation, gives each area's hectares and buildings, and says HLS could not settle it.
+- **Limits text.** AOI01's `stats.json` first said the figures may include irrigation, gave each area's hectares and buildings, and said HLS could not settle it. That was narrowed later on 12 Nov: see "Done, 12 Nov: limits wording" above.
 - **Not done.** I didn't look for another optical image: Sentinel-2 or Landsat from early to mid January might show the fields. I also didn't use a mapped irrigation-scheme boundary.
 
 ### Other changes
@@ -402,7 +424,7 @@ Against the agreement label, inside the scored area, which holds 6,057 ha of agr
 
 - **Method.** Each OSM building point is moved to EPSG:32736 and counted when it falls on a `water_new` pixel. The total on the grid is counted too.
 - **Contract.** Stored in `stats.json` as `results.osm_buildings_in_new_water` and `results.osm_buildings_on_grid`.
-- **The counts are tiny**: 12, 5 and 313. Radar open-water detection misses flooded built-up areas (they look bright), a 30 m pixel is bigger than a house, and OSM is incomplete. Each area's limits call it a lower bound that says nothing about damage.
+- **The counts are tiny**: 12, 5 and 313. Radar open-water detection misses flooded built-up areas (they look bright), a 30 m pixel is bigger than a house, and OSM is incomplete. Each area's limits first called the count a lower bound. That was reworded later on 12 Nov: the count can be too high or too low, and it says nothing about damage.
 
 ### Contract and overlays
 
@@ -481,6 +503,6 @@ Not done or not checked: the pixel quality of the Beta scenes beyond this test, 
 5. Done 12 Nov: LightGBM beat the rule on AOI05 (0.572 against 0.521) and is kept. Both are reported. It took about an hour in all.
 6. Next.js app: map, before/after slider, overlays, coverage map. Reads `web/public/data` only.
 7. `claims/`: parser, time and area gate, verdict rules, evidence report. Write the 30 test claims before tuning. Check the full path on the deployed URL.
-8. Buildings lower bound done 12 Nov. Still to do: cloud panel, 19 Jan optical check, five-date strip, panel on why water is dark. Feature freeze after this.
+8. Buildings count done 12 Nov (worded as "too high or too low", not a lower bound). Still to do: cloud panel, 19 Jan optical check, five-date strip, panel on why water is dark. Feature freeze after this.
 9. Run the 30-claim test, README with limits, backup video, slides.
 10. Rehearse, submit, and check every link while logged out.

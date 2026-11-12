@@ -54,7 +54,7 @@ Say:
 - If asked about a number, say where it comes from. The areas' stats files hold every figure shown.
 - Do not say "accuracy", "lives saved" or "damage".
 
-## B. Eleven judge questions, short answers
+## B. Sixteen judge questions, short answers
 
 1. **Why not just use Copernicus or OPERA?**
 For this flood you should, and we do. They are our reference. Copernicus is on demand: it was activated on 17 January, a week into the event, and covers only the areas requested. OPERA has no NISAR water product for January 2026. Neither answers a claim. ChangeProof does that last step and adds NISAR's L-band as a second look.
@@ -88,6 +88,21 @@ Unproven. It is one event and one track. Validated NISAR data only began in Octo
 
 11. **Why "not supported" and not "false"?**
 Radar can show new open water, but it cannot show its absence under buildings, crops or trees. So the tool backs claims, and never refutes them on silence.
+
+12. **Doesn't flood forecasting already exist?**
+Yes, and here forecasts triggered early action: INGD activated anticipatory action for the southern basins, the Limpopo among them, on 6 to 8 January 2026, and the Government declared a national Red Alert on 16 January (IFRC Emergency Appeal MDRMZ027). ChangeProof is the step after the forecast: where the water went and which claims are true.
+
+13. **Can you predict floods?**
+No. ChangeProof only reports what radar saw on a pass, as of that pass. With a long record of passes, a time-series model could one day estimate how fast water drains in each area, with every new pass checking it. That is future work, not something it does today.
+
+14. **Could this work for earthquakes or landslides?**
+The claim checker could: its place, date and coverage gates and its fixed rules do not depend on the detector. Each hazard needs its own detector and its own test: InSAR for earthquake damage, radar change and coherence loss on slopes for landslides, and the flood detector for tsunami flooding. None of these is built or tested.
+
+15. **Why not show the flood draining?**
+NASA's catalogue, checked on 12 November 2026, has no NISAR pass on our track (114) between 17 January and 22 June 2026, and no pass covering any of our three areas from 21 January to 17 June. One descending pass on 20 January covers part of AOI05, but its only earlier image on that track is from 3 December in a different mode, so we do not use it. The 17 January pass is the only flood-time look we use. With NISAR's routine 12-day repeat, the same pipeline would track each pass.
+
+16. **What happens with more satellites?**
+More L-band radars from other agencies are joining NISAR: JAXA's ALOS-4 (launched July 2024, 14-day repeat) and ESA's Copernicus ROSE-L (planned for 2028, two satellites at first), with Sentinel-1 at C-band. Together the gap between looks falls from 12 days to a few. That means fewer "not observable" verdicts, a better chance of catching the flood peak, tracking the draining, and checking whether trigger forecasts came true. The claim checker does not depend on the sensor: a new radar needs a new detector, not a new tool.
 
 ## C. 30-second video shot list
 

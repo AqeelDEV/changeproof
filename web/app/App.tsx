@@ -178,6 +178,11 @@ export default function App({ areas, optical }: { areas: Stats[]; optical: Recor
                 {area.limits.map((l) => (
                   <li key={l}>{l}</li>
                 ))}
+                <li>
+                  NASA&apos;s catalogue, checked on 12 Nov 2026, lists no NISAR pass on track 114 between 17 Jan and 22 Jun 2026, and
+                  no pass covering any of the three areas from 21 Jan to 17 Jun. A descending pass on 20 Jan covers part of AOI05 but
+                  is not used, so 17 Jan is the only flood-time look here.
+                </li>
               </ul>
               <p className="tag">
                 Code, data sources and tests: <a href="https://github.com/AqeelDEV/changeproof" target="_blank" rel="noreferrer">github.com/AqeelDEV/changeproof</a>

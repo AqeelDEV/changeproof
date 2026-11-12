@@ -101,7 +101,7 @@ Tests:
 ## Limits
 
 - **Beta data.** Not fully calibrated. We use relative change and per-area normalisation.
-- **Last pass is 17 Jan 2026, 03:42 UTC.** The flood kept rising after that, and Copernicus saw a larger flood on AOI01 on 20 Jan (127,755.1 ha). Every verdict is "as of" 17 Jan.
+- **Last pass is 17 Jan 2026, 03:42 UTC.** The flood kept rising after that, and Copernicus saw a larger flood on AOI01 on 20 Jan (127,755.1 ha). Every verdict is "as of" 17 Jan. NASA's catalogue, checked on 12 Nov 2026, lists no NISAR pass on track 114 between 17 Jan and 22 Jun 2026, and no pass covering any of the three areas from 21 Jan to 17 Jun. A descending pass on 20 Jan covers part of AOI05 but is not used, so 17 Jan is the only flood-time look here.
 - **Open water only.** Flooded trees and crops, and flooded buildings, can look bright in radar and are missed. Pixels where HH rose by more than 3 dB are not scored.
 - **Buildings.** The count can be too high or too low, and says nothing about damage.
 - **Some new water may not be flood.** On AOI01, part of the water in field grids near Xai-Xai may be irrigation. 13,174 ha (17%) of AOI01's new water was already dark on 5 Jan.

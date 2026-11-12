@@ -6,6 +6,8 @@ ChangeProof
 
 ## High-level summary
 
+Forecasts triggered early action: INGD activated anticipatory action for the southern basins, the Limpopo among them, on 6 to 8 Jan 2026, and the Government declared a national Red Alert on 16 Jan. ChangeProof is the step after the forecast: where the water went and which claims are true. Next, checking whether trigger forecasts came true.
+
 ChangeProof checks a written flood claim against NISAR radar data. Optical satellites were clouded out during the January 2026 floods in southern Mozambique, and a map is not a verdict. Type a sentence and the app gives one of five verdicts: supported, not supported, contradicted, not observable or not provable. Each is stated as of 17 Jan 2026, 03:42 UTC, with the numbers and limits behind it. It never calls a flood claim false on silence: radar cannot show that a place stayed dry. Copernicus is the reference. We do not claim a better flood map.
 
 ## Detailed description

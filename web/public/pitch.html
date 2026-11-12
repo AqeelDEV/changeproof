@@ -33,6 +33,17 @@ figcaption{font-size:clamp(16px,1.8vw,26px);color:var(--mute)}
 #n{position:fixed;right:2vw;bottom:2vh;font-size:clamp(14px,1.6vw,22px);color:var(--mute)}
 #hint{position:fixed;left:2vw;bottom:2vh;font-size:clamp(14px,1.4vw,20px);color:var(--grey)}
 a{color:var(--water)}
+.tight li{font-size:clamp(16px,2vw,28px)}
+.side{flex:1;min-width:14em}
+.img.sm{height:30vh}
+.nums.sm .num b{font-size:clamp(32px,4.4vw,64px)}
+.next li{font-size:clamp(18px,2.3vw,32px)}
+.links{font-size:clamp(16px,1.9vw,26px)}
+.src{font-size:clamp(12px,1.3vw,18px);color:var(--grey)}
+.vt{border-collapse:collapse;font-size:clamp(14px,1.8vw,26px)}
+.vt th,.vt td{border:2px solid var(--line);padding:.3em .7em;text-align:left}
+.vt td{font-weight:700}
+@media (max-width:700px){section{padding:4vh 16px;overflow-y:auto;justify-content:flex-start}.img,.img.sm{height:auto;width:min(100%,46vh)}figure{width:100%}}
 </style>
 </head>
 <body>
@@ -45,14 +56,19 @@ a{color:var(--water)}
 
 <section>
   <h2>The problem</h2>
-  <div class="row">
-    <figure><div class="img"><img src="data/aoi01/landsat_20260120.webp" alt="Landsat 9 on 20 Jan 2026, covered in cloud"></div><figcaption>Landsat 9, 20 Jan: 95% cloud</figcaption></figure>
-    <figure><div class="img"><img src="data/aoi01/hls_20260119.webp" alt="Sentinel-2 HLS on 19 Jan 2026, thick cloud"></div><figcaption>Sentinel-2 (HLS), 19 Jan: thick cloud</figcaption></figure>
-  </div>
-  <ul>
-    <li>Optical satellites were clouded out. Radar sees through cloud.</li>
-    <li>Claims spread faster than checks. A map is not a verdict.</li>
+  <ul class="tight">
+    <li>Forecasts triggered early action: INGD activated anticipatory action for the southern basins, the Limpopo among them, on 6 to 8 Jan 2026, and the Government declared a national Red Alert on 16 Jan.</li>
+    <li>ChangeProof is the step after the forecast: where the water went and which claims are true. Next, checking whether trigger forecasts came true.</li>
   </ul>
+  <div class="row">
+    <figure><div class="img sm"><img src="data/aoi01/landsat_20260120.webp" alt="Landsat 9 on 20 Jan 2026, covered in cloud"></div><figcaption>Landsat 9, 20 Jan: 95% cloud</figcaption></figure>
+    <figure><div class="img sm"><img src="data/aoi01/hls_20260119.webp" alt="Sentinel-2 HLS on 19 Jan 2026, thick cloud"></div><figcaption>Sentinel-2 (HLS), 19 Jan: thick cloud</figcaption></figure>
+    <ul class="tight side">
+      <li>Optical satellites were clouded out. Radar sees through cloud.</li>
+      <li>Claims spread faster than checks. A map is not a verdict.</li>
+    </ul>
+  </div>
+  <p class="src">Sources: <a href="https://go-api.ifrc.org/api/DownloadFile/94244/MDRMZ027%20OS">IFRC Emergency Appeal MDRMZ027, operational strategy</a>; <a href="https://www.anticipation-hub.org/global-overview/countries/mozambique/time-to-act-how-mozambiques-government-and-wfp-are-turning-early-warnings-into-life-saving-action">WFP, anticipatory action in Mozambique, Dec 2025 to Mar 2026</a>.</p>
 </section>
 
 <section>
@@ -76,15 +92,20 @@ a{color:var(--water)}
 
 <section>
   <h2>Validation</h2>
-  <div class="nums">
+  <div class="nums sm">
     <div class="num"><b>0.521</b><small>tuned rule, held-out area (AOI05)</small></div>
     <div class="num"><b class="w">0.572</b><small>LightGBM, one clean test</small></div>
     <div class="num"><b>42 of 45</b><small>frozen test claims, parser alone</small></div>
   </div>
-  <ul>
+  <ul class="tight">
     <li>Tuned on AOI06 with spatial blocks. Tested once on a different frame and river.</li>
     <li>Agreement with <span class="r">Copernicus</span>, not accuracy. Copernicus is the reference.</li>
   </ul>
+  <table class="vt">
+    <tr><th>What radar saw</th><th>Claim says flooded</th><th>Claim says not flooded</th></tr>
+    <tr><th>New open water</th><td>Supported</td><td>Contradicted</td></tr>
+    <tr><th>No open water</th><td>Not supported</td><td>Not provable</td></tr>
+  </table>
 </section>
 
 <section>
@@ -99,13 +120,13 @@ a{color:var(--water)}
 
 <section>
   <h2>What is next</h2>
-  <ul>
-    <li>Swap in OPERA's NISAR water product when it covers the event.</li>
-    <li>Test on more floods and more tracks.</li>
+  <ul class="next">
+    <li><b>More looks.</b> Every 12-day NISAR pass, plus JAXA's ALOS-4 and ESA's ROSE-L at L-band and Sentinel-1 at C-band, so the gap between looks falls from 12 days to a few. OPERA DSWx-NI, once released, adds flooded vegetation. Next: a 2026 flood with routine 12-day NISAR coverage, for the full rise-and-drain series and a second independent test.</li>
+    <li><b>Smarter models.</b> Fine-tune a foundation model (Prithvi-EO-2.0 or TerraMind) on checked floods. With a long record, a time-series model such as TimesFM could estimate drain rates, checked by each new pass.</li>
+    <li><b>Plugged into the system.</b> Forecasters predict, ChangeProof verifies (for example Google Flood Hub). The same claim checker, with new detectors for earthquake damage, landslides and tsunami flooding.</li>
     <li>It does not replace Copernicus or OPERA.</li>
   </ul>
-  <p>Live: <a href="https://changeproof-dusky.vercel.app">https://changeproof-dusky.vercel.app</a></p>
-  <p>Code (MIT): <a href="https://github.com/AqeelDEV/changeproof">https://github.com/AqeelDEV/changeproof</a></p>
+  <p class="links">Live: <a href="https://changeproof-dusky.vercel.app">changeproof-dusky.vercel.app</a> · Code (MIT): <a href="https://github.com/AqeelDEV/changeproof">github.com/AqeelDEV/changeproof</a></p>
 </section>
 
 <div id="hint">arrows, space or click</div>
@@ -114,7 +135,7 @@ a{color:var(--water)}
 <script>
 (function(){
   var s=[].slice.call(document.querySelectorAll("section")),i=0,n=document.getElementById("n");
-  function go(k){i=Math.max(0,Math.min(s.length-1,k));s.forEach(function(e,j){e.classList.toggle("on",j===i)});n.textContent=(i+1)+" / "+s.length}
+  function go(k){i=Math.max(0,Math.min(s.length-1,k));s.forEach(function(e,j){e.classList.toggle("on",j===i)});n.textContent=(i+1)+" / "+s.length;document.getElementById("hint").hidden=i>0}
   document.addEventListener("keydown",function(e){
     if(e.key==="ArrowRight"||e.key===" "){e.preventDefault();go(i+1)}
     else if(e.key==="ArrowLeft"){e.preventDefault();go(i-1)}

@@ -6,6 +6,7 @@ running the same command again resumes. Log: data\\fetch_log.txt. A summary is p
   python pipeline\\fetch_all.py              stream the NISAR crops; if streaming fails, download the
                                             full frame 165 file for that date instead (about 4 GB each)
   python pipeline\\fetch_all.py --download   download the full frame 165 files first (about 8.2 GB)
+  python pipeline\\fetch_all.py --series     only the three earlier dates (30 Nov, 12 Dec, 24 Dec) for all areas
 
 NISAR, OPERA and HLS need the EARTHDATA_TOKEN environment variable (see prep_aoi05.py).
 Copernicus, JRC, OpenStreetMap and the Landsat previews need no login.
@@ -41,6 +42,19 @@ NISAR_165 = {  # track 114, frame 165, same processing (X05010) on both dates
     "20260105": "NISAR_L2_PR_GCOV_009_114_A_165_4005_DHDH_A_20260105T034232_20260105T034253_X05010_N_P_J_001",
     "20260117": "NISAR_L2_PR_GCOV_010_114_A_165_4005_DHDH_A_20260117T034232_20260117T034254_X05010_N_P_J_001",
 }
+SERIES = {  # earlier dates for the five-date strip, display only. Names from the ASF catalogue, 12 Nov 2026.
+    165: {  # X05010 on every date, as on 5 and 17 Jan
+        "20251130": "NISAR_L2_PR_GCOV_006_114_A_165_4005_DHDH_A_20251130T034230_20251130T034252_X05010_F_P_J_001",
+        "20251212": "NISAR_L2_PR_GCOV_007_114_A_165_4005_DHDH_A_20251212T034230_20251212T034252_X05010_N_P_J_001",
+        "20251224": "NISAR_L2_PR_GCOV_008_114_A_165_4005_DHDH_A_20251224T034231_20251224T034253_X05010_N_P_J_001",
+    },
+    166: {  # X05009 on 12 and 24 Dec, so these are for viewing, not measuring against 5 and 17 Jan
+        "20251130": "NISAR_L2_PR_GCOV_006_114_A_166_4005_DHDH_A_20251130T034251_20251130T034301_X05010_F_P_J_001",
+        "20251212": "NISAR_L2_PR_GCOV_007_114_A_166_4005_DHDH_A_20251212T034251_20251212T034302_X05009_N_P_J_001",
+        "20251224": "NISAR_L2_PR_GCOV_008_114_A_166_4005_DHDH_A_20251224T034252_20251224T034302_X05009_N_P_J_001",
+    },
+}
+SERIES_AREAS = {"aoi01": 165, "aoi05": 166, "aoi06": 165}  # the story area first
 LABELS = [  # (area, Copernicus AOI, product, output). AOI01 gets the maps either side of NISAR (date-gap rule)
     ("aoi06", 6, "DEL", "label_emsr857_aoi06_flood_30m.tif"),      # Sentinel-1, 17 Jan 03:19 UTC
     ("aoi01", 1, "DEL", "label_emsr857_aoi01_flood_30m.tif"),      # COSMO-SkyMed, 18 Jan 14:55 UTC
@@ -235,6 +249,7 @@ def summary():
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--download", action="store_true", help="download the full frame 165 files instead of streaming")
+    ap.add_argument("--series", action="store_true", help="fetch only the 30 Nov, 12 Dec and 24 Dec crops for the five-date strip")
     args = ap.parse_args()
     for area in AREAS:
         (DATA / area).mkdir(parents=True, exist_ok=True)
@@ -244,6 +259,16 @@ def main():
     p.log(f"===== fetch_all.py started{' with --download' if args.download else ''}. EARTHDATA_TOKEN is {token}.")
     for area, (_, _, nx, ny) in GRIDS.items():
         p.log(f"{area} grid: {nx} x {ny} pixels of {p.PIX} m in {p.CRS}")
+
+    if args.series:  # only the earlier-date crops; everything else is left alone
+        try:
+            for area, frame in SERIES_AREAS.items():
+                for date, gran in SERIES[frame].items():
+                    run(f"7 NISAR frame {frame} {area} {date}",
+                        [DATA / area / f"{pol}_{date}_db_30m.tif" for pol in ("hh", "hv")], nisar, area, date, gran, args.download)
+        finally:
+            failed = summary()
+        sys.exit(1 if failed else 0)
 
     try:  # quick items and token checks first, the long NISAR crops last
         for area, aoi, product, name in LABELS:

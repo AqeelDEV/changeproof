@@ -25,6 +25,7 @@ export default function ClaimPanel({ onPlace }: { onPlace: (p: ClaimPlace) => vo
     const r = await checkClaim(t);
     setResult(r);
     setMiss(!r && t.trim() !== "");
+    if (r?.fields.place) onPlace(r.fields.place); // zoom straight away; the card click zooms again
   }
 
   const place = result?.fields.place;

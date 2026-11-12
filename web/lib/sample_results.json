@@ -1,9 +1,16 @@
 {
  "Chókwè was flooded on 17 January": {
-  "path": "rules",
-  "model_status": "not used",
+  "path": "parser",
+  "model_status": "disabled",
   "fields": {
-   "place": { "id": "node/2130849762", "name": "Chókwè", "area": "aoi01", "lon": 33.00368, "lat": -24.52493, "buffer_m": 3000 },
+   "place": {
+    "id": "node/2130849762",
+    "name": "Chókwè",
+    "area": "aoi01",
+    "lon": 33.00368,
+    "lat": -24.52493,
+    "buffer_m": 3000
+   },
    "polarity": "positive",
    "date_from": "2026-01-17",
    "date_to": "2026-01-17",
@@ -29,19 +36,44 @@
    "dark_5jan_share": 0.0172,
    "built_up_share": 0.449,
    "open_share": 0.551,
-   "coverage": { "evaluated": 0.1901, "outside_mapped_area": 0.5956, "unclear": 0.0003, "edge_excluded": 0.214, "no_data": 0.0 },
+   "coverage": {
+    "evaluated": 0.1901,
+    "outside_mapped_area": 0.5956,
+    "unclear": 0.0003,
+    "edge_excluded": 0.214,
+    "no_data": 0.0
+   },
    "copernicus": [
-    { "product": "First Estimate Product (FEP)", "sensor": "Sentinel-1", "observed_utc": "2026-01-16T16:22:00Z", "mapped_share": 0.486, "flooded_share": 0.6885 },
-    { "product": "Delineation (DEL)", "sensor": "COSMO-SkyMed", "observed_utc": "2026-01-18T14:55:00Z", "mapped_share": 0.9257, "flooded_share": 0.5094 }
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 0.486,
+     "flooded_share": 0.6885
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 0.9257,
+     "flooded_share": 0.5094
+    }
    ],
    "osm_buildings_in_new_water": 27
   }
  },
  "Guijá ficou inundada no dia 17 de janeiro": {
-  "path": "rules",
-  "model_status": "not used",
+  "path": "parser",
+  "model_status": "disabled",
   "fields": {
-   "place": { "id": "node/1426307246", "name": "Guijá", "area": "aoi05", "lon": 32.55731, "lat": -24.11304, "buffer_m": 3000 },
+   "place": {
+    "id": "node/1426307246",
+    "name": "Guijá",
+    "area": "aoi05",
+    "lon": 32.55731,
+    "lat": -24.11304,
+    "buffer_m": 3000
+   },
    "polarity": "positive",
    "date_from": "2026-01-17",
    "date_to": "2026-01-17",
@@ -58,8 +90,7 @@
    "0.3 ha of new open water in the 3 km disk (0.01%)",
    "The dry rule applies here: 98% of the disk is open ground (it needs 50%), 98% is scored against Copernicus, only 2% is unclear (limit 10%), and there are no mapped buildings",
    "Copernicus (Sentinel-1, 17 Jan, 03:18 UTC) maps none of it flooded",
-   "Flooding under crops, trees or between buildings does not show as open water",
-   "Compare Xai-Xai, where 12% of the disk is unclear (limit 10%), so the dry rule cannot fire there"
+   "Flooding under crops, trees or between buildings does not show as open water"
   ],
   "evidence": {
    "buffer_m": 3000,
@@ -67,18 +98,37 @@
    "new_water_share": 0.0001,
    "built_up_share": 0.0,
    "open_share": 0.979,
-   "coverage": { "evaluated": 0.979, "outside_mapped_area": 0.0, "unclear": 0.021, "edge_excluded": 0.0, "no_data": 0.0 },
+   "coverage": {
+    "evaluated": 0.979,
+    "outside_mapped_area": 0.0,
+    "unclear": 0.021,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
    "copernicus": [
-    { "product": "Delineation (DEL)", "sensor": "Sentinel-1", "observed_utc": "2026-01-17T03:18:00Z", "mapped_share": 1.0, "flooded_share": 0.0 }
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-17T03:18:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.0
+    }
    ],
    "osm_buildings": 0
   }
  },
  "Xai-Xai não alagou": {
   "path": "model",
-  "model_status": "ok",
+  "model_status": "used",
   "fields": {
-   "place": { "id": "node/335077559", "name": "Xai-Xai", "area": "aoi01", "lon": 33.64073, "lat": -25.04448, "buffer_m": 3000 },
+   "place": {
+    "id": "node/335077559",
+    "name": "Xai-Xai",
+    "area": "aoi01",
+    "lon": 33.64073,
+    "lat": -25.04448,
+    "buffer_m": 3000
+   },
    "polarity": "negative",
    "date_from": null,
    "date_to": null,
@@ -103,18 +153,43 @@
    "new_water_share": 0.064,
    "built_up_share": 0.2647,
    "open_share": 0.6318,
-   "coverage": { "evaluated": 0.7202, "outside_mapped_area": 0.063, "unclear": 0.1189, "edge_excluded": 0.0978, "no_data": 0.0 },
+   "coverage": {
+    "evaluated": 0.7202,
+    "outside_mapped_area": 0.063,
+    "unclear": 0.1189,
+    "edge_excluded": 0.0978,
+    "no_data": 0.0
+   },
    "copernicus": [
-    { "product": "First Estimate Product (FEP)", "sensor": "Sentinel-1", "observed_utc": "2026-01-16T16:22:00Z", "mapped_share": 1.0, "flooded_share": 0.0065 },
-    { "product": "Delineation (DEL)", "sensor": "COSMO-SkyMed", "observed_utc": "2026-01-18T14:55:00Z", "mapped_share": 1.0, "flooded_share": 0.068 }
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "observed_utc": "2026-01-16T16:22:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.0065
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "observed_utc": "2026-01-18T14:55:00Z",
+     "mapped_share": 1.0,
+     "flooded_share": 0.068
+    }
    ]
   }
  },
  "Macia was under water yesterday": {
-  "path": "rules",
-  "model_status": "not used",
+  "path": "parser",
+  "model_status": "timeout",
   "fields": {
-   "place": { "id": "node/561318715", "name": "Macia", "area": "aoi01", "lon": 33.09421, "lat": -25.02985, "buffer_m": 3000 },
+   "place": {
+    "id": "node/561318715",
+    "name": "Macia",
+    "area": "aoi01",
+    "lon": 33.09421,
+    "lat": -25.02985,
+    "buffer_m": 3000
+   },
    "polarity": "positive",
    "date_from": null,
    "date_to": null,
@@ -137,16 +212,30 @@
    "new_water_share": 0.0004,
    "built_up_share": 0.617,
    "open_share": 0.383,
-   "coverage": { "evaluated": 0.0, "outside_mapped_area": 1.0, "unclear": 0.0, "edge_excluded": 0.0, "no_data": 0.0 },
+   "coverage": {
+    "evaluated": 0.0,
+    "outside_mapped_area": 1.0,
+    "unclear": 0.0,
+    "edge_excluded": 0.0,
+    "no_data": 0.0
+   },
    "copernicus": [
-    { "product": "First Estimate Product (FEP)", "sensor": "Sentinel-1", "mapped_share": 0.0 },
-    { "product": "Delineation (DEL)", "sensor": "COSMO-SkyMed", "mapped_share": 0.0 }
+    {
+     "product": "First Estimate Product (FEP)",
+     "sensor": "Sentinel-1",
+     "mapped_share": 0.0
+    },
+    {
+     "product": "Delineation (DEL)",
+     "sensor": "COSMO-SkyMed",
+     "mapped_share": 0.0
+    }
    ]
   }
  },
  "Maputo flooded on 17 Jan": {
-  "path": "rules",
-  "model_status": "not used",
+  "path": "parser",
+  "model_status": "off_list",
   "fields": {
    "place": null,
    "polarity": "positive",

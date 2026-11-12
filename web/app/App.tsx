@@ -28,7 +28,13 @@ export default function App({ areas, optical }: { areas: Stats[]; optical: Recor
         <h1>ChangeProof</h1>
         <label>
           Area{" "}
-          <select value={id} onChange={(e) => setId(e.target.value)}>
+          <select
+            value={id}
+            onChange={(e) => {
+              setId(e.target.value);
+              setFocus(null); // show the whole area again
+            }}
+          >
             {areas.map((a) => (
               <option key={a.area_id} value={a.area_id}>
                 {a.name}

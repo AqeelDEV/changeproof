@@ -57,13 +57,9 @@ export default function MapView({ area, focus }: { area: Stats; focus: Bounds | 
 
   useEffect(() => {
     // The container may have been measured before layout, so re-read its size first.
-    map?.invalidateSize().fitBounds(toLeaflet(area.grid.bounds_4326));
-  }, [map, area]);
-
-  // After the area fit, so a claim that also switches area ends on the place.
-  useEffect(() => {
-    if (focus) map?.invalidateSize().fitBounds(toLeaflet(focus));
-  }, [map, focus]);
+    // One fit per change: Leaflet drops a second zoom while the first still animates.
+    map?.invalidateSize().fitBounds(toLeaflet(focus ?? area.grid.bounds_4326));
+  }, [map, area, focus]);
 
   const before = area.scenes.find((s) => s.role === "before")!;
   const after = area.scenes.find((s) => s.role === "after")!;

@@ -60,6 +60,10 @@ export const buildingsLimit = (s: Stats) => s.limits.find((l) => l.startsWith("B
 export const VERDICTS = ["supported", "contradicted", "not observable", "not provable"] as const;
 export type Verdict = (typeof VERDICTS)[number];
 
+// The checker's vocabulary (claims/check.ts).
+export const PATHS = ["parser", "model", "conflict"] as const;
+export const MODEL_STATUSES = ["used", "cached", "disabled", "timeout", "error", "invalid", "off_list"] as const;
+
 export interface ClaimPlace {
   id: string;
   name: string;
@@ -70,8 +74,8 @@ export interface ClaimPlace {
 }
 
 export interface ClaimResult {
-  path: string;
-  model_status: string;
+  path: (typeof PATHS)[number];
+  model_status: (typeof MODEL_STATUSES)[number];
   fields: {
     place: ClaimPlace | null;
     polarity: "positive" | "negative";

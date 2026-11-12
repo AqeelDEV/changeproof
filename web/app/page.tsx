@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import App from "./App";
 import { SAMPLES } from "../lib/checkClaim";
-import { formatUtc, buildingsLimit, VERDICTS, type Optical, type Stats } from "./types";
+import { formatUtc, buildingsLimit, VERDICTS, PATHS, MODEL_STATUSES, type Optical, type Stats } from "./types";
 
 const DATA = path.join(process.cwd(), "public", "data");
 
@@ -43,6 +43,9 @@ function checkSamples() {
     for (const k of ["path", "model_status", "fields", "verdict", "as_of", "headline", "reasons", "evidence"])
       if (!(k in r)) fail(`${k} missing`);
     if (!VERDICTS.includes(r.verdict)) fail(`verdict "${r.verdict}" is not one of ${VERDICTS.join(", ")}`);
+    if (!PATHS.includes(r.path)) fail(`path "${r.path}" is not one of ${PATHS.join(", ")}`);
+    if (!MODEL_STATUSES.includes(r.model_status))
+      fail(`model_status "${r.model_status}" is not one of ${MODEL_STATUSES.join(", ")}`);
     for (const k of FIELD_KEYS) if (!(k in r.fields)) fail(`fields.${k} missing`);
     const p = r.fields.place;
     if (p !== null && !PLACE_KEYS.every((k) => k in p)) fail(`fields.place needs ${PLACE_KEYS.join(", ")} or null`);

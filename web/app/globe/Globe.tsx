@@ -29,7 +29,7 @@ const rad = Math.PI / 180;
 const merc = (lat: number) => Math.asinh(Math.tan(lat * rad));
 const pct = (x: number | null) => (x === null ? "n/a" : x > 0 && x < 0.01 ? `${(x * 100).toFixed(1)}%` : `${Math.round(x * 100)}%`); // as lib/claims/verdict.ts
 const corners = ([w, s, e, n]: Bounds): [[number, number], [number, number], [number, number], [number, number]] => [[w, n], [e, n], [e, s], [w, s]];
-const line = (coordinates: number[][], o = 1) => ({ type: "Feature" as const, properties: { o }, geometry: { type: "LineString" as const, coordinates } });
+const line = (coordinates: number[][]) => ({ type: "Feature" as const, properties: {}, geometry: { type: "LineString" as const, coordinates } });
 const lines = (features: ReturnType<typeof line>[]) => ({ type: "FeatureCollection" as const, features });
 const NONE = lines([]);
 const BLANK = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="; // 1 px, see-through
@@ -91,17 +91,13 @@ const STYLE: StyleSpecification = {
   sky: { "atmosphere-blend": ["interpolate", ["linear"], ["zoom"], 0, 0.7, 4, 0.7, 6.5, 0] }, // the thin air glow, gone by the time we are close
   sources: {
     ...Object.fromEntries(tileSets.map((s) => [s.id, { type: "raster" as const, tiles: ["/globe/{z}/{y}/{x}.jpg"], tileSize: 256, minzoom: s.minzoom, maxzoom: s.maxzoom, bounds: s.bounds as Bounds }])),
-    areas: { type: "geojson", data: NONE }, disk: { type: "geojson", data: NONE }, pass: { type: "geojson", data: NONE },
+    areas: { type: "geojson", data: NONE }, disk: { type: "geojson", data: NONE },
   },
   layers: [
     ...tileSets.map((s) => ({ id: s.id, type: "raster" as const, source: s.id })),
     { id: "areas-casing", type: "line", source: "areas", paint: { "line-color": "#0a1024", "line-width": 4.5 } }, // white alone vanishes on white cloud
     { id: "areas", type: "line", source: "areas", paint: { "line-color": "#fbf8f1", "line-width": 1.5 } },
     { id: "disk", type: "line", source: "disk", paint: { "line-color": "#fbf8f1", "line-width": 2, "line-dasharray": [2, 1.5] } },
-    // The pass line: decoration, not data. Lilac, thin, with a navy keyline to its north and a short fading trail to its south.
-    { id: "trail", type: "line", source: "pass", filter: ["<", ["get", "o"], 1], paint: { "line-color": "#b79cff", "line-width": 2, "line-opacity": ["get", "o"] } },
-    { id: "keyline", type: "line", source: "pass", filter: ["==", ["get", "o"], 1], paint: { "line-color": "#0a1024", "line-width": 1, "line-offset": -1.5 } },
-    { id: "pass", type: "line", source: "pass", filter: ["==", ["get", "o"], 1], paint: { "line-color": "#b79cff", "line-width": 2 } },
   ],
 };
 
@@ -120,13 +116,14 @@ function Mark({ v }: { v: string }) {
 
 export default function Globe({ areas }: { areas: GlobeArea[] }) {
   const root = useRef<HTMLDivElement>(null), mapEl = useRef<HTMLDivElement>(null), input = useRef<HTMLInputElement>(null);
-  const figShare = useRef<HTMLElement>(null), figHa = useRef<HTMLElement>(null);
+  const figShare = useRef<HTMLElement>(null), figHa = useRef<HTMLElement>(null), passEl = useRef<HTMLDivElement>(null);
   const map = useRef<GlMap | null>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
   const cam = useRef<Cam>({ lng: 50, lat: -14, zoom: 1.5, pitch: 0, bearing: 0, x: 0, y: 0 });
   // What the handlers need without waiting for a render.
   const live = useRef({ mode: "load" as Mode, result: null as ClaimResult | null, first: null as ClaimResult | null, sweeping: false,
-    paper: null as HTMLCanvasElement | null, paperFor: "", canvas: null as HTMLCanvasElement | null });
+    paper: null as HTMLCanvasElement | null, paperFor: "", canvas: null as HTMLCanvasElement | null,
+    lat: null as number | null }); // lat: the latitude the reveal was last drawn to, or null when there is no pass line
   const [mode, setModeState] = useState<Mode>("load");
   const [result, setResult] = useState<ClaimResult | null>(null);
   const [text, setText] = useState("");
@@ -137,6 +134,7 @@ export default function Globe({ areas }: { areas: GlobeArea[] }) {
   const setMode = (m: Mode) => { live.current.mode = m; setModeState(m); };
   const data = (id: string, d: ReturnType<typeof lines>) => (map.current?.getSource(id) as GeoJSONSource | undefined)?.setData(d);
   const opacity = (id: string, on: boolean) => map.current?.setPaintProperty(id, "raster-opacity", on ? 1 : 0);
+  const noPass = () => { live.current.lat = null; if (passEl.current) passEl.current.style.visibility = "hidden"; };
 
   function apply() {
     const m = map.current, c = cam.current, { W, H } = screen();
@@ -177,7 +175,7 @@ export default function Globe({ areas }: { areas: GlobeArea[] }) {
   }
 
   // The reveal up to a latitude: everything south of the line is shown, in step with the line.
-  function sweepTo(a: GlobeArea, lat: number, view: { w: number; e: number; s: number; n: number }) {
+  function sweepTo(a: GlobeArea, lat: number) {
     const L = live.current, cv = L.canvas;
     if (cv && L.paper) {
       if (cv.height !== L.paper.height) cv.height = L.paper.height;
@@ -186,8 +184,7 @@ export default function Globe({ areas }: { areas: GlobeArea[] }) {
       ctx.clearRect(0, 0, cv.width, cv.height);
       if (y < cv.height) ctx.drawImage(L.paper, 0, y, cv.width, cv.height - y, 0, y, cv.width, cv.height - y);
     }
-    const step = (view.n - view.s) * 0.012;
-    data("pass", lines([0, 1, 2, 3].map((k) => line([[view.w, lat - k * step], [view.e, lat - k * step]], k ? 0.3 / k : 1))));
+    L.lat = lat; // the pass line is put there when the map next draws: see the "render" handler
   }
 
   function sweeping(on: boolean) {
@@ -213,7 +210,7 @@ export default function Globe({ areas }: { areas: GlobeArea[] }) {
     Object.assign(cam.current, t.cam);
     apply();
     sweeping(false);
-    data("pass", NONE);
+    noPass();
     const shown = !!(t.seen && t.area && t.place);
     if (shown) prepare(t.area!);
     opacity("radar", shown);
@@ -240,7 +237,7 @@ export default function Globe({ areas }: { areas: GlobeArea[] }) {
     tl.current = null;
     if (live.current.sweeping) { opacity("radar", true); opacity("water", true); } // never leave the picture half revealed
     sweeping(false);
-    data("pass", NONE);
+    noPass();
     gsap.set(q(TYPE), { autoAlpha: 0 });
     gsap.to(q(".g-solid, .g-form"), { autoAlpha: 1, duration: 0.3 });
     setMode("free");
@@ -270,7 +267,7 @@ export default function Globe({ areas }: { areas: GlobeArea[] }) {
     if (intro) setText("");
     lock(true);
     sweeping(false);
-    data("pass", NONE);
+    noPass();
     opacity("radar", false);
     opacity("water", false);
     data("disk", NONE);
@@ -320,18 +317,18 @@ export default function Globe({ areas }: { areas: GlobeArea[] }) {
 
     if (t.seen && t.area && t.place) {
       // The sweep, south to north, as NISAR passed. Constant speed. Behind the line: the real image and the real new water.
-      const a = t.area, p = t.place, sw = { t: 0 }, dk = { t: 0 }, view = { w: 0, e: 0, s: 0, n: 0 };
+      const a = t.area, p = t.place, sw = { t: 0 }, dk = { t: 0 }, view = { s: 0, n: 0 };
       if (intro) time.to(q(".g-l4"), { autoAlpha: 1, duration: 0.5, ease: "power2.out" }, at);
       time.to(sw, {
         t: 1, duration: D.sweep, ease: "none",
         onStart: () => {
           const b = map.current!.getBounds();
-          Object.assign(view, { w: b.getWest() - 1, e: b.getEast() + 1, s: b.getSouth(), n: b.getNorth() });
-          sweepTo(a, view.s, view);
+          Object.assign(view, { s: b.getSouth(), n: b.getNorth() });
+          sweepTo(a, view.s);
           sweeping(true);
         },
-        onUpdate: () => sweepTo(a, view.s + (view.n - view.s) * sw.t, view),
-        onComplete: () => { opacity("radar", true); opacity("water", true); data("pass", NONE); }, // only data stays on screen
+        onUpdate: () => sweepTo(a, view.s + (view.n - view.s) * sw.t),
+        onComplete: () => { opacity("radar", true); opacity("water", true); noPass(); }, // only data stays on screen
       }, at);
       at += D.sweep;
       time.call(() => sweeping(false), [], at + 0.4); // once the full images have faded in over the moving copy
@@ -380,6 +377,14 @@ export default function Globe({ areas }: { areas: GlobeArea[] }) {
           for (const id of ["sweep", "radar", "water"])
             m.addLayer({ id, type: "raster", source: id, paint: { "raster-opacity": 0, "raster-fade-duration": 0 } }, "areas-casing");
           (m.getSource("sweep") as CanvasSource).pause();
+          // The pass line is an element of the page, placed as the map draws, at the latitude the reveal was drawn to in
+          // this same frame. So it sits exactly on the reveal's edge. (As map data it arrived a frame or two late.)
+          m.on("render", () => {
+            const el = passEl.current;
+            if (!el || L.lat === null) return;
+            el.style.transform = `translate3d(0, ${m.project([cam.current.lng, L.lat]).y}px, 0)`;
+            el.style.visibility = "visible";
+          });
           if (seenIntro()) goHome(); else fly(first, true);
         });
         m.on("error", (e) => console.warn("globe:", e.error?.message ?? e));
@@ -450,6 +455,7 @@ export default function Globe({ areas }: { areas: GlobeArea[] }) {
   return (
     <div className="globe" ref={root} data-mode={mode}>
       <div className="g-map" ref={mapEl} />
+      <div className="g-pass" ref={passEl} />
       <div className="g-solid g-topbg" />
       <div className="g-solid g-bandbg" />
       <div className="g-top">

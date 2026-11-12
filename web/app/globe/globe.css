@@ -22,6 +22,12 @@
 .g-map { position: absolute; inset: 0; }
 .g-map canvas { outline: none; }
 
+/* The pass line: decoration, not data. Lilac, 2 px, a navy keyline to its north (lilac alone is lost on white cloud) and
+   a short fading trail to its south. Moved by transform only; the band and the top bar cover it outside the picture. */
+.g-pass { position: absolute; left: 0; right: 0; top: -1px; height: 2px; visibility: hidden; pointer-events: none; will-change: transform;
+  background: var(--signal);
+  box-shadow: 0 -1px 0 var(--space), 0 .8vh 0 rgba(183, 156, 255, .3), 0 1.6vh 0 rgba(183, 156, 255, .15), 0 2.4vh 0 rgba(183, 156, 255, .1); }
+
 /* Hidden until the timeline shows them. */
 .g-solid, .g-open p, .g-band > *, .g-word, .g-figs, .g-card, .g-cover { visibility: hidden; opacity: 0; }
 

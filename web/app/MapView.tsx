@@ -146,7 +146,7 @@ export default function MapView({ area, focus, disk, view, onView, onClaim }: {
   }, [map, split]);
 
   const legend = area.files.find((f) => f.file === "coverage.png")?.legend ?? {};
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(() => window.innerWidth > 860); // closed on a phone, where the box would hide the map
 
   return (
     <>

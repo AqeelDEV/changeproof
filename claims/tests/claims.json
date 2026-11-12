@@ -1,0 +1,725 @@
+{
+ "frozen": "12 Nov 2026, before the first run. Expected supported and contradicted verdicts come from the Copernicus observed maps near each place (NISAR new water was not looked at), using the approved thresholds with Copernicus flooded pixels in place of NISAR new water; places with a mapped share below 0.5, or where the two AOI01 maps disagree, were not used for them. Expected fields come from the text alone.",
+ "claims": [
+  {
+   "id": "c01",
+   "set": "clean",
+   "text": "Macuachane was flooded on 17 January 2026.",
+   "expect": {
+    "place": "Macuachane",
+    "polarity": "positive",
+    "date_kind": "day",
+    "date_from": "2026-01-17",
+    "date_to": "2026-01-17",
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "supported"
+   },
+   "why": "Copernicus wet: flooded share of mapped area >= 10% (AOI05 map, 17 Jan: 26%)"
+  },
+  {
+   "id": "c02",
+   "set": "clean",
+   "text": "Javanhane ficou inundada no dia 17 de janeiro.",
+   "expect": {
+    "place": "Javanhane",
+    "polarity": "positive",
+    "date_kind": "day",
+    "date_from": "2026-01-17",
+    "date_to": "2026-01-17",
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "supported"
+   },
+   "why": "Copernicus wet: flooded share of mapped area >= 10% on both AOI01 maps (16 and 18 Jan) (56%, 69%); Portuguese 'no' is not a negator"
+  },
+  {
+   "id": "c03",
+   "set": "clean",
+   "text": "Chidona was under water on 16 January.",
+   "expect": {
+    "place": "Chidona",
+    "polarity": "positive",
+    "date_kind": "day",
+    "date_from": "2026-01-16",
+    "date_to": "2026-01-16",
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "supported"
+   },
+   "why": "Copernicus wet: flooded share of mapped area >= 10% (AOI06 map: 32%); 16 Jan is judged"
+  },
+  {
+   "id": "c04",
+   "set": "clean",
+   "text": "The whole of Taninga was under water.",
+   "expect": {
+    "place": "Taninga",
+    "polarity": "positive",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": "whole",
+    "verdict": "supported"
+   },
+   "why": "Copernicus wet: flooded share of mapped area >= 10% (AOI06 map: 20%); quantifier not checked"
+  },
+  {
+   "id": "c05",
+   "set": "clean",
+   "text": "Floods hit Soresuanine in January 2026.",
+   "expect": {
+    "place": "Soresuanine",
+    "polarity": "positive",
+    "date_kind": "period",
+    "date_from": "2026-01-01",
+    "date_to": "2026-01-31",
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "supported"
+   },
+   "why": "Copernicus wet: flooded share of mapped area >= 10% on both AOI01 maps (16 and 18 Jan) (35%, 54%); a period with water at the pass"
+  },
+  {
+   "id": "c06",
+   "set": "clean",
+   "text": "Macandene está debaixo de água desde 15 de janeiro.",
+   "expect": {
+    "place": "Macandene",
+    "polarity": "positive",
+    "date_kind": "since",
+    "date_from": "2026-01-15",
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "supported"
+   },
+   "why": "Copernicus wet: flooded share of mapped area >= 10% on both AOI01 maps (16 and 18 Jan) (12%, 34%)"
+  },
+  {
+   "id": "c07",
+   "set": "clean",
+   "text": "Chinhacanine was flooded between 15 and 20 January.",
+   "expect": {
+    "place": "Chinhacanine",
+    "polarity": "positive",
+    "date_kind": "period",
+    "date_from": "2026-01-15",
+    "date_to": "2026-01-20",
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "supported"
+   },
+   "why": "Copernicus wet: flooded share of mapped area >= 10% on both AOI01 maps (16 and 18 Jan) (27%, 26%)"
+  },
+  {
+   "id": "c08",
+   "set": "clean",
+   "text": "Maconguele was flooded on 17 January.",
+   "expect": {
+    "place": "Maconguele",
+    "polarity": "positive",
+    "date_kind": "day",
+    "date_from": "2026-01-17",
+    "date_to": "2026-01-17",
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "contradicted"
+   },
+   "why": "Copernicus dry: open ground >= 50%, flooded share of mapped open ground <= 1%, unclear <= 10% (AOI05 map: 0%, open 99%)"
+  },
+  {
+   "id": "c09",
+   "set": "clean",
+   "text": "Munhamane ficou submersa.",
+   "expect": {
+    "place": "Munhamane",
+    "polarity": "positive",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "contradicted"
+   },
+   "why": "Copernicus dry: open ground >= 50%, flooded share of mapped open ground <= 1%, unclear <= 10% (AOI05 map: 0%, open 99%)"
+  },
+  {
+   "id": "c10",
+   "set": "clean",
+   "text": "Palmeira was under water.",
+   "expect": {
+    "place": "Palmeira",
+    "polarity": "positive",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "contradicted"
+   },
+   "why": "Copernicus dry: open ground >= 50%, flooded share of mapped open ground <= 1%, unclear <= 10% (AOI06 map: 0.7% of open ground, open 91%, unclear 9%)"
+  },
+  {
+   "id": "c11",
+   "set": "clean",
+   "text": "Cunze foi inundada pelas cheias.",
+   "expect": {
+    "place": "Cunze",
+    "polarity": "positive",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "contradicted"
+   },
+   "why": "Copernicus dry: open ground >= 50%, flooded share of mapped open ground <= 1%, unclear <= 10% (AOI05 map: 0.15%, mapped 78%)"
+  },
+  {
+   "id": "c12",
+   "set": "clean",
+   "text": "Macaringue did not flood.",
+   "expect": {
+    "place": "Macaringue",
+    "polarity": "negative",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "contradicted"
+   },
+   "why": "Copernicus wet: flooded share of mapped area >= 10% (AOI05 map: 16%), negative claim"
+  },
+  {
+   "id": "c13",
+   "set": "clean",
+   "text": "Chibotane não ficou alagada.",
+   "expect": {
+    "place": "Chibotane",
+    "polarity": "negative",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "contradicted"
+   },
+   "why": "Copernicus wet: flooded share of mapped area >= 10% (AOI05 map: 27%, mapped 85%), negative claim"
+  },
+  {
+   "id": "c14",
+   "set": "clean",
+   "text": "There was no flooding in Macarretane.",
+   "expect": {
+    "place": "Macarretane (Aldeia da Barragem)",
+    "polarity": "negative",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "contradicted"
+   },
+   "why": "Copernicus wet: flooded share of mapped area >= 10% on both AOI01 maps (16 and 18 Jan) (46%, 41%), negative claim; English 'no' is a negator"
+  },
+  {
+   "id": "c15",
+   "set": "clean",
+   "text": "Palmeira não foi afectada pelas cheias.",
+   "expect": {
+    "place": "Palmeira",
+    "polarity": "negative",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "supported"
+   },
+   "why": "Copernicus dry: open ground >= 50%, flooded share of mapped open ground <= 1%, unclear <= 10% (AOI06 map), negative claim"
+  },
+  {
+   "id": "c16",
+   "set": "clean",
+   "text": "Xai-Xai was completely under water on 22 January.",
+   "expect": {
+    "place": "Xai-Xai",
+    "polarity": "positive",
+    "date_kind": "day",
+    "date_from": "2026-01-22",
+    "date_to": "2026-01-22",
+    "claim_type": "flood",
+    "quantifier": "completely",
+    "verdict": "not observable"
+   },
+   "why": "a day after the pass"
+  },
+  {
+   "id": "c17",
+   "set": "clean",
+   "text": "Chokwe estava inundado no dia 18 de janeiro.",
+   "expect": {
+    "place": "Chókwè",
+    "polarity": "positive",
+    "date_kind": "day",
+    "date_from": "2026-01-18",
+    "date_to": "2026-01-18",
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "not observable"
+   },
+   "why": "18 Jan is not judged; unaccented spelling"
+  },
+  {
+   "id": "c18",
+   "set": "clean",
+   "text": "Macia inundou no dia 10 de janeiro.",
+   "expect": {
+    "place": "Macia",
+    "polarity": "positive",
+    "date_kind": "day",
+    "date_from": "2026-01-10",
+    "date_to": "2026-01-10",
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "not observable"
+   },
+   "why": "a day between the passes"
+  },
+  {
+   "id": "c19",
+   "set": "clean",
+   "text": "Chókwè was destroyed by the floods in 2000.",
+   "expect": {
+    "place": "Chókwè",
+    "polarity": "positive",
+    "date_kind": "period",
+    "date_from": "2000-01-01",
+    "date_to": "2000-12-31",
+    "claim_type": "damage",
+    "quantifier": null,
+    "verdict": "not observable"
+   },
+   "why": "the year 2000 misses the pass (the date gate comes before the type)"
+  },
+  {
+   "id": "c20",
+   "set": "clean",
+   "text": "Maputo ficou alagada.",
+   "expect": {
+    "place": null,
+    "polarity": "positive",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "not observable"
+   },
+   "why": "Maputo is outside the three areas"
+  },
+  {
+   "id": "c21",
+   "set": "clean",
+   "text": "Beira was flooded on 17 January.",
+   "expect": {
+    "place": null,
+    "polarity": "positive",
+    "date_kind": "day",
+    "date_from": "2026-01-17",
+    "date_to": "2026-01-17",
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "not observable"
+   },
+   "why": "Beira is outside the three areas"
+  },
+  {
+   "id": "c22",
+   "set": "clean",
+   "text": "Machubo ficou inundada no dia 17 de janeiro.",
+   "expect": {
+    "place": "Machubo",
+    "polarity": "positive",
+    "date_kind": "day",
+    "date_from": "2026-01-17",
+    "date_to": "2026-01-17",
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "not observable"
+   },
+   "why": "no NISAR data around Machubo (valid share 0)"
+  },
+  {
+   "id": "c23",
+   "set": "clean",
+   "text": "Inundações em Chibuto de 20 a 25 de janeiro.",
+   "expect": {
+    "place": "Chibuto",
+    "polarity": "positive",
+    "date_kind": "period",
+    "date_from": "2026-01-20",
+    "date_to": "2026-01-25",
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "not observable"
+   },
+   "why": "a range that misses the pass"
+  },
+  {
+   "id": "c24",
+   "set": "clean",
+   "text": "2000 people were displaced by the floods in Chókwè.",
+   "expect": {
+    "place": "Chókwè",
+    "polarity": "positive",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "impact",
+    "quantifier": null,
+    "verdict": "not provable"
+   },
+   "why": "displacement; '2000 people' is not a date"
+  },
+  {
+   "id": "c25",
+   "set": "clean",
+   "text": "Casas destruídas em Xai Xai pelas cheias.",
+   "expect": {
+    "place": "Xai-Xai",
+    "polarity": "positive",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "damage",
+    "quantifier": null,
+    "verdict": "not provable"
+   },
+   "why": "damage; spelling Xai Xai"
+  },
+  {
+   "id": "c26",
+   "set": "clean",
+   "text": "The streets of Macia were flooded on 17 January.",
+   "expect": {
+    "place": "Macia",
+    "polarity": "positive",
+    "date_kind": "day",
+    "date_from": "2026-01-17",
+    "date_to": "2026-01-17",
+    "claim_type": "built_up",
+    "quantifier": null,
+    "verdict": "not provable"
+   },
+   "why": "flooding between buildings"
+  },
+  {
+   "id": "c27",
+   "set": "clean",
+   "text": "Os campos de milho em Chibuto ficaram submersos.",
+   "expect": {
+    "place": "Chibuto",
+    "polarity": "positive",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "vegetation",
+    "quantifier": null,
+    "verdict": "not provable"
+   },
+   "why": "flooded crops"
+  },
+  {
+   "id": "c28",
+   "set": "clean",
+   "text": "The water in Chókwè was two metres deep.",
+   "expect": {
+    "place": "Chókwè",
+    "polarity": "positive",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "depth",
+    "quantifier": null,
+    "verdict": "not provable"
+   },
+   "why": "depth"
+  },
+  {
+   "id": "c29",
+   "set": "clean",
+   "text": "80% de Xai-Xai ficou inundado.",
+   "expect": {
+    "place": "Xai-Xai",
+    "polarity": "positive",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "extent",
+    "quantifier": "80%",
+    "verdict": "not provable"
+   },
+   "why": "a numeric extent"
+  },
+  {
+   "id": "c30",
+   "set": "clean",
+   "text": "Elija ficou alagada no dia 17 de janeiro.",
+   "expect": {
+    "place": "Elija",
+    "polarity": "positive",
+    "date_kind": "day",
+    "date_from": "2026-01-17",
+    "date_to": "2026-01-17",
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "not provable"
+   },
+   "why": "Copernicus: 0% flooded on both AOI01 maps, but only 35% open ground (62% built-up), so the dry rule cannot fire"
+  },
+  {
+   "id": "m01",
+   "set": "messy",
+   "text": "javanhane totalmente alagda hoje!!! 😭",
+   "expect": {
+    "place": "Javanhane",
+    "polarity": "positive",
+    "date_kind": "relative",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": "totalmente",
+    "verdict": "supported"
+   },
+   "why": "Copernicus wet: flooded share of mapped area >= 10% on both AOI01 maps (16 and 18 Jan); typo 'alagda', relative date"
+  },
+  {
+   "id": "m02",
+   "set": "messy",
+   "text": "#XaiXai #cheias nao alagou nada, fake news",
+   "expect": {
+    "place": "Xai-Xai",
+    "polarity": "negative",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "not provable"
+   },
+   "why": "Copernicus neither: 16 Jan map 0.7% flooded but unclear 12% > 10%; 18 Jan map 7% flooded, 11% of open ground"
+  },
+  {
+   "id": "m03",
+   "set": "messy",
+   "text": "Macarretane is NOT flooded, stop spreading lies",
+   "expect": {
+    "place": "Macarretane (Aldeia da Barragem)",
+    "polarity": "negative",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "contradicted"
+   },
+   "why": "Copernicus wet: flooded share of mapped area >= 10% on both AOI01 maps (16 and 18 Jan), negative claim"
+  },
+  {
+   "id": "m04",
+   "set": "messy",
+   "text": "cheias no distrito de Soresuanine ontem",
+   "expect": {
+    "place": "Soresuanine",
+    "polarity": "positive",
+    "date_kind": "relative",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "supported"
+   },
+   "why": "Copernicus wet: flooded share of mapped area >= 10% on both AOI01 maps (16 and 18 Jan); Portuguese 'no' is 'in the'"
+  },
+  {
+   "id": "m05",
+   "set": "messy",
+   "text": "Maconguele flodded yesterday??",
+   "expect": {
+    "place": "Maconguele",
+    "polarity": "positive",
+    "date_kind": "relative",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "contradicted"
+   },
+   "why": "Copernicus dry: open ground >= 50%, flooded share of mapped open ground <= 1%, unclear <= 10%; typo 'flodded'"
+  },
+  {
+   "id": "m06",
+   "set": "messy",
+   "text": "Taninga alagada desde dia 16",
+   "expect": {
+    "place": "Taninga",
+    "polarity": "positive",
+    "date_kind": "since",
+    "date_from": "2026-01-16",
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "supported"
+   },
+   "why": "Copernicus wet: flooded share of mapped area >= 10% (AOI06 map)"
+  },
+  {
+   "id": "m07",
+   "set": "messy",
+   "text": "palmeira under water agora, muita água",
+   "expect": {
+    "place": "Palmeira",
+    "polarity": "positive",
+    "date_kind": "relative",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "contradicted"
+   },
+   "why": "Copernicus dry: open ground >= 50%, flooded share of mapped open ground <= 1%, unclear <= 10% (AOI06 map); mixed language"
+  },
+  {
+   "id": "m08",
+   "set": "messy",
+   "text": "Chidona flooded 17/01/2026 pls share",
+   "expect": {
+    "place": "Chidona",
+    "polarity": "positive",
+    "date_kind": "day",
+    "date_from": "2026-01-17",
+    "date_to": "2026-01-17",
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "supported"
+   },
+   "why": "Copernicus wet: flooded share of mapped area >= 10% (AOI06 map)"
+  },
+  {
+   "id": "m09",
+   "set": "messy",
+   "text": "Shai Shai cheia 17 jan",
+   "expect": {
+    "place": "Xai-Xai",
+    "polarity": "positive",
+    "date_kind": "day",
+    "date_from": "2026-01-17",
+    "date_to": "2026-01-17",
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "not provable"
+   },
+   "why": "spelling by sound; Copernicus neither (see m02)"
+  },
+  {
+   "id": "m10",
+   "set": "messy",
+   "text": "no flooding at all in Munhamane, all good",
+   "expect": {
+    "place": "Munhamane",
+    "polarity": "negative",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "supported"
+   },
+   "why": "Copernicus dry: open ground >= 50%, flooded share of mapped open ground <= 1%, unclear <= 10%, negative claim"
+  },
+  {
+   "id": "m11",
+   "set": "messy",
+   "text": "Muitas pessoas mortas em Macia 😢😢",
+   "expect": {
+    "place": "Macia",
+    "polarity": "positive",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "impact",
+    "quantifier": null,
+    "verdict": "not provable"
+   },
+   "why": "deaths"
+  },
+  {
+   "id": "m12",
+   "set": "messy",
+   "text": "Chibotane: agua ate ao telhado!!",
+   "expect": {
+    "place": "Chibotane",
+    "polarity": "positive",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "depth",
+    "quantifier": null,
+    "verdict": "not provable"
+   },
+   "why": "depth (up to the roof)"
+  },
+  {
+   "id": "m13",
+   "set": "messy",
+   "text": "Macuachane n alagou",
+   "expect": {
+    "place": "Macuachane",
+    "polarity": "negative",
+    "date_kind": "none",
+    "date_from": null,
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "contradicted"
+   },
+   "why": "Copernicus wet: flooded share of mapped area >= 10% (AOI05 map); a reader takes 'n' as 'nao', though bare 'n' is not a parser negator"
+  },
+  {
+   "id": "m14",
+   "set": "messy",
+   "text": "omg Chinhacanine flooding since 15th of Jan",
+   "expect": {
+    "place": "Chinhacanine",
+    "polarity": "positive",
+    "date_kind": "since",
+    "date_from": "2026-01-15",
+    "date_to": null,
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "supported"
+   },
+   "why": "Copernicus wet: flooded share of mapped area >= 10% on both AOI01 maps (16 and 18 Jan)"
+  },
+  {
+   "id": "m15",
+   "set": "messy",
+   "text": "Cunze alagado de 10 a 20 de janeiro? mentira",
+   "expect": {
+    "place": "Cunze",
+    "polarity": "negative",
+    "date_kind": "period",
+    "date_from": "2026-01-10",
+    "date_to": "2026-01-20",
+    "claim_type": "flood",
+    "quantifier": null,
+    "verdict": "not provable"
+   },
+   "why": "Copernicus dry: open ground >= 50%, flooded share of mapped open ground <= 1%, unclear <= 10%; a period, so dry settles nothing"
+  }
+ ]
+}

@@ -3,8 +3,8 @@
 Fixed on 12 Nov 2026 before any LightGBM score was computed:
 - Features (14, at 30 m): HH and HV on each date, HV minus HH on each date, the HH and HV change, and the 5x5
   local mean and standard deviation of 17 Jan HH, 17 Jan HV and the HH change. All dB values first have that
-  area's median over reference land (JRC 0% and DSWx-S1 5 Jan not water) removed, per date and polarisation:
-  the per-scene calibration the review asks for, with no label used.
+  area's median over land removed, per date and polarisation: the per-scene calibration the review asks for,
+  with no label used. (v1 took land as JRC 0% and DSWx-S1 5 Jan not water; v2 takes JRC 0%, see below.)
 - Target: Copernicus observed flood (1) against not flooded (0), on evaluated AOI06 pixels (coverage code 1).
 - Post-masks, the same as the rule: valid data, not water before the flood, not permanent water. Pixels these
   remove are left out of training.
@@ -18,9 +18,18 @@ polygon edges out of training and searched thresholds from 0.05. That band held 
 (the polygons are fragmented), so the model saw mostly patch interiors: pooled out-of-fold IoU 0.498, with the
 threshold stuck at the 0.05 end. The band was dropped and the threshold range widened.
 
-  python pipeline\\lgbm_aoi06.py          tune on AOI06; writes data/aoi06/lgbm_model.txt and lgbm_rule.json
-  python pipeline\\lgbm_aoi06.py --test   score the saved model and the tuned rule on AOI05, once only;
-                                         writes data/aoi05/test_lgbm_vs_rule.json and refuses to run again
+Revised again on 12 Nov, after the AOI05 test (v2): land for the median is now every valid pixel with JRC 0%
+occurrence, without needing DSWx-S1 "not water". Found on AOI01 (pipeline/check_aoi01.py): DSWx-S1 covers only
+32% of it, and the land it covers is darker, so v1 made AOI01's flood look less dark than AOI06's. The medians
+move by under 0.01 dB on AOI05, up to 0.11 dB on AOI06 and 1.1 to 1.6 dB on AOI01. Re-tuned on AOI06 with the
+same grid and blocks. v1 stays in data/aoi06/lgbm_model.txt and lgbm_rule.json, and its AOI05 score (IoU 0.572,
+data/aoi05/test_lgbm_vs_rule.json) remains the one clean test. AOI05 is scored once more as a post-fix rerun.
+Decided before that rerun: the fix stays whatever the number is, and the method choice is reopened only if
+LightGBM falls below the tuned rule's AOI05 IoU of 0.521.
+
+  python pipeline\\lgbm_aoi06.py           tune on AOI06; writes data/aoi06/lgbm_model_v2.txt and lgbm_rule_v2.json
+  python pipeline\\lgbm_aoi06.py --test    the v1 one-time test; refuses to run, because it has run
+  python pipeline\\lgbm_aoi06.py --rerun   post-fix rerun on AOI05, once only; writes data/aoi05/test_lgbm_v2.json
 """
 import itertools
 import json
@@ -36,7 +45,10 @@ import baseline_aoi05 as b
 import prep_aoi05 as p
 
 AOI06, AOI05 = p.ROOT / "data" / "aoi06", p.ROOT / "data" / "aoi05"
-MODEL, RULE_JSON, TEST = AOI06 / "lgbm_model.txt", AOI06 / "lgbm_rule.json", AOI05 / "test_lgbm_vs_rule.json"
+MODEL, RULE_JSON = AOI06 / "lgbm_model_v2.txt", AOI06 / "lgbm_rule_v2.json"
+TEST, TEST_V2 = AOI05 / "test_lgbm_vs_rule.json", AOI05 / "test_lgbm_v2.json"  # TEST: v1, the one clean test
+V1_CV = {"model_file": "lgbm_model.txt", "pooled_oof_iou": 0.57, "threshold": 0.37,
+         "land": "JRC 0% and DSWx-S1 5 Jan not water"}
 WIN = 5
 BLOCK, FOLDS, SEED = 100, 5, 0
 SEARCH = {"num_leaves": [15, 31, 63], "min_data_in_leaf": [50, 500, 2000]}
@@ -51,9 +63,9 @@ RULE_IOU_AOI05 = 0.5207  # tuned rule on AOI05, recorded on 11 Nov; the test run
 
 
 def offsets(d):
-    """Median dB over reference land, per date and polarisation."""
+    """Median dB over land (valid pixels with JRC 0% occurrence), per date and polarisation."""
     valid = np.isfinite(d["hh0"]) & np.isfinite(d["hh1"])
-    land = valid & (d["jrc"] == 0) & (d["dswx0"] == 0)
+    land = valid & (d["jrc"] == 0)
     return {k: round(float(np.nanmedian(d[k][land])), 3) for k in ("hh0", "hh1", "hv0", "hv1")}
 
 
@@ -202,7 +214,9 @@ def tune():
     RULE_JSON.write_text(json.dumps({
         "model_file": MODEL.name, "features": FEATURES, "window_px": WIN, "params": params, "rounds": ROUNDS,
         "threshold": best["threshold"], "offsets_aoi06": off,
+        "version": 2, "land_for_offsets": "valid pixels with JRC 0% occurrence",
         "cv": {"blocks_px": BLOCK, "folds": FOLDS, "seed": SEED, "first_run_with_2px_label_edge_band": {"pooled_oof_iou": 0.4978, "threshold": 0.05},
+               "v1": V1_CV,
                "pooled_out_of_fold": {k: round(float(v), 4) for k, v in pooled.items()}, "per_fold": per_fold,
                "search": [{"params": r["params"], "threshold": r["threshold"], "pooled_iou": round(r["pooled_iou"], 4)}
                           for r in results]},
@@ -214,7 +228,7 @@ def tune():
     p.log(f"Chosen {best['params']}, threshold {best['threshold']:.2f}: pooled out-of-fold IoU {pooled['iou']:.4f} "
           f"(precision {pooled['precision']:.3f}, recall {pooled['recall']:.3f}). Final model in-sample IoU "
           f"{insample['iou']:.4f}. Importance: {importance}")
-    p.log(f"Wrote {MODEL} and {RULE_JSON}. Next, once only: python pipeline\\lgbm_aoi06.py --test")
+    p.log(f"Wrote {MODEL} and {RULE_JSON}. Next, once only: python pipeline\\lgbm_aoi06.py --rerun")
 
 
 def test():
@@ -246,5 +260,35 @@ def test():
         print(f"WARNING: the tuned rule gave {s_r['iou']:.4f} on AOI05, not the recorded {RULE_IOU_AOI05}.")
 
 
+def rerun():
+    """Post-fix rerun of the v2 model on AOI05, once only. Not a clean test: the fix was found after the AOI05 test."""
+    if TEST_V2.exists():
+        sys.exit(f"The post-fix rerun on AOI05 has already been scored: {TEST_V2}. It is not run again.")
+    clean = json.loads(TEST.read_text(encoding="utf-8"))
+    cfg = json.loads(RULE_JSON.read_text(encoding="utf-8"))
+    model = lgb.Booster(model_file=str(MODEL))
+    d = b.load(AOI05)
+    coverage = b.scoring(d)
+    ev, truth = coverage == 1, d["label"] == 1
+    assert round(float(ev.sum() * b.HA), 1) == clean["scored_ha"], "the scored area changed since the clean test"
+    s = {k: round(float(v), 4) for k, v in b.score(predict(model, d, cfg["threshold"])[ev], truth[ev]).items()}
+    reopen = round(s["iou"], 3) < round(RULE_IOU_AOI05, 3)
+    TEST_V2.write_text(json.dumps({
+        "label": "post-fix rerun",
+        "note": "Not a clean test. The land-median fix was found on AOI01 after AOI05 had been used as the test. "
+                "The clean held-out figure is the v1 score in test_lgbm_vs_rule.json.",
+        "decided_before_scoring": "The fix stays whatever this number is. The method choice is reopened only if "
+                                  "LightGBM falls below the tuned rule's AOI05 IoU of 0.521 (at 3 decimals).",
+        "reopen_method_choice": reopen,
+        "lightgbm_v2": s, "clean_test_lightgbm_v1": clean["lightgbm"], "tuned_rule": clean["tuned_rule"],
+        "offsets_aoi05_v2": offsets(d), "offsets_aoi05_v1": clean["offsets_aoi05"], "model_file": MODEL.name,
+        "lightgbm_threshold": cfg["threshold"], "lightgbm_params": cfg["params"], "scored_ha": clean["scored_ha"],
+        "generated_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+    }, indent=2), encoding="utf-8")
+    print(f"AOI05 post-fix rerun, LightGBM v2: IoU {s['iou']:.4f}  precision {s['precision']:.4f}  recall "
+          f"{s['recall']:.4f}  (clean v1 test: {clean['lightgbm']['iou']:.4f}; rule {clean['tuned_rule']['iou']:.4f})")
+    print(f"Reopen the method choice: {reopen}. Wrote {TEST_V2}")
+
+
 if __name__ == "__main__":
-    test() if "--test" in sys.argv else tune()
+    test() if "--test" in sys.argv else rerun() if "--rerun" in sys.argv else tune()

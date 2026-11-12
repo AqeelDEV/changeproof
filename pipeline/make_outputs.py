@@ -1,7 +1,9 @@
 """Contract 1.1 outputs for AOI05, AOI06 and AOI01, with the method chosen by the one-time AOI05 test.
 
 The method is the one named in data/aoi05/test_lgbm_vs_rule.json (written by pipeline/lgbm_aoi06.py --test).
-If that file is missing, the tuned threshold rule is used. For each area this writes water_new, change_hh and
+If that file is missing, the tuned threshold rule is used. LightGBM runs the v2 model (land median over JRC 0%
+land, data/aoi06/lgbm_model_v2.txt). Its post-fix rerun on AOI05 (data/aoi05/test_lgbm_v2.json) is quoted next to
+the clean v1 test, and stops this script if it fell below the rule. For each area this writes water_new, change_hh and
 coverage GeoTIFFs in data/<area>, and the overlays and stats.json in web/public/data/<area>, then lists the
 finished areas in web/public/data/areas.json. It also counts OpenStreetMap buildings inside detected new water.
 
@@ -13,10 +15,13 @@ both exist (no flood label used).
   python pipeline\\make_outputs.py
 """
 import json
+import sys
 import traceback
 
 import lightgbm as lgb
 import numpy as np
+from affine import Affine
+from rasterio.features import rasterize
 from rasterio.warp import transform
 
 import baseline_aoi05 as b
@@ -54,6 +59,22 @@ AREAS = {
                          "here on 20 Jan (127,755.1 ha), after that pass."]},
 }
 LEGEND_AOI01 = {2: "valid, outside the area both Copernicus maps cover, or where the 16 and 18 Jan maps disagree"}
+# Field grids in AOI01, drawn by eye on the 17 Jan HH image along the visible field boundaries, as (column, row) on
+# the AOI01 grid. Water inside them may be irrigation rather than flood (pipeline/check_fields_aoi01.py).
+# shortcut: hand-drawn outlines, edges good to about 1 km; replace with a mapped irrigation-scheme boundary if found.
+FIELDS_AOI01 = {
+    "on the south-west bank downstream of Chókwè": [[(520, 700), (560, 690), (700, 765), (960, 985), (1450, 1262), (1600, 1300),
+                                               (1600, 1420), (430, 1420), (380, 1360), (440, 1150), (480, 900)]],
+    "north-west of Xai-Xai": [[(2385, 2005), (2625, 2005), (2625, 2385), (2385, 2385)],
+                              [(2715, 2125), (2895, 2125), (2895, 2425), (2715, 2425)]],
+}
+V1_IOU = {"aoi05": 0.5716, "aoi06": 0.5772, "aoi01": 0.7179}  # LightGBM v1, published 12 Nov (commit db3bded)
+
+
+def field_mask(shape, polygons):
+    """True on pixels whose centre lies inside any of the (column, row) polygons."""
+    return rasterize([({"type": "Polygon", "coordinates": [list(pg) + [pg[0]]]}, 1) for pg in polygons],
+                     out_shape=shape, transform=Affine.identity(), dtype="uint8").astype(bool)
 
 
 def agreement_label(a, c):
@@ -97,22 +118,28 @@ _lon, _lat = transform(p.CRS, "EPSG:4326", [p.X0 + 45, p.X0 + 105, p.X0 + 500], 
 _mask = np.zeros((3, 4), bool)
 _mask[0, 1] = True
 assert count_in(_lon, _lat, _g, _mask) == (1, 2)  # pixel (0, 1) is hit, (2, 3) is not, the third is off the grid
+assert field_mask((4, 6), [[(1, 1), (4, 1), (4, 3), (1, 3)]]).sum() == 6  # columns 1-3, rows 1-2
 
 
-def method_block(chosen, test, rule, info, d):
-    """stats.json method block, with the AOI05 comparison attached."""
+def method_block(chosen, test, rerun, rule, info, d):
+    """stats.json method block, with the AOI05 comparison (and the post-fix rerun, if any) attached."""
     comparison = {"tuned_rule_iou": test["tuned_rule"]["iou"], "lightgbm_iou": test["lightgbm"]["iou"],
                   "chosen": chosen, "decision_rule": test["decision_rule"]} if test else None
+    if comparison and rerun:
+        comparison["post_fix_rerun"] = {k: rerun[k] for k in ("label", "note", "decided_before_scoring")}
+        comparison["post_fix_rerun"]["lightgbm_v2_iou"] = rerun["lightgbm_v2"]["iou"]
     if chosen == "threshold":
         block = b.threshold_method(rule, info, "tuned_on_aoi06")
     else:
         cfg = json.loads(m.RULE_JSON.read_text(encoding="utf-8"))
         block = {"name": "lightgbm", "edge_buffer_px": b.EDGE_PX,
                  "summary": f"LightGBM classifier on {len(m.FEATURES)} radar features (HH, HV, HV minus HH, the "
-                            "change between dates, and 5x5 local mean and spread), each scene's land median removed; "
+                            "change between dates, and 5x5 local mean and spread), each with the area's median over "
+                            "land with no water on record (JRC 0%) removed; "
                             f"flood where the probability is at least {cfg['threshold']:.2f}; not water on 5 Jan "
                             f"(DSWx-S1); not permanent water (JRC occurrence >= {b.PERMANENT_PCT}%).",
-                 "parameters": {"features": m.FEATURES, "window_px": m.WIN, "params": cfg["params"],
+                 "parameters": {"version": cfg.get("version", 1), "land_for_offsets": cfg.get("land_for_offsets"),
+                                "features": m.FEATURES, "window_px": m.WIN, "params": cfg["params"],
                                 "rounds": cfg["rounds"], "threshold": cfg["threshold"], "offsets_db": m.offsets(d),
                                 "cv_aoi06": cfg["cv"]["pooled_out_of_fold"], "tuned_on": "aoi06",
                                 "unclear_rise_db": b.RISE_DB, "permanent_water_jrc_pct": b.PERMANENT_PCT}}
@@ -124,7 +151,7 @@ def method_block(chosen, test, rule, info, d):
     return block
 
 
-def run_area(area, chosen, test, rule, model, threshold):
+def run_area(area, chosen, test, rerun, rule, model, threshold):
     cfg, grid = AREAS[area], f.GRIDS[area]
     limits_extra = []
     if area == "aoi01":
@@ -161,24 +188,44 @@ def run_area(area, chosen, test, rule, model, threshold):
     dark_ha, new_ha = (pred & valid & dark0).sum() * b.HA, max((pred & valid).sum() * b.HA, 1)
 
     limits = list(b.LIMITS_COMMON) if chosen == "threshold" else [
-        "NISAR Beta data: not fully calibrated. The 17 Jan scene is about 3 dB brighter overall, so each scene's "
-        "median over reference land is removed before the classifier sees it.", *b.LIMITS_COMMON[1:4],
+        "NISAR Beta data: not fully calibrated. The 17 Jan scene is about 3 dB brighter overall, so each area's "
+        "median over land with no water on record (JRC 0%) is removed before the classifier sees it.",
+        *b.LIMITS_COMMON[1:4],
         "The classifier learned from the Copernicus map of AOI06 only."]
     if area == "aoi06":
         no_data = float((coverage == 0).mean())
         limits_extra.append(f"NISAR frame 165 covers only part of this grid: {no_data:.0%} has no NISAR data "
                             "on at least one of the two dates.")
     if test:
-        limits_extra.append(f"On the held-out area AOI05, the tuned rule scored IoU {test['tuned_rule']['iou']:.3f} "
-                            f"and LightGBM {test['lightgbm']['iou']:.3f} against Copernicus, so the "
-                            f"{'tuned rule' if chosen == 'threshold' else 'LightGBM classifier'} is used.")
+        sentence = (f"On the held-out area AOI05, the tuned rule scored IoU {test['tuned_rule']['iou']:.3f} "
+                    f"and LightGBM {test['lightgbm']['iou']:.3f} against Copernicus, so the "
+                    f"{'tuned rule' if chosen == 'threshold' else 'LightGBM classifier'} is used.")
+        if rerun:
+            sentence += (" That is the one clean test. A fix to how the land median is taken was found later, on "
+                         "AOI01, and AOI05 was scored once more after it (a post-fix rerun, not a clean test): IoU "
+                         f"{rerun['lightgbm_v2']['iou']:.3f}." +
+                         (" The agreement figures for this area are from that rerun." if area == "aoi05" else ""))
+        limits_extra.append(sentence)
     ev, truth = coverage == 1, d["label"] == 1
     rule_iou = round(float(b.score(rule_pred[ev], truth[ev])["iou"]), 4)
-    if chosen == "lightgbm" and area != "aoi05":  # AOI05's comparison is the test sentence above
+    if chosen == "lightgbm" and area == "aoi06":  # AOI05's comparison is the test sentence above
         lgbm_iou = float(b.score(pred[ev], truth[ev])["iou"])
         limits_extra.append(f"Against this area's reference, the tuned rule scores IoU {rule_iou:.3f} and LightGBM "
-                            f"{lgbm_iou:.3f}" + (" (both in-sample)." if area == "aoi06" else
-                                                 ". The method was chosen on AOI05, not here."))
+                            f"{lgbm_iou:.3f} (both in-sample).")
+    elif chosen == "lightgbm" and area == "aoi01":
+        lgbm_iou = float(b.score(pred[ev], truth[ev])["iou"])
+        limits_extra.append(f"Against this area's reference, LightGBM scores IoU {lgbm_iou:.3f}. This is a diagnostic, "
+                            "not a test score: the land-median problem was found on this area. Before the fix "
+                            f"LightGBM scored {V1_IOU[area]:.3f} here, and the tuned rule scores {rule_iou:.3f}. "
+                            "The method was chosen on AOI05, not here.")
+        parts = []
+        for name, polygons in FIELDS_AOI01.items():
+            w = pred & valid & field_mask(pred.shape, polygons)
+            parts.append(f"{w.sum() * b.HA:,.0f} ha ({buildings(area, grid, w)[0]:,} buildings) lies in the field "
+                         f"grid{'s' if len(polygons) > 1 else ''} {name}")
+        limits_extra.append("The figures here may include irrigation. Of the detected new water, " + ", and ".join(parts) +
+                            ". These regular plots look irrigated, so a flooded field there may be irrigation rather "
+                            "than flood. The optical image of 19 Jan (HLS) is cloud-covered, so this is not resolved.")
     limits_extra.append(f"{dark_ha:,.0f} ha ({dark_ha / new_ha:.0%}) of the detected new water was already dark in "
                         "NISAR's 5 Jan image. DSWx-S1 (or JRC) called it dry, so it counts as new, but some of it "
                         "may have been water before 17 Jan.")
@@ -186,8 +233,10 @@ def run_area(area, chosen, test, rule, model, threshold):
                         "mapped on this grid. This is a lower bound: OpenStreetMap is incomplete here, a 30 m pixel "
                         "is larger than a house, and flooded built-up areas look bright in radar, so open-water "
                         "detection misses them. It says nothing about damage. Data: OpenStreetMap contributors, ODbL.")
-    method = method_block(chosen, test, rule, info, d)
+    method = method_block(chosen, test, rerun, rule, info, d)
     method["parameters"]["tuned_rule_iou_this_area"] = rule_iou
+    if chosen == "lightgbm":
+        method["parameters"]["lightgbm_v1_iou_this_area"] = V1_IOU[area]
     stats = b.area_stats(area, cfg["name"], grid, cfg["frame"], cfg["granules"], cfg["reference"], method, d, pred,
                          coverage, [limits[0], *cfg["limits"], *limits[1:], *limits_extra])
     stats["results"]["osm_buildings_in_new_water"], stats["results"]["osm_buildings_on_grid"] = n_in, n_grid
@@ -198,6 +247,10 @@ def run_area(area, chosen, test, rule, model, threshold):
 
 def main():
     test = json.loads(m.TEST.read_text(encoding="utf-8")) if m.TEST.exists() else None
+    rerun = json.loads(m.TEST_V2.read_text(encoding="utf-8")) if m.TEST_V2.exists() else None
+    if rerun and rerun["reopen_method_choice"]:
+        sys.exit("The post-fix rerun fell below the tuned rule on AOI05, so the method choice is reopened. "
+                 "Decide it before regenerating the outputs.")
     chosen = test["chosen"] if test else "threshold"
     rule = json.loads(b.TUNED.read_text(encoding="utf-8"))["rule"]
     model = lgb.Booster(model_file=str(m.MODEL)) if chosen == "lightgbm" else None
@@ -206,7 +259,7 @@ def main():
     done, rows = [], []
     for area in AREAS:
         try:
-            app, rule_iou = run_area(area, chosen, test, rule, model, threshold)
+            app, rule_iou = run_area(area, chosen, test, rerun, rule, model, threshold)
             done.append(area)
             r, a = app["results"], app["agreement"]
             rows.append(f"  {area}: IoU {a['iou']:.4f}  precision {a['precision']:.4f}  recall {a['recall']:.4f}  "

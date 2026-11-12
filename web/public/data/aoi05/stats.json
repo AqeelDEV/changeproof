@@ -2,7 +2,7 @@
   "schema_version": "1.1",
   "area_id": "aoi05",
   "name": "AOI05 Chinhangane, Mozambique",
-  "generated_utc": "2026-11-11T21:27:24Z",
+  "generated_utc": "2026-11-12T04:43:15Z",
   "as_of_label": "17 Jan 2026, 03:42 UTC",
   "release": "Beta",
   "grid": {
@@ -58,8 +58,10 @@
   "method": {
     "name": "lightgbm",
     "edge_buffer_px": 2,
-    "summary": "LightGBM classifier on 14 radar features (HH, HV, HV minus HH, the change between dates, and 5x5 local mean and spread), each scene's land median removed; flood where the probability is at least 0.37; not water on 5 Jan (DSWx-S1); not permanent water (JRC occurrence >= 50%).",
+    "summary": "LightGBM classifier on 14 radar features (HH, HV, HV minus HH, the change between dates, and 5x5 local mean and spread), each with the area's median over land with no water on record (JRC 0%) removed; flood where the probability is at least 0.36; not water on 5 Jan (DSWx-S1); not permanent water (JRC occurrence >= 50%).",
     "parameters": {
+      "version": 2,
+      "land_for_offsets": "valid pixels with JRC 0% occurrence",
       "features": [
         "hh1",
         "hv1",
@@ -88,23 +90,23 @@
         "force_row_wise": true,
         "verbose": -1,
         "num_leaves": 15,
-        "min_data_in_leaf": 500
+        "min_data_in_leaf": 50
       },
       "rounds": 300,
-      "threshold": 0.37,
+      "threshold": 0.36,
       "offsets_db": {
-        "hh0": -8.528,
-        "hh1": -5.301,
-        "hv0": -15.59,
-        "hv1": -13.423
+        "hh0": -8.534,
+        "hh1": -5.309,
+        "hv0": -15.596,
+        "hv1": -13.43
       },
       "cv_aoi06": {
         "iou": 0.57,
-        "precision": 0.7537,
-        "recall": 0.7005,
-        "tp_ha": 6253.2,
-        "fp_ha": 2043.99,
-        "fn_ha": 2673.45
+        "precision": 0.7495,
+        "recall": 0.7041,
+        "tp_ha": 6285.33,
+        "fp_ha": 2101.14,
+        "fn_ha": 2641.32
       },
       "tuned_on": "aoi06",
       "unclear_rise_db": 3.0,
@@ -113,25 +115,32 @@
         "tuned_rule_iou": 0.5207,
         "lightgbm_iou": 0.5716,
         "chosen": "lightgbm",
-        "decision_rule": "higher AOI05 IoU at 3 decimals wins; a tie keeps the rule"
+        "decision_rule": "higher AOI05 IoU at 3 decimals wins; a tie keeps the rule",
+        "post_fix_rerun": {
+          "label": "post-fix rerun",
+          "note": "Not a clean test. The land-median fix was found on AOI01 after AOI05 had been used as the test. The clean held-out figure is the v1 score in test_lgbm_vs_rule.json.",
+          "decided_before_scoring": "The fix stays whatever this number is. The method choice is reopened only if LightGBM falls below the tuned rule's AOI05 IoU of 0.521 (at 3 decimals).",
+          "lightgbm_v2_iou": 0.5741
+        }
       },
-      "tuned_rule_iou_this_area": 0.5207
+      "tuned_rule_iou_this_area": 0.5207,
+      "lightgbm_v1_iou_this_area": 0.5716
     }
   },
   "results": {
-    "flooded_ha": 14916.7,
-    "flooded_ha_in_mapped_area": 10105.8,
+    "flooded_ha": 15263.1,
+    "flooded_ha_in_mapped_area": 10333.1,
     "hh_median_db_in_label": {
       "before": -12.06,
       "after": -15.86
     },
-    "osm_buildings_in_new_water": 12,
+    "osm_buildings_in_new_water": 15,
     "osm_buildings_on_grid": 11349
   },
   "agreement": {
-    "iou": 0.5716,
-    "precision": 0.7111,
-    "recall": 0.7445,
+    "iou": 0.5741,
+    "precision": 0.7055,
+    "recall": 0.7551,
     "evaluated_ha": 62969.8
   },
   "coverage": {
@@ -233,15 +242,15 @@
     }
   ],
   "limits": [
-    "NISAR Beta data: not fully calibrated. The 17 Jan scene is about 3 dB brighter overall, so each scene's median over reference land is removed before the classifier sees it.",
+    "NISAR Beta data: not fully calibrated. The 17 Jan scene is about 3 dB brighter overall, so each area's median over land with no water on record (JRC 0%) is removed before the classifier sees it.",
     "Agreement with Copernicus, not accuracy: the reference is a Sentinel-1 (C-band) map made 24 minutes before the NISAR pass, not ground truth.",
     "AOI05 is the held-out test area: the method was chosen on AOI06 and applied here once, unchanged.",
     "Pixels where HH rose by more than 3 dB (possible flooded vegetation) are not scored. This method only finds open water.",
     "Permanent water (JRC occurrence >= 50%) is never counted as flood.",
     "A 2-pixel band along the Copernicus mapped-area edge is not scored. Flood polygon edges are scored.",
     "The classifier learned from the Copernicus map of AOI06 only.",
-    "On the held-out area AOI05, the tuned rule scored IoU 0.521 and LightGBM 0.572 against Copernicus, so the LightGBM classifier is used.",
-    "707 ha (5%) of the detected new water was already dark in NISAR's 5 Jan image. DSWx-S1 (or JRC) called it dry, so it counts as new, but some of it may have been water before 17 Jan.",
-    "Buildings: 12 OpenStreetMap buildings sit inside detected new water, out of 11,349 mapped on this grid. This is a lower bound: OpenStreetMap is incomplete here, a 30 m pixel is larger than a house, and flooded built-up areas look bright in radar, so open-water detection misses them. It says nothing about damage. Data: OpenStreetMap contributors, ODbL."
+    "On the held-out area AOI05, the tuned rule scored IoU 0.521 and LightGBM 0.572 against Copernicus, so the LightGBM classifier is used. That is the one clean test. A fix to how the land median is taken was found later, on AOI01, and AOI05 was scored once more after it (a post-fix rerun, not a clean test): IoU 0.574. The agreement figures for this area are from that rerun.",
+    "738 ha (5%) of the detected new water was already dark in NISAR's 5 Jan image. DSWx-S1 (or JRC) called it dry, so it counts as new, but some of it may have been water before 17 Jan.",
+    "Buildings: 15 OpenStreetMap buildings sit inside detected new water, out of 11,349 mapped on this grid. This is a lower bound: OpenStreetMap is incomplete here, a 30 m pixel is larger than a house, and flooded built-up areas look bright in radar, so open-water detection misses them. It says nothing about damage. Data: OpenStreetMap contributors, ODbL."
   ]
 }

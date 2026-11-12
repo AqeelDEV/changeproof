@@ -1,17 +1,16 @@
 # Progress
 
-Updated Thursday 12 November 2026, after the overnight run and the AOI01 checks. Submission is Saturday 14 November, 12:00 GST.
+Updated Thursday 12 November 2026, after the overnight run, the AOI01 checks and the land-median fix. Submission is Saturday 14 November, 12:00 GST.
 
 ## Start here tomorrow
 
 Where things stand:
-- LightGBM beat the tuned rule on the held-out area AOI05: IoU 0.572 against 0.521. It is now the method for all three areas.
-- Contract 1.1 outputs exist for AOI05, AOI06 and AOI01, and `web/public/data/areas.json` lists all three.
-- On AOI01's reference the rule scores higher than LightGBM (0.833 against 0.718). LightGBM is kept for now, but not as final (decided 12 Nov). The AOI01 checks found the likely cause: the land median removed before the model sees the data.
+- LightGBM is the method for all three areas, now as v2. The only change from v1: the land median is taken over all valid pixels with JRC 0% occurrence.
+- **The headline test figure stays AOI05 IoU 0.572** (v1, the one clean test), against the tuned rule's 0.521. v2 scored 0.574 on AOI05 as a post-fix rerun, which is not a clean test.
+- AOI01: v2 scores 0.835 against its reference. That is a diagnostic only, because the problem was found there. The published v1 figure was 0.718 and the rule scores 0.833. AOI01's `stats.json` gives all three.
+- Contract 1.1 outputs for all three areas were regenerated with v2, and `web/public/data/areas.json` lists all three.
 
-1. **Decide whether to change how LightGBM's land median is taken.** The AOI01 gap is mostly this normalisation, not the model failing on a wetter scene. AOI01's land median comes only from the 32% of the area where DSWx-S1 has data, and that land is darker. Taken over all JRC 0% land instead, LightGBM scores 0.838 on AOI01 (in-sample), against the rule's 0.833.
-   - The catch: this was found by looking at AOI01, so AOI01 would no longer be an independent check. AOI05's output would also change slightly, and AOI05 cannot be rescored as a fresh test.
-   - Details and numbers: "Done, 12 Nov: AOI01 checks" below. Nothing has been changed yet.
+1. **AOI01's field grids may be irrigation.** They hold 7,799 ha of new water (81 buildings) downstream of Chókwè and 2,622 ha (23 buildings) north-west of Xai-Xai. HLS 19 Jan is all cloud, so it could not settle this, and AOI01's limits say the figures may include irrigation. To settle it you would need a clear optical image from early to mid January, or a map of the irrigation schemes. See "Field-shaped water in AOI01" below.
 2. **Delete the four old grey PNGs** in `web/public/data/aoi05/` (`hh_20260105.png`, `hh_20260117.png`, `hv_20260105.png`, `hv_20260117.png`) once the web app uses the WebP files. They are kept for now because the app may still load them, but `stats.json` no longer lists them.
 3. **Check the web app reads the new files.** It needs to handle three things:
    - `areas.json` with three areas.
@@ -20,7 +19,116 @@ Where things stand:
 4. **`pipeline/__pycache__` is tracked in git.** Add `__pycache__/` to `.gitignore` and untrack it. It was outside tonight's folders, so it is not done.
 5. **Carry on with "Next steps" from step 6**: web app, then claims.
 
-Keep in mind: AOI05 has now been used as the test twice, once for the rule (11 Nov) and once for LightGBM (12 Nov). Each method was scored on it exactly once. Do not tune anything else on AOI05.
+Keep in mind:
+- AOI05 has now been scored three times: the rule (11 Nov), LightGBM v1 (12 Nov, the clean test) and LightGBM v2 (12 Nov, the post-fix rerun, labelled as such). Do not tune anything else on AOI05.
+- AOI01 can no longer check the land-median definition independently.
+
+## Done, 12 Nov: land-median fix (LightGBM v2) and the AOI01 field check
+
+You asked for this: adopt the all-JRC-0% land median for all three areas, with full disclosure. You also decided, before the AOI05 rerun: the fix stays whatever the number is, and the method choice is reopened only if LightGBM drops below the rule's 0.521.
+
+### 1. Land median under both definitions (no labels)
+
+- v1 land: valid NISAR pixels with JRC 0% and DSWx-S1 "not water" on 5 Jan.
+- v2 land: valid NISAR pixels with JRC 0%.
+
+| Area | Land, v1 to v2 (share of valid pixels) | Shift, HH 5 Jan (dB) | HH 17 Jan | HV 5 Jan | HV 17 Jan |
+|---|---|---|---|---|---|
+| AOI05 | 97.6% to 97.9% | -0.006 | -0.007 | -0.006 | -0.007 |
+| AOI06 | 88.6% to 92.0% | -0.021 | -0.090 | -0.057 | -0.107 |
+| AOI01 | 30.3% to 93.2% | +1.116 | +1.240 | +1.222 | +1.611 |
+
+- **AOI05 moves by under 0.01 dB.**
+- v2 offsets in dB (HH 5 Jan, HH 17 Jan, HV 5 Jan, HV 17 Jan):
+  - AOI05: -8.534, -5.309, -15.596, -13.430.
+  - AOI06: -10.427, -7.483, -18.241, -16.231.
+  - AOI01: -11.055, -7.907, -17.900, -15.583.
+
+### 2. Re-tuned on AOI06 (same grid, same spatial blocks)
+
+- **Code.** Only `offsets()` in `pipeline/lgbm_aoi06.py` changed. The features, grid, blocks, rounds and threshold search are as before, and the docstring records the revision.
+- **Files.** `data/aoi06/lgbm_model_v2.txt` and `lgbm_rule_v2.json`. The v1 files (`lgbm_model.txt`, `lgbm_rule.json`) are kept unchanged.
+- **Chosen settings.** num_leaves 15, min_data_in_leaf 50, threshold 0.36. v1 had 15, 500 and 0.37.
+- **Pooled out-of-fold IoU 0.5700** (precision 0.749, recall 0.704), the same as v1's 0.5700. All nine settings scored between 0.5691 and 0.5700, so the choice among them hardly matters.
+- **Per fold**, LightGBM v2 against the tuned rule (the rule's scores are in-sample):
+
+  | Fold | 0 | 1 | 2 | 3 | 4 |
+  |---|---|---|---|---|---|
+  | LightGBM v2 | 0.516 | 0.543 | 0.597 | 0.618 | 0.587 |
+  | LightGBM v1 | 0.518 | 0.542 | 0.595 | 0.617 | 0.588 |
+  | Tuned rule | 0.503 | 0.523 | 0.593 | 0.610 | 0.577 |
+
+- **Final model on AOI06, in-sample:** IoU 0.5773. Importance: hh1 64%, hh1_mean 27%, no other feature above 3%.
+
+### 3. AOI05 post-fix rerun
+
+- **The run.** `python pipeline\lgbm_aoi06.py --rerun` wrote `data/aoi05/test_lgbm_v2.json`. The file is labelled "post-fix rerun" and states the decision rule fixed before scoring. The script refuses to run again.
+- **The clean test is untouched.** `data/aoi05/test_lgbm_vs_rule.json` was not changed, and `--test` still refuses to run.
+- **Result:** IoU 0.5741, precision 0.7055, recall 0.7551. The v1 clean test gave 0.5716, 0.7111 and 0.7445. The rerun is above the rule's 0.521, so the method choice is not reopened.
+- **0.572 stays the headline figure.**
+  - AOI05's `stats.json` now carries the v2 agreement figures (0.574). Its limits say they come from the post-fix rerun and that 0.572 is the one clean test.
+  - `method.parameters.aoi05_test` holds both scores, with the rerun's label and note.
+  - `make_outputs.py` stops if a rerun file ever says the choice is reopened.
+
+### 4. AOI01: a diagnostic, not a test score
+
+- **Scores against the agreement label:**
+  - v2: IoU 0.835 (precision 0.879, recall 0.944).
+  - Published v1: 0.718 (0.944, 0.750).
+  - Tuned rule: 0.833.
+- AOI01's `stats.json` limits give all three, and call 0.835 a diagnostic because the land-median problem was found on this area. `method.parameters` holds `lightgbm_v1_iou_this_area` (0.7179) and `tuned_rule_iou_this_area` (0.8328).
+
+### 5. Before and after, per area
+
+| Area | IoU, v1 to v2 | New water, whole grid (ha) | In mapped area (ha) | OSM buildings in new water | Already dark on 5 Jan |
+|---|---|---|---|---|---|
+| AOI05 | 0.572 to 0.574 (post-fix rerun) | 14,917 to 15,263 | 10,106 to 10,333 | 12 to 15, of 11,349 | 707 ha (5%) to 738 ha (5%) |
+| AOI06 | 0.577 to 0.577 (in-sample) | 11,408 to 11,524 | 8,348 to 8,433 | 5 to 5, of 18,515 | 715 ha (6%) to 714 ha (6%) |
+| AOI01 | 0.718 to 0.835 (diagnostic) | 51,494 to 75,951 | 12,754 to 17,514 | 313 to 824, of 346,003 | 9,050 ha (18%) to 13,174 ha (17%) |
+
+- **What moved.** AOI05 and AOI06 barely change. AOI01's new water rises by 47%, to about the rule's 76,198 ha, and its buildings in new water more than double.
+- **Files changed in `web/public/data/`:** the three `stats.json` and the three `water_new.png`. The grey WebP files, `label.png`, `coverage.png` and `areas.json` came out identical.
+- **Checks passed:**
+  - `check_contract` on all three areas, and coverage sums to 1.
+  - `flooded_ha` matches `water_new_30m.tif`.
+  - Building counts are within the grid totals.
+  - Every listed file exists, and each WebP is under 1 MB.
+
+### 6. Field-shaped water in AOI01
+
+- **Script:** `pipeline/check_fields_aoi01.py`. It writes `data/aoi01/check_fields_aoi01.json` and `check_fields_aoi01.png`. The outlines live in `make_outputs.FIELDS_AOI01`, so the limits text and the check use the same ones.
+- **Outlines.** Drawn by eye on the 17 Jan HH image, along visible field boundaries and canals. The edges are good to about 1 km.
+  - South-west bank downstream of Chókwè: one polygon, 43,450 ha, roughly 32.95 to 33.31° E and 24.55 to 24.74° S.
+  - North-west of Xai-Xai: two rectangles, one either side of the river, 13,068 ha together, roughly 33.55 to 33.70° E and 24.90 to 25.02° S.
+- **HLS 19 Jan cannot show the ground.** Wherever it covers AOI01, it shows thick cloud:
+  - The median reflectance is 0.79 in blue and red, 0.81 in NIR and 0.14 in SWIR, and the image has no ground features.
+  - OPERA DSWx-HLS labels 99.7% of it snow/ice and 0.3% cloud. Snow is impossible here, so this is cloud.
+  - Its Fmask flags only 0.2% as cloud, so Fmask missed the cloud.
+  - The tile also misses 23% of AOI01, mainly the western 16 km.
+- **Results, for v2 new water:**
+
+  | Field area | New water (ha) | Share of AOI01 new water | OSM buildings in it | 18 Jan map: flooded / dry / unmapped | 16 Jan map: flooded / dry / unmapped | JRC saw water there before | Dark on 5 Jan |
+  |---|---|---|---|---|---|---|---|
+  | Downstream of Chókwè | 7,799 | 10% | 81 (10% of 824) | 52% / 5% / 43% | 2% / 3% / 94% | 2% | 9% |
+  | North-west of Xai-Xai | 2,622 | 3% | 23 (3%) | 74% / 26% / 0% | 9% / 77% / 14% | 23% | 20% |
+
+  Together: 10,421 ha (14% of AOI01's new water) and 104 buildings (13%).
+- **Downstream of Chókwè: leans towards flood.**
+  - The water fills plots between canals, so it is field-shaped.
+  - But where the 18 Jan COSMO-SkyMed map covers it, it calls ten times as much flooded as dry (52% against 5%).
+  - JRC has almost never seen water there (2%).
+  - That leans towards flood water held in the fields, not routine irrigation. Not settled.
+- **North-west of Xai-Xai: mixed.**
+  - In the eastern block, JRC has seen water in many plots, plot by plot. That looks like fields that are flooded from time to time, for example for rice.
+  - DSWx-S1 has no data here, so plots with JRC 4% or more already count as water before the flood and are excluded. Of the new water that remains, 23% has JRC 1 to 3%.
+  - The 16 Jan Sentinel-1 map calls 77% of this water dry, and the 18 Jan map calls 74% flooded. Either the flood arrived after 16 Jan, or one map is wrong.
+  - Part of it may well be irrigation.
+- **Limits text.** AOI01's `stats.json` now says the figures may include irrigation, gives each area's hectares and buildings, and says HLS could not settle it.
+- **Not done.** I didn't look for another optical image: Sentinel-2 or Landsat from early to mid January might show the fields. I also didn't use a mapped irrigation-scheme boundary.
+
+### Other changes
+
+- **`pipeline/check_aoi01.py`:** a docstring note that it was written for v1, and one key renamed. It was not rerun, so its v1 outputs in `data/aoi01/` are kept.
 
 ## Done, 12 Nov: AOI01 checks (no outputs changed)
 
@@ -164,7 +272,7 @@ Against the agreement label, inside the scored area, which holds 6,057 ha of agr
   - `data/aoi06/lgbm_model.txt` and `data/aoi06/lgbm_rule.json` (settings, folds, importance).
   - `data/aoi05/test_lgbm_vs_rule.json`. While it exists, `lgbm_aoi06.py --test` refuses to score AOI05 again.
 
-### Outputs per area (LightGBM)
+### Outputs per area (LightGBM v1, replaced by v2 later on 12 Nov, see above)
 
 | Area | IoU | Precision | Recall | Scored (ha) | New water, whole grid (ha) | In mapped area (ha) | Rule IoU, same reference | Rule new water (ha) | OSM buildings in new water |
 |---|---|---|---|---|---|---|---|---|---|

@@ -2,7 +2,7 @@
   "schema_version": "1.1",
   "area_id": "aoi01",
   "name": "AOI01 Chibabel: Chókwè, Macia and Xai-Xai, Mozambique",
-  "generated_utc": "2026-11-11T21:27:55Z",
+  "generated_utc": "2026-11-12T04:43:44Z",
   "as_of_label": "17 Jan 2026, 03:42 UTC",
   "release": "Beta",
   "grid": {
@@ -58,8 +58,10 @@
   "method": {
     "name": "lightgbm",
     "edge_buffer_px": 2,
-    "summary": "LightGBM classifier on 14 radar features (HH, HV, HV minus HH, the change between dates, and 5x5 local mean and spread), each scene's land median removed; flood where the probability is at least 0.37; not water on 5 Jan (DSWx-S1, or JRC occurrence >= 4% where DSWx-S1 has no data); not permanent water (JRC occurrence >= 50%).",
+    "summary": "LightGBM classifier on 14 radar features (HH, HV, HV minus HH, the change between dates, and 5x5 local mean and spread), each with the area's median over land with no water on record (JRC 0%) removed; flood where the probability is at least 0.36; not water on 5 Jan (DSWx-S1, or JRC occurrence >= 4% where DSWx-S1 has no data); not permanent water (JRC occurrence >= 50%).",
     "parameters": {
+      "version": 2,
+      "land_for_offsets": "valid pixels with JRC 0% occurrence",
       "features": [
         "hh1",
         "hv1",
@@ -88,23 +90,23 @@
         "force_row_wise": true,
         "verbose": -1,
         "num_leaves": 15,
-        "min_data_in_leaf": 500
+        "min_data_in_leaf": 50
       },
       "rounds": 300,
-      "threshold": 0.37,
+      "threshold": 0.36,
       "offsets_db": {
-        "hh0": -12.171,
-        "hh1": -9.147,
-        "hv0": -19.123,
-        "hv1": -17.194
+        "hh0": -11.055,
+        "hh1": -7.907,
+        "hv0": -17.9,
+        "hv1": -15.583
       },
       "cv_aoi06": {
         "iou": 0.57,
-        "precision": 0.7537,
-        "recall": 0.7005,
-        "tp_ha": 6253.2,
-        "fp_ha": 2043.99,
-        "fn_ha": 2673.45
+        "precision": 0.7495,
+        "recall": 0.7041,
+        "tp_ha": 6285.33,
+        "fp_ha": 2101.14,
+        "fn_ha": 2641.32
       },
       "tuned_on": "aoi06",
       "unclear_rise_db": 3.0,
@@ -113,26 +115,33 @@
         "tuned_rule_iou": 0.5207,
         "lightgbm_iou": 0.5716,
         "chosen": "lightgbm",
-        "decision_rule": "higher AOI05 IoU at 3 decimals wins; a tie keeps the rule"
+        "decision_rule": "higher AOI05 IoU at 3 decimals wins; a tie keeps the rule",
+        "post_fix_rerun": {
+          "label": "post-fix rerun",
+          "note": "Not a clean test. The land-median fix was found on AOI01 after AOI05 had been used as the test. The clean held-out figure is the v1 score in test_lgbm_vs_rule.json.",
+          "decided_before_scoring": "The fix stays whatever this number is. The method choice is reopened only if LightGBM falls below the tuned rule's AOI05 IoU of 0.521 (at 3 decimals).",
+          "lightgbm_v2_iou": 0.5741
+        }
       },
       "before_water_jrc_fallback_pct": 4,
-      "tuned_rule_iou_this_area": 0.8328
+      "tuned_rule_iou_this_area": 0.8328,
+      "lightgbm_v1_iou_this_area": 0.7179
     }
   },
   "results": {
-    "flooded_ha": 51494.4,
-    "flooded_ha_in_mapped_area": 12754.4,
+    "flooded_ha": 75951.0,
+    "flooded_ha_in_mapped_area": 17513.8,
     "hh_median_db_in_label": {
       "before": -12.29,
       "after": -18.22
     },
-    "osm_buildings_in_new_water": 313,
+    "osm_buildings_in_new_water": 824,
     "osm_buildings_on_grid": 346003
   },
   "agreement": {
-    "iou": 0.7179,
-    "precision": 0.9439,
-    "recall": 0.7499,
+    "iou": 0.8349,
+    "precision": 0.8788,
+    "recall": 0.9436,
     "evaluated_ha": 51503.3
   },
   "coverage": {
@@ -234,7 +243,7 @@
     }
   ],
   "limits": [
-    "NISAR Beta data: not fully calibrated. The 17 Jan scene is about 3 dB brighter overall, so each scene's median over reference land is removed before the classifier sees it.",
+    "NISAR Beta data: not fully calibrated. The 17 Jan scene is about 3 dB brighter overall, so each area's median over land with no water on record (JRC 0%) is removed before the classifier sees it.",
     "Agreement with Copernicus, not accuracy, and a lower bound: no Copernicus map was made on the NISAR morning here. The reference maps are from about 11 hours before (Sentinel-1, C-band) and 35 hours after (COSMO-SkyMed, X-band) the NISAR pass, so part of their difference may be the sensor, not the flood.",
     "NISAR's last pass on this track was 17 Jan 03:42 UTC. Copernicus observed a larger flood here on 20 Jan (127,755.1 ha), after that pass.",
     "Pixels where HH rose by more than 3 dB (possible flooded vegetation) are not scored. This method only finds open water.",
@@ -243,9 +252,10 @@
     "The classifier learned from the Copernicus map of AOI06 only.",
     "Only pixels where both maps agree are scored. They disagree on 37% of the area both cover (mostly flooded on 18 Jan only), and those pixels count as outside the mapped area. The red overlay shows flood on both maps (17,569 ha on this grid), not the full 18 Jan extent.",
     "DSWx-S1 covers only 32% of this area on 5 Jan. Elsewhere, water before the flood is JRC occurrence >= 4%, the level that best matches DSWx-S1 where both exist (IoU 0.38).",
-    "On the held-out area AOI05, the tuned rule scored IoU 0.521 and LightGBM 0.572 against Copernicus, so the LightGBM classifier is used.",
-    "Against this area's reference, the tuned rule scores IoU 0.833 and LightGBM 0.718. The method was chosen on AOI05, not here.",
-    "9,050 ha (18%) of the detected new water was already dark in NISAR's 5 Jan image. DSWx-S1 (or JRC) called it dry, so it counts as new, but some of it may have been water before 17 Jan.",
-    "Buildings: 313 OpenStreetMap buildings sit inside detected new water, out of 346,003 mapped on this grid. This is a lower bound: OpenStreetMap is incomplete here, a 30 m pixel is larger than a house, and flooded built-up areas look bright in radar, so open-water detection misses them. It says nothing about damage. Data: OpenStreetMap contributors, ODbL."
+    "On the held-out area AOI05, the tuned rule scored IoU 0.521 and LightGBM 0.572 against Copernicus, so the LightGBM classifier is used. That is the one clean test. A fix to how the land median is taken was found later, on AOI01, and AOI05 was scored once more after it (a post-fix rerun, not a clean test): IoU 0.574.",
+    "Against this area's reference, LightGBM scores IoU 0.835. This is a diagnostic, not a test score: the land-median problem was found on this area. Before the fix LightGBM scored 0.718 here, and the tuned rule scores 0.833. The method was chosen on AOI05, not here.",
+    "The figures here may include irrigation. Of the detected new water, 7,799 ha (81 buildings) lies in the field grid on the south-west bank downstream of Chókwè, and 2,622 ha (23 buildings) lies in the field grids north-west of Xai-Xai. These regular plots look irrigated, so a flooded field there may be irrigation rather than flood. The optical image of 19 Jan (HLS) is cloud-covered, so this is not resolved.",
+    "13,174 ha (17%) of the detected new water was already dark in NISAR's 5 Jan image. DSWx-S1 (or JRC) called it dry, so it counts as new, but some of it may have been water before 17 Jan.",
+    "Buildings: 824 OpenStreetMap buildings sit inside detected new water, out of 346,003 mapped on this grid. This is a lower bound: OpenStreetMap is incomplete here, a 30 m pixel is larger than a house, and flooded built-up areas look bright in radar, so open-water detection misses them. It says nothing about damage. Data: OpenStreetMap contributors, ODbL."
   ]
 }

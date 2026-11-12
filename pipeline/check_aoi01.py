@@ -10,6 +10,9 @@ method, a threshold or an output file.
 
 Writes data/aoi01/check_aoi01.json and data/aoi01/disagreement_aoi01.png.
 
+Written for the v1 model, whose results are in PROGRESS.md ("AOI01 checks", 12 Nov). Rerun now, it uses the v2
+model and v2 land medians (JRC 0% land), which this check led to.
+
   python pipeline\\check_aoi01.py
 """
 import json
@@ -160,7 +163,7 @@ def main():
     # AOI06 and AOI01 share the frame 165 granules, so a land-median gap between them is landscape, not calibration.
     # LightGBM on AOI01 with other offsets, same model and threshold. In-sample, not used to choose anything.
     jrc0 = valid & (d["jrc"] == 0)
-    alt = {"used_aoi01_land_with_dswx": off, "aoi06_offsets_same_frame": off6,
+    alt = {"used": off, "aoi06_offsets_same_frame": off6,
            "aoi01_land_jrc0_only": {k: round(float(np.nanmedian(d[k][jrc0])), 3) for k in ("hh0", "hh1", "hv0", "hv1")}}
     features["lightgbm_aoi01_with_other_offsets"] = {}
     for name, o in alt.items():
@@ -169,7 +172,7 @@ def main():
         features["lightgbm_aoi01_with_other_offsets"][name] = {
             "offsets_db": o, "iou": s["iou"], "precision": s["precision"], "recall": s["recall"],
             "new_water_ha": ha(pr)}
-    assert features["lightgbm_aoi01_with_other_offsets"]["used_aoi01_land_with_dswx"]["iou"] == sc["lightgbm"]["iou"]
+    assert features["lightgbm_aoi01_with_other_offsets"]["used"]["iou"] == sc["lightgbm"]["iou"]
 
     # 3. The rule's IoU with and without the JRC fallback
     fallback = {}

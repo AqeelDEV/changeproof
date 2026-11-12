@@ -2,7 +2,7 @@
   "schema_version": "1.1",
   "area_id": "aoi01",
   "name": "AOI01 Chibabel: Chókwè, Macia and Xai-Xai, Mozambique",
-  "generated_utc": "2026-11-12T08:42:40Z",
+  "generated_utc": "2026-11-12T10:30:36Z",
   "as_of_label": "17 Jan 2026, 03:42 UTC",
   "release": "Beta",
   "grid": {
@@ -240,6 +240,66 @@
     {
       "file": "data/aoi01/coverage_30m.tif",
       "format": "geotiff"
+    },
+    {
+      "file": "hh_20251130.webp",
+      "format": "webp",
+      "bounds_4326": [
+        32.838832,
+        -25.10212,
+        33.794901,
+        -24.357811
+      ]
+    },
+    {
+      "file": "hv_20251130.webp",
+      "format": "webp",
+      "bounds_4326": [
+        32.838832,
+        -25.10212,
+        33.794901,
+        -24.357811
+      ]
+    },
+    {
+      "file": "hh_20251212.webp",
+      "format": "webp",
+      "bounds_4326": [
+        32.838832,
+        -25.10212,
+        33.794901,
+        -24.357811
+      ]
+    },
+    {
+      "file": "hv_20251212.webp",
+      "format": "webp",
+      "bounds_4326": [
+        32.838832,
+        -25.10212,
+        33.794901,
+        -24.357811
+      ]
+    },
+    {
+      "file": "hh_20251224.webp",
+      "format": "webp",
+      "bounds_4326": [
+        32.838832,
+        -25.10212,
+        33.794901,
+        -24.357811
+      ]
+    },
+    {
+      "file": "hv_20251224.webp",
+      "format": "webp",
+      "bounds_4326": [
+        32.838832,
+        -25.10212,
+        33.794901,
+        -24.357811
+      ]
     }
   ],
   "limits": [
@@ -260,6 +320,51 @@
     "Buildings: 824 OpenStreetMap buildings sit inside detected new water, out of 346,003 mapped on this grid. For this area the count is about 680 to 820 mapped buildings in detected water, depending on method. The count can be too high or too low. Too low: OpenStreetMap is incomplete here, and flooded built-up areas look bright in radar, so open-water detection misses them. Too high: a 30 m pixel is larger than a house, so a building beside water can fall on a water pixel, and some detected water may not be flood. It says nothing about damage. Data: OpenStreetMap contributors, ODbL."
   ],
   "series": [
+    {
+      "date": "2025-11-30",
+      "role": "earlier",
+      "granule_id": "NISAR_L2_PR_GCOV_006_114_A_165_4005_DHDH_A_20251130T034230_20251130T034252_X05010_F_P_J_001",
+      "processing_version": "X05010",
+      "files": {
+        "hh": "hh_20251130.webp",
+        "hv": "hv_20251130.webp"
+      },
+      "hh_median_db": {
+        "new_water": -11.13,
+        "dry_land": -8.35,
+        "permanent_water": -17.28
+      }
+    },
+    {
+      "date": "2025-12-12",
+      "role": "earlier",
+      "granule_id": "NISAR_L2_PR_GCOV_007_114_A_165_4005_DHDH_A_20251212T034230_20251212T034252_X05010_N_P_J_001",
+      "processing_version": "X05010",
+      "files": {
+        "hh": "hh_20251212.webp",
+        "hv": "hv_20251212.webp"
+      },
+      "hh_median_db": {
+        "new_water": -14.73,
+        "dry_land": -10.69,
+        "permanent_water": -18.44
+      }
+    },
+    {
+      "date": "2025-12-24",
+      "role": "earlier",
+      "granule_id": "NISAR_L2_PR_GCOV_008_114_A_165_4005_DHDH_A_20251224T034231_20251224T034253_X05010_N_P_J_001",
+      "processing_version": "X05010",
+      "files": {
+        "hh": "hh_20251224.webp",
+        "hv": "hv_20251224.webp"
+      },
+      "hh_median_db": {
+        "new_water": -12.91,
+        "dry_land": -9.86,
+        "permanent_water": -18.98
+      }
+    },
     {
       "date": "2026-01-05",
       "role": "before",

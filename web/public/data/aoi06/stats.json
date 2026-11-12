@@ -2,7 +2,7 @@
   "schema_version": "1.1",
   "area_id": "aoi06",
   "name": "AOI06 Palmeira, Mozambique",
-  "generated_utc": "2026-11-12T08:42:13Z",
+  "generated_utc": "2026-11-12T10:30:10Z",
   "as_of_label": "17 Jan 2026, 03:42 UTC",
   "release": "Beta",
   "grid": {
@@ -239,6 +239,46 @@
     {
       "file": "data/aoi06/coverage_30m.tif",
       "format": "geotiff"
+    },
+    {
+      "file": "hh_20251130.webp",
+      "format": "webp",
+      "bounds_4326": [
+        32.718642,
+        -25.610371,
+        32.940218,
+        -25.059722
+      ]
+    },
+    {
+      "file": "hv_20251130.webp",
+      "format": "webp",
+      "bounds_4326": [
+        32.718642,
+        -25.610371,
+        32.940218,
+        -25.059722
+      ]
+    },
+    {
+      "file": "hh_20251212.webp",
+      "format": "webp",
+      "bounds_4326": [
+        32.718642,
+        -25.610371,
+        32.940218,
+        -25.059722
+      ]
+    },
+    {
+      "file": "hv_20251212.webp",
+      "format": "webp",
+      "bounds_4326": [
+        32.718642,
+        -25.610371,
+        32.940218,
+        -25.059722
+      ]
     }
   ],
   "limits": [
@@ -256,6 +296,36 @@
     "Buildings: 5 OpenStreetMap buildings sit inside detected new water, out of 18,515 mapped on this grid. The count can be too high or too low. Too low: OpenStreetMap is incomplete here, and flooded built-up areas look bright in radar, so open-water detection misses them. Too high: a 30 m pixel is larger than a house, so a building beside water can fall on a water pixel, and some detected water may not be flood. It says nothing about damage. Data: OpenStreetMap contributors, ODbL."
   ],
   "series": [
+    {
+      "date": "2025-11-30",
+      "role": "earlier",
+      "granule_id": "NISAR_L2_PR_GCOV_006_114_A_165_4005_DHDH_A_20251130T034230_20251130T034252_X05010_F_P_J_001",
+      "processing_version": "X05010",
+      "files": {
+        "hh": "hh_20251130.webp",
+        "hv": "hv_20251130.webp"
+      },
+      "hh_median_db": {
+        "new_water": -9.82,
+        "dry_land": -8.94,
+        "permanent_water": -18.85
+      }
+    },
+    {
+      "date": "2025-12-12",
+      "role": "earlier",
+      "granule_id": "NISAR_L2_PR_GCOV_007_114_A_165_4005_DHDH_A_20251212T034230_20251212T034252_X05010_N_P_J_001",
+      "processing_version": "X05010",
+      "files": {
+        "hh": "hh_20251212.webp",
+        "hv": "hv_20251212.webp"
+      },
+      "hh_median_db": {
+        "new_water": -12.35,
+        "dry_land": -10.82,
+        "permanent_water": -20.48
+      }
+    },
     {
       "date": "2026-01-05",
       "role": "before",

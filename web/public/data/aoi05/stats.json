@@ -2,7 +2,7 @@
   "schema_version": "1.1",
   "area_id": "aoi05",
   "name": "AOI05 Chinhangane, Mozambique",
-  "generated_utc": "2026-11-12T08:42:06Z",
+  "generated_utc": "2026-11-12T10:30:02Z",
   "as_of_label": "17 Jan 2026, 03:42 UTC",
   "release": "Beta",
   "grid": {
@@ -239,6 +239,66 @@
     {
       "file": "data/aoi05/coverage_30m.tif",
       "format": "geotiff"
+    },
+    {
+      "file": "hh_20251130.webp",
+      "format": "webp",
+      "bounds_4326": [
+        32.117067,
+        -24.212344,
+        32.641283,
+        -23.797815
+      ]
+    },
+    {
+      "file": "hv_20251130.webp",
+      "format": "webp",
+      "bounds_4326": [
+        32.117067,
+        -24.212344,
+        32.641283,
+        -23.797815
+      ]
+    },
+    {
+      "file": "hh_20251212.webp",
+      "format": "webp",
+      "bounds_4326": [
+        32.117067,
+        -24.212344,
+        32.641283,
+        -23.797815
+      ]
+    },
+    {
+      "file": "hv_20251212.webp",
+      "format": "webp",
+      "bounds_4326": [
+        32.117067,
+        -24.212344,
+        32.641283,
+        -23.797815
+      ]
+    },
+    {
+      "file": "hh_20251224.webp",
+      "format": "webp",
+      "bounds_4326": [
+        32.117067,
+        -24.212344,
+        32.641283,
+        -23.797815
+      ]
+    },
+    {
+      "file": "hv_20251224.webp",
+      "format": "webp",
+      "bounds_4326": [
+        32.117067,
+        -24.212344,
+        32.641283,
+        -23.797815
+      ]
     }
   ],
   "limits": [
@@ -251,9 +311,55 @@
     "The classifier learned from the Copernicus map of AOI06 only.",
     "On the held-out area AOI05, the tuned rule scored IoU 0.521 and LightGBM 0.572 against Copernicus, so the LightGBM classifier is used. That is the one clean test. A fix to how the land median is taken was found later, on AOI01, and AOI05 was scored once more after it (a post-fix rerun, not a clean test): IoU 0.574. The agreement figures for this area are from that rerun.",
     "738 ha (5%) of the detected new water was already dark in NISAR's 5 Jan image. DSWx-S1 (or JRC) called it dry, so it counts as new, but some of it may have been water before 17 Jan.",
-    "Buildings: 15 OpenStreetMap buildings sit inside detected new water, out of 11,349 mapped on this grid. The count can be too high or too low. Too low: OpenStreetMap is incomplete here, and flooded built-up areas look bright in radar, so open-water detection misses them. Too high: a 30 m pixel is larger than a house, so a building beside water can fall on a water pixel, and some detected water may not be flood. It says nothing about damage. Data: OpenStreetMap contributors, ODbL."
+    "Buildings: 15 OpenStreetMap buildings sit inside detected new water, out of 11,349 mapped on this grid. The count can be too high or too low. Too low: OpenStreetMap is incomplete here, and flooded built-up areas look bright in radar, so open-water detection misses them. Too high: a 30 m pixel is larger than a house, so a building beside water can fall on a water pixel, and some detected water may not be flood. It says nothing about damage. Data: OpenStreetMap contributors, ODbL.",
+    "The five-date strip is for viewing, not measuring: the scenes of 12 Dec 2025 and 24 Dec 2025 use processing version X05009, not X05010."
   ],
   "series": [
+    {
+      "date": "2025-11-30",
+      "role": "earlier",
+      "granule_id": "NISAR_L2_PR_GCOV_006_114_A_166_4005_DHDH_A_20251130T034251_20251130T034301_X05010_F_P_J_001",
+      "processing_version": "X05010",
+      "files": {
+        "hh": "hh_20251130.webp",
+        "hv": "hv_20251130.webp"
+      },
+      "hh_median_db": {
+        "new_water": -9.05,
+        "dry_land": -5.61,
+        "permanent_water": -16.97
+      }
+    },
+    {
+      "date": "2025-12-12",
+      "role": "earlier",
+      "granule_id": "NISAR_L2_PR_GCOV_007_114_A_166_4005_DHDH_A_20251212T034251_20251212T034302_X05009_N_P_J_001",
+      "processing_version": "X05009",
+      "files": {
+        "hh": "hh_20251212.webp",
+        "hv": "hv_20251212.webp"
+      },
+      "hh_median_db": {
+        "new_water": -13.0,
+        "dry_land": -8.73,
+        "permanent_water": -18.74
+      }
+    },
+    {
+      "date": "2025-12-24",
+      "role": "earlier",
+      "granule_id": "NISAR_L2_PR_GCOV_008_114_A_166_4005_DHDH_A_20251224T034252_20251224T034302_X05009_N_P_J_001",
+      "processing_version": "X05009",
+      "files": {
+        "hh": "hh_20251224.webp",
+        "hv": "hv_20251224.webp"
+      },
+      "hh_median_db": {
+        "new_water": -11.11,
+        "dry_land": -7.4,
+        "permanent_water": -18.48
+      }
+    },
     {
       "date": "2026-01-05",
       "role": "before",

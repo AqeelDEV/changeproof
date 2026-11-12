@@ -57,7 +57,8 @@ function SeriesChart({ series }: { series: SeriesEntry[] }) {
         {LINES.map((l) => (
           <span key={l.key}><span className="swatch" style={{ background: l.colour }} />{l.name}. </span>
         ))}
-        For viewing only: nothing here feeds the flood detection.
+        Whole scenes shift by a few dB between passes (Beta calibration, or wet ground), so read the gap between the lines,
+        not their height. For viewing only: nothing here feeds the flood detection.
       </figcaption>
     </figure>
   );

@@ -1,0 +1,227 @@
+{
+ "macuachane was flooded on 17 january 2026": {
+  "status": "ok",
+  "content": "{\"place\": \"Macuachane\", \"polarity\": \"positive\", \"date_kind\": \"day\", \"date_from\": \"2026-01-17\", \"date_to\": \"2026-01-17\", \"claim_type\": \"flood\",",
+  "ms": 3552
+ },
+ "javanhane ficou inundada no dia 17 de janeiro": {
+  "status": "ok",
+  "content": "{\"place\": \"Javanhane\", \"polarity\": \"positive\", \"date_kind\": \"day\", \"date_from\": \"2026-01-17\", \"date_to\": \"2026-01-17\", \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\":",
+  "ms": 2433
+ },
+ "chidona was under water on 16 january": {
+  "status": "ok",
+  "content": "{\"place\": \"Chidona\", \"polarity\": \"positive\", \"date_kind\": \"day\", \"date_from\": \"2026-01-16\", \"date_to\": \"2026-01-16\", \"claim_type\":",
+  "ms": 2803
+ },
+ "the whole of taninga was under water": {
+  "status": "ok",
+  "content": "\"under water\"",
+  "ms": 1983
+ },
+ "floods hit soresuanine in january 2026": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"",
+  "ms": 2647
+ },
+ "macandene esta debaixo de agua desde 15 de janeiro": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"Macandene\", \"polarity\": \"positive\", \"date_kind\": \"since\", \"date_from\": \"2026-01-15\", \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 0.95}\n```",
+  "ms": 3988
+ },
+ "chinhacanine was flooded between 15 and 20 january": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"Chinhacanine\", \"polarity\": \"positive\", \"date_kind\": \"period\", \"date_from\": \"2026-0",
+  "ms": 2804
+ },
+ "maconguele was flooded on 17 january": {
+  "status": "ok",
+  "content": "```json\n{\n  \"place\": \"Maconguele\",\n  \"polarity\": \"positive\",\n  \"date_kind\": \"day\",\n  \"date_from\": \"2026-01-17\",\n  \"date_to\": \"2026-01-",
+  "ms": 2635
+ },
+ "munhamane ficou submersa": {
+  "status": "ok",
+  "content": "```json\n{\"",
+  "ms": 2755
+ },
+ "palmeira was under water": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"Palmeira\", \"polarity\": \"positive\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 0.95}\n```",
+  "ms": 2036
+ },
+ "cunze foi inundada pelas cheias": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"C",
+  "ms": 2247
+ },
+ "macaringue did not flood": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"Macaringue\", \"polarity\": \"negative\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 0.95}\n```",
+  "ms": 2228
+ },
+ "chibotane nao ficou alagada": {
+  "status": "ok",
+  "content": "{\"place\": \"Chibotane\", \"polarity\": \"negative\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 1.0}",
+  "ms": 2099
+ },
+ "there was no flooding in macarretane": {
+  "status": "ok",
+  "content": "{\"place\": \"Macarretane\", \"polarity\": \"negative\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null",
+  "ms": 2223
+ },
+ "palmeira nao foi afectada pelas cheias": {
+  "status": "ok",
+  "content": "```json\n",
+  "ms": 2884
+ },
+ "xai xai was completely under water on 22 january": {
+  "status": "ok",
+  "content": "```json\n{\"",
+  "ms": 2558
+ },
+ "chokwe estava inundado no dia 18 de janeiro": {
+  "status": "ok",
+  "content": "{\"place\": \"Chokwe\", \"polarity\": \"positive\", \"date_kind\": \"day\", \"date_from\": \"2026-01-18\", \"date_to\": \"2026-01-18\", \"claim_type\": \"flood",
+  "ms": 3384
+ },
+ "macia inundou no dia 10 de janeiro": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"Macia\", \"polarity\": \"positive\", \"date_kind\": \"day\", \"date_from\": \"2026-01-10\", \"date_",
+  "ms": 2752
+ },
+ "chokwe was destroyed by the floods in 2000": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"Chókwè\",\n \"polarity\": \"positive\",\n \"date_kind\": \"period\",\n \"date_from\": \"2000-01-01\",\n \"date_to\": \"2",
+  "ms": 2710
+ },
+ "maputo ficou alagada": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"Maputo\", \"polarity\": \"positive\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 0.95}\n```",
+  "ms": 3040
+ },
+ "beira was flooded on 17 january": {
+  "status": "ok",
+  "content": "```json\n{\"place\":",
+  "ms": 2425
+ },
+ "machubo ficou inundada no dia 17 de janeiro": {
+  "status": "ok",
+  "content": "{\"place\": \"Machubo\", \"polarity\": \"positive\", \"date_kind\": \"day\", \"date_from\": \"2026-01-17\", \"date_to\": \"2026-01-17\", \"claim_type\": \"flood\", \"",
+  "ms": 2347
+ },
+ "inundacoes em chibuto de 20 a 25 de janeiro": {
+  "status": "ok",
+  "content": "{\"place\": \"Chibuto",
+  "ms": 2119
+ },
+ "2000 people were displaced by the floods in chokwe": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"Chókwè\", \"",
+  "ms": 2554
+ },
+ "casas destruidas em xai xai pelas cheias": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"Xai Xai\", \"polarity\": \"positive\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"damage\", \"quantifier\": null, \"confidence\": 0.95}\n```",
+  "ms": 2478
+ },
+ "the streets of macia were flooded on 17 january": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"Macia\", \"polarity\": \"positive\", \"date_kind\": \"day\", \"date_from\": \"2026-01-17\", \"date_to\": \"2026-01-17\", \"claim_type\": \"built_up\", \"quantifier\": null",
+  "ms": 2461
+ },
+ "os campos de milho em chibuto ficaram submersos": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"Chibuto\", \"polarity\": \"positive\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"vegetation\", \"quantifier\": null, \"confidence\": 0.95}\n```",
+  "ms": 2386
+ },
+ "the water in chokwe was two metres deep": {
+  "status": "ok",
+  "content": "```json\n{\"place\":",
+  "ms": 2686
+ },
+ "80 de xai xai ficou inundado": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"Xai-Xai\", \"polarity\": \"positive\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"extent\", \"quantifier\": \"80%\", \"confidence\":",
+  "ms": 2509
+ },
+ "elija ficou alagada no dia 17 de janeiro": {
+  "status": "ok",
+  "content": "```json\n{\"place\":",
+  "ms": 2329
+ },
+ "javanhane totalmente alagda hoje": {
+  "status": "ok",
+  "content": "```json\n",
+  "ms": 2767
+ },
+ "xai xai cheias nao alagou nada fake news": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"XaiXai\", \"polarity\": \"negative\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": \"nada\", \"confidence\": 0.95}\n```",
+  "ms": 3465
+ },
+ "macarretane is not flooded stop spreading lies": {
+  "status": "ok",
+  "content": "{\"place\": \"Macarretane\", \"polarity\": \"negative\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 0.95}",
+  "ms": 3751
+ },
+ "cheias no distrito de soresuanine ontem": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"distrito de Soresuanine\", \"polarity\": \"positive\", \"date_kind\": \"relative\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": null,",
+  "ms": 2311
+ },
+ "maconguele flodded yesterday": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"Maconguele\", \"polarity\": \"positive\", \"date_kind\": \"relative\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 0.7}\n```",
+  "ms": 2999
+ },
+ "taninga alagada desde dia 16": {
+  "status": "ok",
+  "content": "```json\n{\"place",
+  "ms": 2572
+ },
+ "palmeira under water agora muita agua": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"palmeira\", \"polarity\": \"positive\", \"date_kind\": \"relative\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": \"muita água\", \"confidence\": ",
+  "ms": 2536
+ },
+ "chidona flooded 17 01 2026 pls share": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"Chidona\", \"polarity\": \"positive\", \"date_kind\": \"day\", \"date_from\": \"2026-01-17\", \"date_to\": \"2026-01-17\", \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 0.95}\n```",
+  "ms": 3991
+ },
+ "shai shai cheia 17 jan": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"Shai Shai\", \"polarity\": \"positive\", \"date_kind\": \"day\", \"date_from\": \"2026-01-17\", \"date_to\": \"2026-01-17\", \"claim_type\": \"flood\", \"quantifier",
+  "ms": 2295
+ },
+ "no flooding at all in munhamane all good": {
+  "status": "ok",
+  "content": "```json\n{\"place\":",
+  "ms": 3145
+ },
+ "muitas pessoas mortas em macia": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"Macia\", \"polarity\": \"positive\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"impact\", \"quantifier\": \"Muitas\", \"confidence",
+  "ms": 3082
+ },
+ "chibotane agua ate ao telhado": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"Chibotane\", \"polarity\": \"positive\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"depth\", \"quantifier\": \"ate ao telhado\", \"confidence\":",
+  "ms": 6542
+ },
+ "macuachane n alagou": {
+  "status": "ok",
+  "content": "{\"place\": \"Macuachane\", \"polarity\": \"negative\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 0.95}",
+  "ms": 2547
+ },
+ "omg chinhacanine flooding since 15th of jan": {
+  "status": "ok",
+  "content": "```json\n{\"place\": \"Ch",
+  "ms": 2742
+ },
+ "cunze alagado de 10 a 20 de janeiro mentira": {
+  "status": "ok",
+  "content": "{\"place\": \"Cunze\", \"polarity\": \"negative\", \"date_kind\": \"period\", \"date_from\": \"2026-01-10\", \"date_to\": \"2026-01-20",
+  "ms": 2248
+ }
+}

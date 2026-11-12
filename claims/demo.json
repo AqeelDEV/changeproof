@@ -1,0 +1,42 @@
+{
+ "claims": [
+  "Chókwè was under water on 17 January",
+  "Xai Xai nao alagou",
+  "Xai-Xai was under water on 25 Jan",
+  "Homes were destroyed in Chókwè",
+  "Maputo was flooded",
+  "Massingir ficou debaixo de água ontem"
+ ],
+ "cache": {
+  "chokwe was under water on 17 january": {
+   "status": "ok",
+   "content": "```json\n{\"place\": \"Chókwè\", \"polarity\": \"positive\", \"date_kind\": \"day\", \"date_from\": \"2026-01-17\", \"date_to\": \"2026-01-17\", \"claim_type\": \"flood\", \"quantifier",
+   "ms": 2522
+  },
+  "xai xai nao alagou": {
+   "status": "ok",
+   "content": "{\"place\": \"Xai Xai\", \"polarity\": \"negative\", \"date_kind\": \"none\", \"date_",
+   "ms": 2512
+  },
+  "xai xai was under water on 25 jan": {
+   "status": "ok",
+   "content": "{\"place\": \"Xai-Xai\", \"polarity\": \"positive\", \"date_kind\": \"day\", \"date_from\": \"2026-01-25\", \"date_to\": \"2026-01-25\", \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 0.95}",
+   "ms": 2336
+  },
+  "homes were destroyed in chokwe": {
+   "status": "ok",
+   "content": "{\"place\": \"Chókwè\", \"polarity\": \"positive\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"damage\", \"quantifier\": null, \"confidence\": 0.9}",
+   "ms": 3117
+  },
+  "maputo was flooded": {
+   "status": "ok",
+   "content": "{\"place\": \"Maputo\", \"polarity\": \"positive\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 1.0}",
+   "ms": 2998
+  },
+  "massingir ficou debaixo de agua ontem": {
+   "status": "ok",
+   "content": "```json\n{\"place\": \"Massingir\", \"polarity\": \"positive\", \"date_kind\": \"relative\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 0.95}\n```",
+   "ms": 2952
+  }
+ }
+}

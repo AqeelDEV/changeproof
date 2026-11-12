@@ -1,6 +1,6 @@
 # Progress
 
-Updated Thursday 12 November 2026, after the overnight run, the AOI01 checks, the land-median fix and the limits wording. Submission is Saturday 14 November, 12:00 GST.
+Updated Thursday 12 November 2026, after the overnight run, the AOI01 checks, the land-median fix, the limits wording and the claim checker's first run. Submission is Saturday 14 November, 12:00 GST.
 
 ## Start here tomorrow
 
@@ -21,11 +21,144 @@ Where things stand:
    - The optional building fields in `results` (see `docs/DATA_CONTRACT.md`, 12 Nov addition).
    - AOI06, where 35% of the grid has no NISAR data.
 4. **`pipeline/__pycache__` is tracked in git.** Add `__pycache__/` to `.gitignore` and untrack it. It was outside tonight's folders, so it is not done.
-5. **Carry on with "Next steps" from step 6**: web app, then claims.
+5. **Claims: first run done (41 of 45 verdicts on both paths).** See "claim checker and its first test run". Next: the fixes after it, the published claims, then the move into `web/lib/`.
 
 Keep in mind:
 - AOI05 has now been scored three times: the rule (11 Nov), LightGBM v1 (12 Nov, the clean test) and LightGBM v2 (12 Nov, the post-fix rerun, labelled as such). Do not tune anything else on AOI05.
 - AOI01 can no longer check the land-median definition independently.
+
+## Done, 12 Nov: claim checker and its first test run
+
+### First run, the headline (a clean test)
+
+The 45 test claims were frozen in commit d1bd515 before any run. The thresholds were not changed after it. You ran it in your shell, with the endpoint and model set there only. The output is in `data/claims_first_run.txt` (UTF-16, so accents show garbled there), and the model replies are in `claims/tests/model_cache.json`.
+
+| Path | Fields correct | Verdict correct |
+|---|---|---|
+| Parser alone | 43 of 45 (clean 29 of 30, messy 14 of 15) | 41 of 45 (clean 28 of 30, messy 13 of 15) |
+| Parser plus model | 43 of 45 (clean 29 of 30, messy 14 of 15) | 41 of 45 (clean 28 of 30, messy 13 of 15) |
+
+- **Parser plus model:**
+  - Fields came from the parser 40 times and from the model 5 times. There were no conflicts.
+  - Model status: timeout 28, invalid 12, cached 5.
+  - Replies within 2,500 ms: 17 of 45. The median was 2,572 ms and the slowest 6,542 ms.
+- **The model changed no verdict.** The same four claims fail on both paths.
+- **Why 12 replies were invalid.** All 12 stop before the closing brace, and so do 33 of all 45 replies. They are 13 to 175 characters long, far below the 200-token limit, so the hidden reasoning probably used up most of the budget. The finish reason was not recorded, so this is inferred, not proven. It is fixed below.
+
+**Every failure (the same four on both paths):**
+
+| Claim | Expected | Got | Cause |
+|---|---|---|---|
+| c10 "Palmeira was under water." | contradicted | not provable, "1% of the area newly under open water" | NISAR and Copernicus disagree at Palmeira (below). On the model path the fields came from the model (cached). |
+| c15 "Palmeira não foi afectada pelas cheias." | supported, polarity negative | not provable, polarity positive | Polarity missed: "não" is four tokens before "cheias" and the parser looked back three. With the right polarity it would still be not provable, because of Palmeira. Model: timeout. |
+| m07 "palmeira under water agora, muita água" | contradicted | not provable | Palmeira. Model: timeout. |
+| m13 "Macuachane n alagou" | contradicted, polarity negative | supported, polarity positive | Bare "n" was not a negator, by the approved rule. The frozen expectation reads it as "não". Model: timeout. |
+
+**Palmeira (town, AOI06, 3 km radius).**
+- **NISAR:** 32.2 ha of new open water. That is 1.14% of the area and 1.26% of the open ground.
+- **The rules:** the dry rule allows at most 1% of the open ground, and the wet rule needs 10%, so neither fires and the verdict is not provable.
+- **Copernicus:** the 17 Jan map (Sentinel-1, 03:19 UTC) shows 0.72% of the open ground flooded, under 1%. That is why the frozen claims expect the dry verdict.
+- **What this means:** three of the four failures are one disagreement with Copernicus at one place, not a bug. `rules.ts` checks Palmeira by hand. The threshold stays.
+
+**Places where the dry rule fires**, for a check by hand. At these 10 places a "flooded" claim is contradicted. Check on the map that none of them sits in flooded crops or trees, because radar open water misses those.
+
+| Place | Type, area | Lon, lat | Radius | Open ground | New open water on it |
+|---|---|---|---|---|---|
+| Chipenhe | village, AOI01 | 33.4382, -24.93815 | 1 km | 97% | 0.00% |
+| Chissano | village, AOI01 | 33.35905, -24.93494 | 1 km | 99% | 0.00% |
+| Incaia | village, AOI01 | 33.21472, -24.96587 | 1 km | 100% | 0.00% |
+| Shilluanhana | village, AOI01 | 33.28997, -24.94981 | 1 km | 100% | 0.00% |
+| Cunze | village, AOI05 | 32.37267, -23.95131 | 1 km | 99% | 0.23% |
+| Guijá | town, AOI05 | 32.55731, -24.11304 | 3 km | 98% | 0.01% |
+| Maconguele | village, AOI05 | 32.51944, -24.08652 | 1 km | 99% | 0.35% |
+| Maguezi | village, AOI05 | 32.55093, -23.9773 | 1 km | 100% | 0.06% |
+| Munhamane | village, AOI05 | 32.47591, -24.00765 | 1 km | 99% | 0.14% |
+| Thlavene | village, AOI05 | 32.568, -23.89222 | 1 km | 100% | 0.31% |
+
+**Demo claims:** 6 of 6 resolved from the cache with no network.
+
+| Claim | Verdict | Fields from |
+|---|---|---|
+| "Chókwè was under water on 17 January" | supported, 42% | parser; model timeout |
+| "Xai Xai nao alagou" | not provable, 6% | parser; model timeout |
+| "Xai-Xai was under water on 25 Jan" | not observable | model (cached) |
+| "Homes were destroyed in Chókwè" | Damage, not provable | parser; model timeout |
+| "Maputo was flooded" | not observable, "no place matched inside the NISAR areas" | parser; model timeout |
+| "Massingir ficou debaixo de água ontem" | not provable, 3% | parser; model timeout |
+
+**Published claims:** none yet. `claims/real_claims.json` is `[]`.
+
+### What was built
+
+**`pipeline/places.py` writes `data/places.json`**
+- **Places:** 50, from 61 named OSM place nodes:
+  - AOI05: 3 towns and 12 villages.
+  - AOI06: 3 towns and 2 villages.
+  - AOI01: 1 city, 7 towns and 22 villages.
+  - No suburbs.
+- **Buffers:** 3 km for a city or town, 1 km for a village or suburb.
+- **Per place:**
+  - the coverage shares;
+  - open ground;
+  - new water, in hectares, as a share of the area and as a share of the open ground;
+  - the share already dark on 5 Jan;
+  - the Copernicus shares for each map;
+  - the OSM building counts.
+- **Inputs:** AOI01 uses both Copernicus maps (the 16 Jan first estimate and the 18 Jan delineation).
+- **Checks:** the asserts pass. Disk pixel counts are within 2% of πR²/900, and the coverage shares sum to 1.
+- **Name issues:**
+  - Guijá is an AOI05 town and also an AOI01 village spelt "Guija". The town wins by rank.
+  - "3 de Fevereio" is a village name, so it is kept out of the date parser.
+
+**`claims/`**
+- `parse.ts`: the rule-based parser.
+- `model.ts`: the optional model call and its validation.
+- `verdict.ts`: the fixed rules on places.json.
+- `check.ts`: one claim, from the text to the result.
+- `demo.json`: the demo claims with their cached model replies.
+- `tests/`:
+  - `claims.json`: frozen.
+  - `rules.ts`: 57 of 57 checks pass.
+  - `run.ts`.
+- **Type check:** `node web/node_modules/typescript/bin/tsc -p claims/tsconfig.json` passes. It only reads `web/node_modules`.
+
+**Thresholds** (approved, `THRESHOLDS` in `claims/verdict.ts`, never changed on test results):
+
+| Rule | Condition |
+|---|---|
+| Observable | NISAR data on at least 50% of the buffer |
+| Wet | new open water at least 10% of the buffer pixels with data, and at least 10 ha |
+| Dry | open ground at least 50% of the buffer, new open water at most 1% of the open ground, unclear at most 10% |
+| Both | wet wins |
+
+**Verdict order:**
+1. Place.
+2. Date. 16 or 17 Jan, or a period or "since" that includes the pass, is judged. Any other day, and anything that misses the pass, is not observable.
+3. Coverage.
+4. Parser-model conflict. This gives not provable after the gates.
+5. Non-flood type: not provable.
+6. The flood rules. For a period, dry gives not provable, because NISAR looked once.
+
+**Buffer comparison.** 2 of 14 cities and towns change verdict class between 1 km and 3 km: Massingir and Chicumbane. Both go from "observable, the dry rule cannot fire" to "the dry rule can fire". This used only the coverage and built-up numbers, never new water.
+
+### Contract proposal (not applied)
+
+- **The file:** `web/public/data/places.json`, with the fields of `data/places.json`.
+- **Status:** optional, still version 1.1.
+- **Not edited:** `docs/DATA_CONTRACT.md`. Add the file there when the web app reads it.
+
+### Moving `claims/` into `web/lib/`
+
+- **TypeScript setting:** the files import each other with `.ts` extensions, so `web/tsconfig.json` needs `"allowImportingTsExtensions": true`. That setting needs `noEmit`, which Next.js sets.
+- **Server code only:** import `model.ts`, and `check.ts`, which imports it, only from server code (a route handler or server action), because it reads the key.
+- **Browser-safe:** `parse.ts` and `verdict.ts` can run in the browser.
+
+### Skipped
+
+- **Claims with several parts:** one verdict per claim, and the non-flood type wins.
+- **Hamlets, rivers and places outside the grids:** no match gives not observable.
+- **"until/até X" ranges.**
+- **Portuguese output text.**
 
 ## Done, 12 Nov: limits wording (no method or number changes)
 
@@ -507,7 +640,7 @@ Not done or not checked: the pixel quality of the Beta scenes beyond this test, 
 4. Done 12 Nov: `pipeline/make_outputs.py` writes the outputs for AOI05, AOI06 and AOI01 (Chókwè to Xai-Xai).
 5. Done 12 Nov: LightGBM beat the rule on AOI05 (0.572 against 0.521) and is kept. Both are reported. It took about an hour in all.
 6. Next.js app: map, before/after slider, overlays, coverage map. Reads `web/public/data` only.
-7. `claims/`: parser, time and area gate, verdict rules, evidence report. Write the 30 test claims before tuning. Check the full path on the deployed URL.
+7. Done 12 Nov: `claims/` (parser, optional model, date and coverage gates, verdict rules, evidence). 45 test claims were frozen before the first run, which got 41 of 45 verdicts on both paths. Still to do: the published claims, the move into `web/lib/`, and a check of the full path on the deployed URL.
 8. Buildings count done 12 Nov (worded as "too high or too low", not a lower bound). Still to do: cloud panel, 19 Jan optical check, five-date strip, panel on why water is dark. Feature freeze after this.
-9. Run the 30-claim test, README with limits, backup video, slides.
+9. README with limits, backup video, slides. (The claim test ran on 12 Nov, see step 7.)
 10. Rehearse, submit, and check every link while logged out.

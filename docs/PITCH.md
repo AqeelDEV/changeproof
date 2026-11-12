@@ -8,37 +8,37 @@ The tour has five steps. Each step below gives the time, what to click and what 
 
 ### 0:00 to 0:35. Step 1: optical saw cloud, radar saw the flood
 
-Click: open https://changeproof-dusky.vercel.app, start the tour, and open the cloud card.
+Click: open https://changeproof-dusky.vercel.app and press "Take the tour". Step 1 opens the Evidence tab with the cloud panel beside the 17 Jan radar image. Point at the two optical images, then at the map.
 
 Say:
 "In January 2026, floods hit southern Mozambique. This is what optical satellites saw. Landsat on 20 January: 95% cloud. Sentinel-2 on 19 January: thick cloud over our area. Sentinel-2 on 17 January, four hours after NISAR: 100% cloud. Radar sees through cloud. This is what NISAR saw."
 
-Click: close the cloud card, and show the radar image.
+Click: nothing. Stay on step 1 while you finish the sentence, then press "Next".
 
 ### 0:35 to 1:05. Step 2: slide from 5 Jan to 17 Jan at Chókwè
 
-Click: go to Chókwè (tour step 2), drag the before/after slider from 5 Jan to 17 Jan.
+Click: step 2 zooms to Chókwè. Open "Layers" if it is closed and move the "Before / after" slider slowly from right to left and back.
 
 Say:
 "This is NISAR, track 114, Beta data. Left is 5 January. Right is 17 January, at 03:42 UTC. Dark means smooth open water. The town sits in a wide dark area that was not there twelve days earlier."
 
 ### 1:05 to 1:40. Step 3: new water, the Copernicus outline, the agreement figure
 
-Click: switch on the new-water overlay (blue), then the Copernicus overlay (red outline), then open the stats panel for AOI05. Show the coverage map for a moment.
+Click: press "Next". Step 3 switches to AOI05 with the blue and red overlays on. Scroll the Evidence tab to "Agreement with Copernicus".
 
 Say:
 "Blue is new open water that we detect. Red is the Copernicus observed flood, from a different radar, Sentinel-1, 24 minutes before NISAR. On the held-out area the agreement with Copernicus is IoU 0.574 for the current model. One clean test gave 0.572. A tuned threshold rule gave 0.521. This is agreement with Copernicus, not accuracy. Copernicus is our reference. We do not claim a better flood map."
 
 ### 1:40 to 2:15. Step 4: a published claim, checked
 
-Click: open the published claims list, pick the AIM claim of 17 Jan, and run the check.
+Click: press "Next". Step 4 runs the AIM claim of 17 Jan by itself and shows the verdict card. Press "Show Chókwè on the map".
 
 Say:
 "This sentence was published by AIM on 17 January: 'The flood waters of the Limpopo river have engulfed the town of Chokwe.' The parser only splits it into place, date and type. Fixed rules do the rest. Verdict: supported, as of 17 January, 03:42 UTC. 42% of the area within 3 kilometres of Chókwè was newly under open water. The rule needs 10%."
 
 ### 2:15 to 2:45. Step 5: what NISAR cannot say, then export
 
-Click: type "Xai-Xai was under water on 25 Jan" and check. Then type "Homes were destroyed in Chókwè" and check. Then click export report.
+Click: press "Next". Step 5 runs "Xai-Xai was under water on 25 Jan" by itself. Then press the preset "Homes were destroyed in Chókwè". Then press "Export report (.md)".
 
 Say:
 "Now what NISAR cannot say. 'Xai-Xai was under water on 25 January': not observable. NISAR's last pass on this track was 17 January. 'Homes were destroyed in Chókwè': not provable. Radar open-water detection says nothing about damage. The evidence report lists the granule IDs, the numbers and the limits."

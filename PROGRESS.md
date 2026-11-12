@@ -10,7 +10,7 @@ Where things stand:
   - 0.572 is v1, scored once on AOI05 before the fix: the one clean test.
   - 0.574 is v2's post-fix rerun, which is not a clean test.
   - The tuned rule scored 0.521.
-- **AOI01 totals, before you quote them.** v2 finds 75,951 ha of new water with 824 OSM buildings in it; the tuned rule finds 76,198 ha with 682. Of the 24,457 ha that v2 added over v1, 55% is outside the Copernicus maps, so nothing checks it. Of v2's whole 75,951 ha, 55% (41,589 ha) lies outside the area both Copernicus maps cover, and AOI01's limits say it has no independent check yet. See "AOI01 totals, checked before quoting" and "limits wording".
+- **AOI01 totals, before you quote them.** v2 finds 75,951 ha of new water with 824 OSM buildings in it; the tuned rule finds 76,198 ha with 682. Of the 24,457 ha that v2 added over v1, 55% is outside the Copernicus maps, so nothing checks it. Of v2's whole 75,951 ha, about 44% (33,787 ha) lies outside both Copernicus maps with no independent check, and a further 10% (7,802 ha) is covered only by the 18 Jan map. AOI01's limits say both. See "AOI01 totals, checked before quoting" and "limits wording".
 - AOI01: v2 scores 0.835 against its reference. That is a diagnostic only, because the problem was found there. The published v1 figure was 0.718 and the rule scores 0.833. AOI01's `stats.json` gives all three.
 - Contract 1.1 outputs for all three areas were regenerated with v2, and `web/public/data/areas.json` lists all three.
 
@@ -42,12 +42,17 @@ Keep in mind:
 - **2. Irrigation caveat, AOI01.** It now covers the Xai-Xai field grids only: 2,622 ha of new water (23 buildings), about 525 ha of it already dark on 5 Jan. For the Chókwè grid (7,799 ha, 81 buildings) the limits say the evidence leans towards flood water held in the fields, and that this is not confirmed.
   - The two reasons given for Chókwè come from `check_fields_aoi01.json`: where the 18 Jan map covers it, 52% of the water is called flooded and 5% dry (43% is unmapped), and JRC saw water at 2% of it.
   - The 525 ha and the hectares are worked out in the script, not typed in. "Most" and "almost never" are typed in, and were checked against that JSON.
-- **3. AOI01, new water outside the Copernicus maps.**
-  - **55% (54.8%) of v2's 75,951 ha of new water, 41,589 ha, lies outside the area that both the 16 and 18 Jan maps cover.** The limits now say it has no independent check yet.
-  - It is the same as the table's "Outside one or both Copernicus maps" row (41,589 ha). Of that 41,589 ha, 33,787 ha (44.5% of the total) is outside both maps. The other 7,802 ha is inside the 18 Jan map only.
-  - Not the same as the earlier 55% (13,507 of the 24,457 ha that v2 added over v1). It is a different share that rounds the same.
-  - Pixels where the maps disagree are a separate 22% (16,848 ha) and are not in this figure.
-- **Not changed (outside the folders I was asked to touch).** `docs/DATA_CONTRACT.md` (lines 11 and 152) and `PROJECT_BRIEF.md` (line 36) still say "lower bound" for buildings. AOI01's first limit also still calls the agreement figure "a lower bound". That is about agreement, not buildings, so I left it.
+- **3. AOI01, new water outside the Copernicus maps.** The first version said 55% (41,589 ha) lay outside the area both maps cover. A follow-up the same day split it in two, and the limits now say:
+  - **About 44% of v2's 75,951 ha of new water (33,787 ha) lies outside both Copernicus maps, with no independent check.**
+  - **A further 10% (7,802 ha) is covered only by the 18 Jan map, so it is not scored either.** The 16 Jan map alone holds none of the new water, and the script asserts that.
+  - Both shares are worked out in `make_outputs.py`. Together they make the earlier 55% (41,589 ha), the table's "Outside one or both Copernicus maps" row.
+  - Not the same as the other 55% (13,507 of the 24,457 ha that v2 added over v1). It is a different share that rounds the same.
+  - Pixels where the maps disagree are a separate 22% (16,848 ha) and are in neither figure.
+- **Docs, follow-up the same day.** The building "lower bound" wording now matches the limits text in `docs/DATA_CONTRACT.md` (line 11 and the schema description at line 152, still version 1.1) and `PROJECT_BRIEF.md` (line 36). AOI01's first limit still calls the agreement figure "a lower bound". That is about agreement, not buildings, so I left it.
+- **Web side.** The app does not exist yet: `web/` holds only `web/public/data/`, so there is no hard-coded building wording to change. When it is built:
+  - Show the building wording from each area's `limits` entry (it starts "Buildings:"), and do not write a second version.
+  - Do not use "lower bound" or "at least" for the building count.
+  - `research/CHANGEPROOF-REVIEW.md` still says "building lower bound" or "OSM buildings as a lower bound" (lines 31, 140, 168 and 181). The demo script in that file (lines 168 and 181) should use the new wording. I did not edit it.
 
 ## Done, 12 Nov: AOI01 totals, checked before quoting (no outputs changed)
 

@@ -33,7 +33,7 @@ Floods in southern Mozambique, January 2026, area AOI05 (Chinhangane). NISAR GCO
 
 **Must:** AOI05 precomputed with a threshold water map and change map; Copernicus overlay with agreement numbers; coverage map; claim parser with the time and area gate and four verdicts; before/after slider; report export with granule IDs and limits; cloud panel; public repo; backup video.
 
-**Should:** frame 165 for Chókwè; LightGBM against the threshold baseline, kept only if it wins on a held-out frame; OSM buildings as a lower bound; 19 Jan optical check; five-date strip; one panel on why water is dark and flooded trees are bright; 30 hand-labelled test claims, frozen before tuning.
+**Should:** frame 165 for Chókwè; LightGBM against the threshold baseline, kept only if it wins on a held-out frame; OSM buildings in detected water, shown as a count that can be too high or too low, never as damage; 19 Jan optical check; five-date strip; one panel on why water is dark and flooded trees are bright; 30 hand-labelled test claims, frozen before tuning.
 
 **Could:** Beta against Provisional comparison; flooded-vegetation class; Portuguese output.
 

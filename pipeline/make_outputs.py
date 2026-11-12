@@ -224,10 +224,14 @@ def run_area(area, chosen, test, rerun, rule, model, threshold):
                             "not a test score: the land-median problem was found on this area. Before the fix "
                             f"LightGBM scored {V1_IOU[area]:.3f} here, and the tuned rule scores {rule_iou:.3f}. "
                             "The method was chosen on AOI05, not here.")
-        outside_ha = (pred & valid & ~both).sum() * b.HA  # not covered by both the 16 and 18 Jan maps
-        limits_extra.append(f"{outside_ha / new_ha:.0%} of the detected new water ({outside_ha:,.0f} ha of "
-                            f"{new_ha:,.0f} ha) lies outside the area that both Copernicus maps cover. It has no "
-                            "independent check yet.")
+        new = pred & valid
+        assert not (new & (fep != 255) & (dl == 255)).any()  # so "outside both" and "18 Jan only" are the only cases
+        neither_ha = (new & (fep == 255) & (dl == 255)).sum() * b.HA
+        only18_ha = (new & (fep == 255) & (dl != 255)).sum() * b.HA
+        limits_extra.append(f"About {neither_ha / new_ha:.0%} of the detected new water ({neither_ha:,.0f} ha of "
+                            f"{new_ha:,.0f} ha) lies outside both Copernicus maps, with no independent check. A "
+                            f"further {only18_ha / new_ha:.0%} ({only18_ha:,.0f} ha) is covered only by the 18 Jan "
+                            "map, so it is not scored either.")
         field = {}  # name -> (new water ha, buildings in it, ha of it already dark on 5 Jan)
         for name, polygons in FIELDS_AOI01.items():
             w = pred & valid & field_mask(pred.shape, polygons)

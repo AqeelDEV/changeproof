@@ -20,18 +20,6 @@ export const NUMBER_LABELS: Record<string, string> = {
 export const showNumber = (key: string, v: number | null): string =>
   v === null ? "n/a" : key.endsWith("_share") || key.endsWith("_share_open") ? `${(v * 100).toFixed(1)}%` : v.toLocaleString("en-GB");
 
-/** Display only: the checker's sentence "42% of the area within 3 km with NISAR data (1191 ha) was newly under open water"
- *  can be read as if 1191 ha were the area with data. This puts the hectares first, with their own label. The report and
- *  the checker keep their wording.
- *  shortcut: matches the sentences built in lib/claims/verdict.ts by pattern; if that wording changes, the original
- *  sentence shows unchanged and the build check in app/page.tsx fails, so move the wording into verdict.ts then. */
-export const plainReason = (reason: string, place: string): string =>
-  reason.replace(/(\S+%) of the area(?: within (\S+ km))?(?: of (.+?))? with NISAR data \((\S+) ha\) was newly under open water/,
-    (_, share, km, named, ha, at: number) => {
-      const water = `${showNumber("new_water_ha", Number(ha))} ha was newly under open water`, where = km ? `within ${km} of ${named ?? place}, ` : "";
-      return at === 0 ? `${where.replace("w", "W")}${water}. That is ${share} of the area NISAR saw` : `${where}${water}, which is ${share} of the area NISAR saw`;
-    });
-
 export function dateRead(f: ClaimResult["fields"]): string {
   if (!f.date_from) return f.date_kind;
   const to = f.date_to && f.date_to !== f.date_from ? ` to ${f.date_to}` : "";

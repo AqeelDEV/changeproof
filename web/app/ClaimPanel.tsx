@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { checkClaim, PRESETS, PUBLISHED, type ClaimOpts, type PublishedClaim } from "../lib/checkClaim";
-import { dateRead, NUMBER_LABELS, plainReason, reportMarkdown, showNumber } from "../lib/report";
+import { dateRead, NUMBER_LABELS, reportMarkdown, showNumber } from "../lib/report";
 import { shownVerdict } from "../lib/claims/verdict.ts";
 import { formatDay, type ClaimPlace, type ClaimRequest, type ClaimResult, type Stats } from "./types";
 
@@ -117,7 +117,7 @@ export default function ClaimPanel({ areas, request, onPlace }: {
           <p className="headline">{result.headline}</p>
           <ul>
             {result.reasons.map((r) => (
-              <li key={r}>{plainReason(r, place?.name ?? "the place")}</li>
+              <li key={r}>{r}</li>
             ))}
           </ul>
           <div className="actions no-print">

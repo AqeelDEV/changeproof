@@ -182,6 +182,14 @@ export default function Globe({ areas }: { areas: GlobeArea[] }) {
     else s?.pause();
   }
 
+  // Upload the reveal's texture just before the sweep, so its first frame does not stall: a blank canvas, shown and playing.
+  function warm() {
+    const cv = live.current.canvas, s = map.current?.getSource("sweep") as CanvasSource | undefined;
+    cv?.getContext("2d")?.clearRect(0, 0, cv.width, cv.height);
+    opacity("sweep", true);
+    s?.play();
+  }
+
   function count(t: number) {
     const n = live.current.result?.evidence?.numbers;
     if (!n || !figShare.current || !figHa.current) return;
@@ -306,11 +314,18 @@ export default function Globe({ areas }: { areas: GlobeArea[] }) {
       // The sweep, south to north, as NISAR passed. Constant speed. Behind the line: the real image and the real new water.
       const a = t.area, p = t.place, sw = { t: 0 }, dk = { t: 0 }, view = { s: 0, n: 0 };
       if (intro) time.to(q(".g-l4"), { autoAlpha: 1, duration: 0.5, ease: "power2.out" }, at);
+      time.call(warm, [], at - 0.3);
       time.to(sw, {
         t: 1, duration: D.sweep, ease: "none",
         onStart: () => {
-          const b = map.current!.getBounds();
-          Object.assign(view, { s: b.getSouth(), n: b.getNorth() });
+          // From the top of the caption band to the bottom of the top bar: where the picture can be seen. The x is the
+          // camera's own column, the one the pass line is placed on.
+          const mp = map.current!, b = mp.getBounds(), x = mp.project([c.lng, c.lat]).x, top = mapEl.current!.getBoundingClientRect().top;
+          const lat = (el: string, edge: "top" | "bottom", fallback: number) => {
+            const v = mp.unproject([x, root.current!.querySelector(el)!.getBoundingClientRect()[edge] - top]).lat;
+            return Number.isFinite(v) ? v : fallback;
+          };
+          Object.assign(view, { s: lat(".g-bandbg", "top", b.getSouth()), n: lat(".g-topbg", "bottom", b.getNorth()) });
           sweepTo(a, view.s);
           sweeping(true);
         },
@@ -495,7 +510,7 @@ export default function Globe({ areas }: { areas: GlobeArea[] }) {
       </div>
 
       <p className="g-credit">
-        Cloud image: NASA VIIRS on Suomi NPP, 17 January 2026, early afternoon. Pale streaks are where one orbit meets the next. Radar: NISAR
+        Cloud image: NASA VIIRS on Suomi NPP, 17 January 2026, early afternoon. Pale streaks are where one orbit meets the next. The far north is dark: no daylight there in January. Radar: NISAR
         Beta data, NASA and ISRO, 17 January 2026, 03:42 UTC.
       </p>
       <div className="g-cover" />

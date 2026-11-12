@@ -103,8 +103,12 @@ const TYPE_REASON: Record<string, string> = {
   other: "The claim says nothing that radar open-water detection can check.",
 };
 
+// The hectares come first, with their own label, so they cannot be read as the area NISAR saw.
+const newWater = (p: Place) => `${p.new_water_ha.toLocaleString("en-GB")} ha was newly under open water`;
+const ofSeen = (p: Place) => `${pct(p.new_water_share)} of the area NISAR saw`;
+
 const asOfNumbers = (p: Place, asOf: string) =>
-  `As of ${asOf}, ${pct(p.new_water_share)} of the area within ${km(p)} of ${p.name} with NISAR data (${p.new_water_ha} ha) was newly under open water.`;
+  `As of ${asOf}, within ${km(p)} of ${p.name}, ${newWater(p)}, which is ${ofSeen(p)}.`;
 
 function evidence(p: Place, places: Places): Evidence {
   const area = places.areas[p.area];
@@ -163,7 +167,7 @@ export function verdict(f: Fields, places: Places, other?: Fields): Judgement {
   let v: Verdict = "not provable";
   if (wet) {
     v = negative ? "contradicted" : "supported";
-    reasons.push(`${pct(p.new_water_share)} of the area within ${km(p)} with NISAR data (${p.new_water_ha} ha) was newly under open water, at or above the ${pct(T.wet_share)} (and ${T.wet_min_ha} ha) that counts as flooded.`);
+    reasons.push(`Within ${km(p)} of ${p.name}, ${newWater(p)}. That is ${ofSeen(p)}, at or above the ${pct(T.wet_share)} (and ${T.wet_min_ha} ha) that counts as flooded.`);
   } else if (dry) {
     v = period ? "not provable" : negative ? "supported" : "contradicted";
     reasons.push(`Only ${pct(p.new_water_share_open)} of the open ground within ${km(p)} (${pct(p.open_share)} of the area, away from buildings and possible flooded vegetation) was newly under open water, at or below the ${pct(T.dry_max_open_water_share)} that counts as none.`,
@@ -171,7 +175,7 @@ export function verdict(f: Fields, places: Places, other?: Fields): Judgement {
     if (p.built_up_share > 0) reasons.push(`The built-up part (${pct(p.built_up_share)} of the area) cannot be judged.`);
     if (period) reasons.push("No water at NISAR's one look does not settle a claim about a period: the flood could have been on another day.");
   } else {
-    const why = [`${pct(p.new_water_share)} of the area with NISAR data (${p.new_water_ha} ha) was newly under open water, ${(p.new_water_share ?? 0) >= T.wet_share ? `but under ${T.wet_min_ha} ha` : `below the ${pct(T.wet_share)} that counts as flooded`}`];
+    const why = [`${newWater(p)}, which is ${ofSeen(p)}, ${(p.new_water_share ?? 0) >= T.wet_share ? `but under ${T.wet_min_ha} ha` : `below the ${pct(T.wet_share)} that counts as flooded`}`];
     if (p.open_share < T.dry_min_open_share) why.push(`only ${pct(p.open_share)} of the area is open ground away from buildings and possible flooded vegetation, too little to rule flooding out (at least ${pct(T.dry_min_open_share)} is needed)`);
     else if ((p.new_water_share_open ?? 1) > T.dry_max_open_water_share) why.push(`${pct(p.new_water_share_open)} of the open ground had new water, above the ${pct(T.dry_max_open_water_share)} that counts as none`);
     if (p.coverage.unclear > T.dry_max_unclear_share) why.push(`${pct(p.coverage.unclear)} of the area may be flooded vegetation (HH rose)`);

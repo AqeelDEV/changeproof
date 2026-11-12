@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import App from "./App";
 import { PRESETS, runCheck } from "../lib/checkClaim";
-import { plainReason } from "../lib/report";
+import { reportMarkdown } from "../lib/report";
 import { formatUtc, buildingsLimit, VERDICTS, PATHS, MODEL_STATUSES, type Optical, type Stats } from "./types";
 
 const DATA = path.join(process.cwd(), "public", "data");
@@ -47,8 +47,12 @@ async function checkPresets() {
     if (r.as_of !== "17 Jan 2026, 03:42 UTC" || !r.headline.includes(`as of ${r.as_of}`)) fail("as_of missing from the headline");
     if (r.fields.place && r.evidence?.place.id !== r.fields.place.id) fail("evidence is for another place");
     if (/accura/i.test(JSON.stringify(r))) fail('says "accuracy"; use "agreement"');
-    // The card rewords the sentence that carries the hectares; a sentence it no longer recognises would show the old wording.
-    if (r.reasons.some((x) => x.includes("with NISAR data (") && plainReason(x, "X") === x)) fail("plainReason does not match the checker's sentence");
+    // The card and the exported report print the checker's reasons as they are: the hectares carry their own label
+    // ("1,191 ha was newly under open water ... of the area NISAR saw"), never the old "of the area ... (1191 ha)" wording.
+    const md = reportMarkdown(r, undefined, "");
+    for (const x of r.reasons) if (!md.includes(`- ${x}\n`)) fail("the report does not carry a reason as the card shows it");
+    if (r.reasons.some((x) => x.includes("with NISAR data ("))) fail("a reason still has the old hectares wording");
+    if (r.reasons.some((x) => x.includes("ha was newly under open water") && !x.includes("of the area NISAR saw"))) fail("hectares without the share's label");
   }
 }
 

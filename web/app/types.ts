@@ -62,7 +62,7 @@ export type Verdict = (typeof VERDICTS)[number];
 
 // The checker's vocabulary (claims/check.ts).
 export const PATHS = ["parser", "model", "conflict"] as const;
-export const MODEL_STATUSES = ["used", "cached", "disabled", "timeout", "error", "invalid", "off_list"] as const;
+export const MODEL_STATUSES = ["used", "cached", "ignored", "disabled", "timeout", "error", "invalid", "off_list"] as const;
 
 export interface ClaimPlace {
   id: string;

@@ -3,10 +3,11 @@
 import type { Fields, Place, Places } from "./parse.ts";
 
 export type Verdict = "supported" | "contradicted" | "not observable" | "not provable";
-/** The label people see. A positive claim is contradicted only by the dry rule, which rests on no open water seen,
- * so it shows as "not supported"; a negative claim contradicted by water seen keeps "contradicted". */
+/** The label people see. The dry rule rests on no open water seen, which is not proof of dry ground: it is the only
+ * source of a contradicted positive claim (shown "not supported") and of a supported negative claim (shown "not provable").
+ * A negative claim contradicted by water seen keeps "contradicted". */
 export const shownVerdict = (v: Verdict, polarity: Fields["polarity"]) =>
-  v === "contradicted" && polarity === "positive" ? "not supported" : v;
+  v === "contradicted" && polarity === "positive" ? "not supported" : v === "supported" && polarity === "negative" ? "not provable" : v;
 
 export const THRESHOLDS = {
   min_valid_share: 0.5, // NISAR data on both dates, share of the buffer

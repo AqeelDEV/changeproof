@@ -2,7 +2,7 @@
 
 ChangeProof checks a written flood claim against NISAR radar data and says what the data can and cannot support. It was built for NASA Space Apps 2026, challenge "Dancing with the SARs". The case is the January 2026 floods in southern Mozambique. Live site: https://changeproof-dusky.vercel.app. Code: https://github.com/AqeelDEV/changeproof.
 
-You type a sentence, such as "The flood waters of the Limpopo river have engulfed the town of Chokwe". The app finds the place, the date and what is claimed. Fixed rules on measured numbers then give one of four verdicts, always "as of 17 Jan 2026, 03:42 UTC". All NISAR data here is Beta.
+You type a sentence, such as "The flood waters of the Limpopo river have engulfed the town of Chokwe". The app finds the place, the date and what is claimed. Fixed rules on measured numbers then give one of five verdicts, always "as of 17 Jan 2026, 03:42 UTC". All NISAR data here is Beta.
 
 We do not claim a better flood map than Copernicus. Copernicus is our reference.
 
@@ -27,11 +27,11 @@ We do not claim a better flood map than Copernicus. Copernicus is our reference.
 
 | Verdict | Meaning |
 |---|---|
-| Supported | The data shows it, inside the time and area covered. |
+| Supported | The data shows it, inside the time and area covered: new open water was seen where a claim says there was a flood. |
 | Not supported | NISAR saw no new open water at this place on its pass. That is not proof it stayed dry. |
 | Contradicted | The data shows otherwise, inside the time and area covered: new open water was seen where a claim says there was no flood. |
 | Not observable | The claim falls outside the time or area NISAR covered. |
-| Not provable | Inside the time and area, but radar cannot settle it (for example "homes were destroyed"). |
+| Not provable | Inside the time and area, but radar cannot settle it (for example "homes were destroyed"), or no new open water was seen where a claim says there was no flood: that fits the claim, but radar cannot prove a place stayed dry. |
 
 "Not supported" and "Contradicted" are never returned for something outside the time or area window. Radar can show new open water, but not its absence under buildings, crops or trees, so a flood claim is never called false on silence. Map markers: "no new open water seen: a flood claim is not supported".
 

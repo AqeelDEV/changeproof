@@ -10,6 +10,7 @@ const MEANING: Record<string, string> = {
   supported: "The data shows it, inside the time and area NISAR covered.",
   contradicted: "The data shows otherwise, inside the time and area NISAR covered.",
   "not supported": "NISAR saw no new open water at this place on its pass. That is not proof it stayed dry.",
+  "not provable, dry": "NISAR saw no new open water here, which fits the claim, but radar cannot prove a place stayed dry.",
   "not observable": "The claim falls outside the time or area NISAR covered.",
   "not provable": "Inside the time and area, but radar cannot settle it.",
 };
@@ -48,6 +49,8 @@ export default function ClaimPanel({ areas, request, onPlace }: {
   }, [request]);
 
   const f = result?.fields, place = f?.place, e = result?.evidence;
+  const shown = result && f ? shownVerdict(result.verdict, f.polarity) : "";
+  const meaning = MEANING[shown === "not provable" && result?.verdict === "supported" ? "not provable, dry" : shown];
   const area = areas.find((a) => a.area_id === place?.area);
 
   function download() {
@@ -80,7 +83,7 @@ export default function ClaimPanel({ areas, request, onPlace }: {
       </div>
 
       {result && f && (
-        <div className={`result r-${result.verdict.replace(" ", "-")}`} aria-live="polite">
+        <div className={`result r-${shown.replace(" ", "-")}`} aria-live="polite">
           <p className="print-only"><b>ChangeProof evidence report</b></p>
           <p className="quote">“{result.claim}”</p>
           {source && (
@@ -89,10 +92,10 @@ export default function ClaimPanel({ areas, request, onPlace }: {
             </p>
           )}
           <p>
-            <span className={`verdict v-${result.verdict.replace(" ", "-")}`}>{shownVerdict(result.verdict, f.polarity)}</span>{" "}
+            <span className={`verdict v-${shown.replace(" ", "-")}`}>{shown}</span>{" "}
             <span className="tag">as of {result.as_of}, NISAR Beta data</span>
           </p>
-          <p className="tag">{MEANING[shownVerdict(result.verdict, f.polarity)]}</p>
+          <p className="tag">{meaning}</p>
           <p className="headline">{result.headline}</p>
           <ul>
             {result.reasons.map((r) => (

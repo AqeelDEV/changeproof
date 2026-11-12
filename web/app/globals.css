@@ -69,7 +69,7 @@ aside ul { padding-left: 18px; margin: 4px 0; }
 .r-supported { border-left-color: #2e8b47; }
 .r-contradicted { border-left-color: #c62828; }
 .r-not-observable { border-left-color: #888; }
-.r-not-provable { border-left-color: #c99a00; }
+.r-not-provable, .r-not-supported { border-left-color: #c99a00; }
 .result p { margin: 4px 0; }
 .quote { font: italic 16px/1.35 var(--serif); }
 .headline { font-weight: 600; }
@@ -77,7 +77,7 @@ aside ul { padding-left: 18px; margin: 4px 0; }
 .v-supported { background: #d9f2df; color: #145a26; border-color: #2e8b47; }
 .v-contradicted { background: #fbdcdc; color: #8a1414; border-color: #c62828; }
 .v-not-observable { background: #e6e6e6; color: #333; border-color: #888; border-style: dashed; }
-.v-not-provable { background: #fff1cc; color: #6b4e00; border-color: #c99a00; }
+.v-not-provable, .v-not-supported { background: #fff1cc; color: #6b4e00; border-color: #c99a00; }
 .actions { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
 .actions button { font-size: 12.5px; }
 details { margin-top: 8px; }

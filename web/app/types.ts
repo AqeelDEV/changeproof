@@ -33,10 +33,11 @@ export interface Stats {
     observed_utc: string;
     observed_ha: number;
   };
-  method: { name: string; parameters: { aoi05_test: { lightgbm_iou: number } } };
+  method: { name: string; summary: string; parameters: { aoi05_test: { lightgbm_iou: number } } };
   results: {
     flooded_ha: number;
     flooded_ha_in_mapped_area: number;
+    hh_median_db_in_label: { before: number; after: number };
     osm_buildings_in_new_water?: number;
     osm_buildings_on_grid?: number;
   };
@@ -44,6 +45,26 @@ export interface Stats {
   coverage: Record<string, number>;
   files: FileEntry[];
   limits: string[];
+  series?: SeriesEntry[]; // optional: every NISAR date available for this area, oldest first
+}
+
+export interface SeriesEntry {
+  date: string; // YYYY-MM-DD
+  role: "earlier" | "before" | "after";
+  granule_id: string;
+  processing_version: string;
+  files: { hh: string; hv: string };
+  hh_median_db: { new_water: number | null; dry_land: number | null; permanent_water: number | null };
+}
+
+// What the map shows. Held by App so the tour can drive it.
+export interface MapState {
+  pol: "hh" | "hv";
+  radarOn: boolean;
+  classes: Record<string, boolean>;
+  placesOn: boolean;
+  split: number; // 0 to 1, where the swipe line sits
+  left: string | null; // YYYY-MM-DD shown left of the swipe; null means the before scene
 }
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -54,6 +75,12 @@ export function formatUtc(iso: string): string {
   const hh = String(d.getUTCHours()).padStart(2, "0");
   const mm = String(d.getUTCMinutes()).padStart(2, "0");
   return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}, ${hh}:${mm} UTC`;
+}
+
+// "2025-11-30" -> "30 Nov 2025"
+export function formatDay(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  return `${d} ${MONTHS[m - 1]} ${y}`;
 }
 
 export const buildingsLimit = (s: Stats) => s.limits.find((l) => l.startsWith("Buildings:"));

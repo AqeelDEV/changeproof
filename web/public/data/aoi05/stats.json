@@ -2,7 +2,7 @@
   "schema_version": "1.1",
   "area_id": "aoi05",
   "name": "AOI05 Chinhangane, Mozambique",
-  "generated_utc": "2026-11-12T05:05:33Z",
+  "generated_utc": "2026-11-12T08:42:06Z",
   "as_of_label": "17 Jan 2026, 03:42 UTC",
   "release": "Beta",
   "grid": {
@@ -252,5 +252,37 @@
     "On the held-out area AOI05, the tuned rule scored IoU 0.521 and LightGBM 0.572 against Copernicus, so the LightGBM classifier is used. That is the one clean test. A fix to how the land median is taken was found later, on AOI01, and AOI05 was scored once more after it (a post-fix rerun, not a clean test): IoU 0.574. The agreement figures for this area are from that rerun.",
     "738 ha (5%) of the detected new water was already dark in NISAR's 5 Jan image. DSWx-S1 (or JRC) called it dry, so it counts as new, but some of it may have been water before 17 Jan.",
     "Buildings: 15 OpenStreetMap buildings sit inside detected new water, out of 11,349 mapped on this grid. The count can be too high or too low. Too low: OpenStreetMap is incomplete here, and flooded built-up areas look bright in radar, so open-water detection misses them. Too high: a 30 m pixel is larger than a house, so a building beside water can fall on a water pixel, and some detected water may not be flood. It says nothing about damage. Data: OpenStreetMap contributors, ODbL."
+  ],
+  "series": [
+    {
+      "date": "2026-01-05",
+      "role": "before",
+      "granule_id": "NISAR_L2_PR_GCOV_009_114_A_166_4005_DHDH_A_20260105T034252_20260105T034303_X05010_N_P_J_001",
+      "processing_version": "X05010",
+      "files": {
+        "hh": "hh_20260105.webp",
+        "hv": "hv_20260105.webp"
+      },
+      "hh_median_db": {
+        "new_water": -12.43,
+        "dry_land": -8.43,
+        "permanent_water": -18.57
+      }
+    },
+    {
+      "date": "2026-01-17",
+      "role": "after",
+      "granule_id": "NISAR_L2_PR_GCOV_010_114_A_166_4005_DHDH_A_20260117T034253_20260117T034303_X05010_N_P_J_001",
+      "processing_version": "X05010",
+      "files": {
+        "hh": "hh_20260117.webp",
+        "hv": "hv_20260117.webp"
+      },
+      "hh_median_db": {
+        "new_water": -16.3,
+        "dry_land": -5.18,
+        "permanent_water": -16.68
+      }
+    }
   ]
 }

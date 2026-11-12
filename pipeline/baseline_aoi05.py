@@ -41,6 +41,7 @@ from PIL import Image
 from rasterio.transform import array_bounds, from_origin
 from rasterio.warp import Resampling, calculate_default_transform, reproject, transform_bounds
 
+import fetch_all as f
 import prep_aoi05 as p
 import matplotlib.pyplot as plt  # noqa: E402  (prep_aoi05 has already selected the Agg backend)
 
@@ -195,7 +196,9 @@ CONTRACT_KEYS = {  # docs/DATA_CONTRACT.md, stats.json: these objects allow no o
     "agreement": ["iou", "precision", "recall", "evaluated_ha"],
     "coverage": ["evaluated", "outside_mapped_area", "unclear", "edge_excluded", "no_data"],
 }
-CONTRACT_OPTIONAL = {"results": ["osm_buildings_in_new_water", "osm_buildings_on_grid"]}  # added 12 Nov, still 1.1
+CONTRACT_OPTIONAL = {None: ["series"], "results": ["osm_buildings_in_new_water", "osm_buildings_on_grid"]}  # added 12 Nov, still 1.1
+SERIES_ROLES = ("earlier", "before", "after")
+SERIES_SETS = ("new_water", "dry_land", "permanent_water")
 SCENE_KEYS = ["role", "granule_id", "track", "frame", "processing_version", "start_utc", "end_utc", "polarisations"]
 
 
@@ -210,6 +213,16 @@ def check_contract(stats):
     assert all(0 <= stats["agreement"][k] <= 1 for k in ("iou", "precision", "recall"))
     assert all(f["format"] in ("png", "webp", "geotiff") for f in stats["files"])
     assert all("bounds_4326" in f for f in stats["files"] if f["format"] in ("png", "webp"))
+    names = {f["file"] for f in stats["files"]}
+    series = stats.get("series", [])
+    assert [e["date"] for e in series] == sorted(e["date"] for e in series)
+    for e in series:
+        datetime.strptime(e["date"], "%Y-%m-%d")
+        assert set(e) == {"date", "role", "granule_id", "processing_version", "files", "hh_median_db"}
+        assert e["role"] in SERIES_ROLES and re.fullmatch(r"X\d{5}", e["processing_version"])
+        assert set(e["files"]) == {"hh", "hv"} and set(e["files"].values()) <= names
+        assert set(e["hh_median_db"]) == set(SERIES_SETS)
+        assert all(v is None or isinstance(v, (int, float)) for v in e["hh_median_db"].values())
 
 
 def rgba(mask, colour, alpha=255):
@@ -240,14 +253,18 @@ def export(area, grid, d, pred, coverage, stats, legend=None):
                   dst_crs="EPSG:4326", dst_nodata=nodata, resampling=Resampling.nearest)
         return dst
 
-    imgs = {}
-    for pol, date in itertools.product(("hh", "hv"), (BEFORE, AFTER)):
+    def grey_overlay(pol, date):
         with rasterio.open(folder / f"{pol}_{date}_db_30m.tif") as src:
             db = warp(src.read(1), np.nan)
         grey = (np.clip((np.nan_to_num(db, nan=-25) + 25) / 25, 0, 1) * 255).astype("uint8")  # -25 dB black, 0 white
         img = np.dstack([grey, grey, grey, np.where(np.isfinite(db), 255, 0).astype("uint8")])
         # shortcut: with an odd width or height this stretches by under one 30 m pixel over the bounds; fine for display
-        imgs[f"{pol}_{date}.webp"] = img[::2, ::2]  # every second pixel, about 60 m (contract 1.1)
+        return img[::2, ::2]  # every second pixel, about 60 m (contract 1.1)
+
+    imgs = {f"{pol}_{date}.webp": grey_overlay(pol, date) for pol, date in itertools.product(("hh", "hv"), (BEFORE, AFTER))}
+    extra = sorted(m.group(1) for q in folder.glob("hh_*_db_30m.tif") if (m := re.fullmatch(r"hh_(\d{8})_db_30m\.tif", q.name))
+                   and m.group(1) not in (BEFORE, AFTER) and (folder / f"hv_{m.group(1)}_db_30m.tif").exists())
+    extra_imgs = {f"{pol}_{date}.webp": grey_overlay(pol, date) for date in extra for pol in ("hh", "hv")}
     imgs["water_new.png"] = rgba(warp(water_new, 255) == 1, "#1f78ff")
     imgs["label.png"] = rgba(warp(d["label"], 255) == 1, "#e5382d")
     cov = warp(coverage, 0)
@@ -265,11 +282,49 @@ def export(area, grid, d, pred, coverage, stats, legend=None):
                            **{str(c): f"{col} at alpha 170: {names[c]}" for c, (col, _) in COVERAGE_COLOURS.items()}}
     files += [{"file": f"data/{area}/{n}", "format": "geotiff"}
               for n in ("water_new_30m.tif", "change_hh_db_30m.tif", "coverage_30m.tif")]
+    files += [{"file": n, "format": "webp", "bounds_4326": bounds} for n in extra_imgs]
+    for name, img in extra_imgs.items():
+        Image.fromarray(img, "RGBA").save(web / name, quality=80)
     app = {**stats, "files": files}
+    app["series"], app["limits"] = series_block(stats, d, water_new, folder, extra)
     check_contract(app)
     (web / "stats.json").write_text(json.dumps(app, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"Contract outputs written: 3 GeoTIFFs in {folder}, {len(imgs)} overlays and stats.json in {web}")
     return app
+
+
+def series_block(stats, d, water_new, folder, extra):
+    """Display-only time series: the two main dates plus the extra ones, with the HH median (raw dB) over three fixed
+    pixel sets. Returns (series, limits); a processing version unlike the 17 Jan one adds a sentence to limits."""
+    frame, main = stats["scenes"][0]["frame"], {s["role"]: s for s in stats["scenes"]}
+    new = water_new == 1
+    sets = {"new_water": new,
+            "dry_land": np.isfinite(d["hh0"]) & np.isfinite(d["hh1"]) & (d["jrc"] == 0) & ~new,
+            "permanent_water": permanent(d["jrc"])}
+    series = []
+    for date in sorted([BEFORE, AFTER, *extra]):
+        if date in (BEFORE, AFTER):
+            role, gran, hh = ("before", main["before"], d["hh0"]) if date == BEFORE else ("after", main["after"], d["hh1"])
+            gran = gran["granule_id"]
+        else:
+            role, gran = "earlier", f.SERIES[frame][date]
+            with rasterio.open(folder / f"hh_{date}_db_30m.tif") as src:
+                hh = src.read(1)
+        med = {}
+        for k, m in sets.items():
+            v = hh[m & np.isfinite(hh)]
+            med[k] = round(float(np.median(v)), 2) if len(v) >= 100 else None
+        series.append({"date": f"{date[:4]}-{date[4:6]}-{date[6:]}", "role": role, "granule_id": gran,
+                       "processing_version": re.search(r"_(X\d{5})_", gran).group(1),
+                       "files": {"hh": f"hh_{date}.webp", "hv": f"hv_{date}.webp"}, "hh_median_db": med})
+    limits, main_v = list(stats["limits"]), main["after"]["processing_version"]
+    odd = [e for e in series if e["processing_version"] != main_v]
+    if odd:
+        dates = [datetime.strptime(e["date"], "%Y-%m-%d").strftime("%d %b %Y").lstrip("0") for e in odd]
+        names = dates[0] if len(dates) == 1 else ", ".join(dates[:-1]) + " and " + dates[-1]
+        limits.append("The five-date strip is for viewing, not measuring: the scenes of " + names +
+                      f" use processing version {', '.join(sorted({e['processing_version'] for e in odd}))}, not {main_v}.")
+    return series, limits
 
 
 def scene(role, gran, frame=166):

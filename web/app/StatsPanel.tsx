@@ -4,7 +4,7 @@ const ha = (n: number) => `${n.toLocaleString("en-GB", { maximumFractionDigits: 
 const pct = (n: number) => `${(n * 100).toFixed(1)}%`;
 
 // What each area's agreement figure is, taken from its limits text.
-const IOU_TAG: Record<string, (s: Stats) => string> = {
+export const IOU_TAG: Record<string, (s: Stats) => string> = {
   aoi05: (s) => `post-fix rerun; one clean test: ${s.method.parameters.aoi05_test.lightgbm_iou.toFixed(3)}`,
   aoi06: () => "in-sample",
   aoi01: () => "diagnostic",
@@ -126,13 +126,6 @@ export default function StatsPanel({ area: s }: { area: Stats }) {
           <p>{buildingsLimit(s)}</p>
         </>
       )}
-
-      <h2>Limits</h2>
-      <ul>
-        {s.limits.map((l) => (
-          <li key={l}>{l}</li>
-        ))}
-      </ul>
     </>
   );
 }

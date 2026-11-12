@@ -1,6 +1,26 @@
 # Progress
 
-Updated Thursday 12 November 2026, after the overnight run, the AOI01 checks, the land-median fix, the limits wording and the claim checker's first run. Submission is Saturday 14 November, 12:00 GST.
+Updated Thursday 12 November 2026, afternoon, after the app was finished and published. Submission is Saturday 14 November, 12:00 GST.
+
+## Done, 12 Nov (afternoon): app finished and published
+
+- **Live:** https://changeproof-dusky.vercel.app (Vercel project `changeproof`, deployed from `web/`). **Repo:** https://github.com/AqeelDEV/changeproof, branch `main`.
+- **The claim panel runs the real checker.** `web/app/api/check/route.ts` calls `check()`; if the route cannot be reached, the same code runs in the browser with the parser alone. The claim code moved from `claims/` to `web/lib/claims/`, and `places.json` is now committed at `web/public/data/places.json`, so a fresh clone can run the tests.
+- **Published claims, first run (parser alone, reported only, never used to tune anything).** 11 quotes in `web/lib/claims/real_claims.json`: 1 supported, 5 not observable, 5 not provable.
+  - Supported: "The flood waters of the Limpopo river have engulfed the town of Chokwe" (AIM, 17 Jan): 42% of the area within 3 km (1,191 ha) newly under open water.
+  - Not observable: the five that refer to 15, 18, 20, 21 (no place matched) and 30 Jan.
+  - Not provable: built-up flooding, people on a bus, "a água já começou a entrar na cidade do Xai-Xai" (read as type "other"), "arrastado pelas águas", and the 2,258 km² extent.
+- **Added to the app:** evidence report export (Markdown, and print to PDF), a five-step tour, three tabs (claim, evidence, method and limits), markers for the 50 places coloured by the checker's own wet and dry rules, a "How to read the radar" card, and a date strip and chart that appear once an area has more than two dates.
+- **Time series, display only.** `stats.json` has an optional `series` (contract still 1.1): each NISAR date with its granule and the median HH over three fixed pixel sets. `make_outputs.py` was rerun: every existing PNG and WebP hash is unchanged, and apart from `generated_utc` and `series` each `stats.json` is equal to before. With the two dates fetched so far, median HH over the new water fell from -12.43 to -16.30 dB (AOI05), -12.53 to -17.70 dB (AOI06) and -14.71 to -18.21 dB (AOI01).
+- **Docs:** `README.md`, `docs/PITCH.md`, `docs/SUBMISSION.md`, slides at `/pitch.html`.
+- **Checks:** type check, 77 of 77 rule checks, 42 of 45 test verdicts with the parser alone (unchanged), `next build` with its build-time checks, the tour and the offline fallback in the browser.
+
+Still open:
+1. **Three earlier dates.** Run `.venv\Scripts\python.exe pipeline\fetch_all.py --series` with `EARTHDATA_TOKEN` set, then `pipeline\make_outputs.py`, rebuild and redeploy. The extra-date path in `baseline_aoi05.py` (extra WebP files, the processing-version sentence in the limits) has not run yet, so check its output when it does.
+2. **Model on the live site.** Add `LLM_BASE_URL`, `LLM_MODEL=google/gemini-2.5-flash-lite` and `LLM_API_KEY` in the Vercel project settings and redeploy. Until then live claims use the parser, and the six preset claims use their recorded replies.
+3. Record the backup video and fill in the project page.
+
+Items 2 to 5 of the list below are done.
 
 ## Start here tomorrow
 

@@ -11,6 +11,7 @@ Addition on 12 Nov 2026, still version 1.1 (optional fields, so files without th
 - `results.osm_buildings_in_new_water` and `results.osm_buildings_on_grid`: OpenStreetMap buildings (one point each) inside detected new water, and on the whole grid. The first can be too high or too low, and is never a damage count. It can be too low because OSM is incomplete and radar open-water detection misses flooded built-up areas. It can be too high because a 30 m pixel is larger than a house, and some detected water may not be flood.
 - `areas.json` lists every finished area.
 - `web/public/data/places.json` (optional, written by `pipeline/places.py`): the 50 named places inside the three grids, each with the numbers measured in its buffer. The claim checker reads only this file. Fields: see `Place` in `web/lib/claims/parse.ts`.
+- Note of 12 Nov 2026 (optional, display only): `series` and extra grey files. When NISAR scenes of more dates exist, `files` also lists `hh_<yyyymmdd>.webp` and `hv_<yyyymmdd>.webp` for each extra date (same stretch, resolution and bounds as the two main dates), and `series` lists every date in order, 5 and 17 Jan included. Each entry gives the date, its role (`earlier`, `before` or `after`), the granule, the processing version, the two grey files, and the median raw HH in dB over three fixed pixel sets (`new_water`, `dry_land`, `permanent_water`; `null` where fewer than 100 pixels are valid). If a scene has a different processing version from 17 Jan, a sentence in `limits` says the strip is for viewing, not measuring. Files without `series` stay valid.
 - The four old 1.0 grey PNGs in `web/public/data/aoi05/` (`hh_*.png`, `hv_*.png`) are still there but no longer listed in `stats.json`. Use the WebP files; the PNGs will be removed.
 
 ## Layout
@@ -186,6 +187,24 @@ Rules: `coverage` shares are fractions of all grid pixels and sum to 1 (within 0
         },
         "if": { "properties": { "format": { "enum": ["png", "webp"] } } },
         "then": { "required": ["bounds_4326"] }
+      }
+    },
+    "series": {
+      "type": "array",
+      "description": "Optional. Display only, ordered by date",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["date", "role", "granule_id", "processing_version", "files", "hh_median_db"],
+        "properties": {
+          "date": { "type": "string", "format": "date" },
+          "role": { "enum": ["earlier", "before", "after"] },
+          "granule_id": { "type": "string" },
+          "processing_version": { "type": "string", "pattern": "^X[0-9]{5}$" },
+          "files": { "type": "object", "required": ["hh", "hv"],
+                     "description": "Names of webp entries in files" },
+          "hh_median_db": { "type": "object", "required": ["new_water", "dry_land", "permanent_water"],
+                            "additionalProperties": { "type": ["number", "null"] } }
+        }
       }
     },
     "limits": { "type": "array", "minItems": 1, "items": { "type": "string" },

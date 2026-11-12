@@ -100,7 +100,16 @@ export default function ClaimPanel({ areas, request, onPlace }: {
           <div className="actions no-print">
             {place && <button type="button" onClick={() => onPlace(place)}>Show {place.name} on the map</button>}
             <button type="button" onClick={download}>Export report (.md)</button>
-            <button type="button" onClick={() => window.print()}>Print / save as PDF</button>
+            <button
+              type="button"
+              onClick={(ev) => {
+                // A closed <details> prints empty, so open the report's sections first.
+                ev.currentTarget.closest(".result")?.querySelectorAll("details").forEach((d) => (d.open = true));
+                window.print();
+              }}
+            >
+              Print / save as PDF
+            </button>
           </div>
 
           <details open>

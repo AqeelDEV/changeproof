@@ -34,13 +34,14 @@ export function timeoutMs(): number {
 /** A short hash of everything that shapes a reply (model, prompt, limit), so recorded replies are kept apart per setting. */
 export function settingsKey(): string {
   let h = 0x811c9dc5; // FNV-1a
-  for (const ch of [env().LLM_MODEL ?? "", MAX_TOKENS, SYSTEM].join("\n")) h = Math.imul(h ^ ch.codePointAt(0)!, 0x01000193) >>> 0;
+  const extra = env().LLM_EXTRA_JSON; // appended only when set, so keys recorded before it existed stay valid
+  for (const ch of [env().LLM_MODEL ?? "", MAX_TOKENS, SYSTEM, ...(extra ? [extra] : [])].join("\n")) h = Math.imul(h ^ ch.codePointAt(0)!, 0x01000193) >>> 0;
   return h.toString(16).padStart(8, "0");
 }
 
 /** Ask the model for the fields. Never throws; a missing setting or LLM_DISABLED=1 means no call. */
 export async function askModel(text: string, limit: number = timeoutMs()): Promise<ModelReply> {
-  const { LLM_BASE_URL: base, LLM_MODEL: model, LLM_API_KEY: key, LLM_DISABLED: off } = env();
+  const { LLM_BASE_URL: base, LLM_MODEL: model, LLM_API_KEY: key, LLM_DISABLED: off, LLM_EXTRA_JSON: extra } = env();
   if ((globalThis as { window?: unknown }).window !== undefined || off === "1" || !base || !model || !key)
     return { status: "disabled", content: null, ms: 0 };
   const t0 = Date.now(), ctl = new AbortController();
@@ -49,7 +50,8 @@ export async function askModel(text: string, limit: number = timeoutMs()): Promi
     const r = await fetch(`${base.replace(/\/+$/, "")}/chat/completions`, {
       method: "POST", signal: ctl.signal,
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
-      body: JSON.stringify({ model, temperature: 0, max_tokens: MAX_TOKENS, messages: [{ role: "system", content: SYSTEM }, { role: "user", content: text }] }),
+      // LLM_EXTRA_JSON: endpoint-specific body fields, e.g. {"reasoning":{"enabled":false}}; bad JSON gives status "error"
+      body: JSON.stringify({ model, temperature: 0, max_tokens: MAX_TOKENS, messages: [{ role: "system", content: SYSTEM }, { role: "user", content: text }], ...JSON.parse(extra || "{}") }),
     });
     if (!r.ok) return { status: "error", content: null, ms: Date.now() - t0, http: r.status };
     const js = await r.json(), choice = js?.choices?.[0], content = choice?.message?.content;

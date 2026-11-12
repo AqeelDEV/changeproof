@@ -21,14 +21,33 @@ Where things stand:
    - The optional building fields in `results` (see `docs/DATA_CONTRACT.md`, 12 Nov addition).
    - AOI06, where 35% of the grid has no NISAR data.
 4. **`pipeline/__pycache__` is tracked in git.** Add `__pycache__/` to `.gitignore` and untrack it. It was outside tonight's folders, so it is not done.
-5. **Claims: first run done (41 of 45 verdicts on both paths).** After the fixes the rerun gets 42 of 45 with the parser alone; it is not a clean test (see "fixes after the first claim run"). Next:
-   - put the published claims into `claims/real_claims.json` and run them;
-   - choose the model, which trades speed against fields;
+5. **Claims: first run done (41 of 45 verdicts on both paths).** After the fixes the rerun gets 42 of 45 with the parser alone; it is not a clean test (see "fixes after the first claim run"). The demo model is now chosen: `google/gemini-2.5-flash-lite` (see "demo model chosen"). Next:
+   - put the published claims into `claims/real_claims.json` and run them. On 12 Nov the file on disk was still `[]`;
    - move the code into `web/lib/`.
 
 Keep in mind:
 - AOI05 has now been scored three times: the rule (11 Nov), LightGBM v1 (12 Nov, the clean test) and LightGBM v2 (12 Nov, the post-fix rerun, labelled as such). Do not tune anything else on AOI05.
 - AOI01 can no longer check the land-median definition independently.
+
+## Done, 12 Nov: demo model chosen (after fixes, not a clean test)
+
+**The rule, set before the run:** use `google/gemini-3.8-flash` with reasoning switched off if it gets at least 40 of 45 replies within 2,500 ms; otherwise use the lighter model.
+
+**What changed:** `LLM_EXTRA_JSON`, an optional environment variable. It is a JSON object merged into the request body, so endpoint settings stay out of the code. It is part of the settings key only when set, so the keys recorded before it existed are unchanged. Bad JSON gives model status `error`.
+
+**Run, 12 Nov** (I ran it here, with the endpoint and models set in the shell only):
+
+| Run | Fields correct | Verdict correct | Model replies within 2,500 ms | Fields came from |
+|---|---|---|---|---|
+| Parser alone | 45 of 45 | 42 of 45 (clean 28 of 30, messy 14 of 15) | n/a | parser 45 |
+| Parser plus `gemini-3.8-flash`, `LLM_EXTRA_JSON={"reasoning":{"enabled":false}}` (key dc68dcb7) | 45 of 45 | 42 of 45 (clean 28 of 30, messy 14 of 15) | 0 of 45 (all 45 refused with HTTP 400) | parser 45 |
+| Parser plus `gemini-2.5-flash-lite` (key 7dcbac70, the replies recorded earlier) | 40 of 45 | 41 of 45 (clean 28 of 30, messy 13 of 15) | 45 of 45 (median 691 ms, slowest 1,094 ms) | model 42, parser 2, conflict 1 |
+
+- **Why 3.8 got nothing.** OpenRouter refuses the request: "Reasoning is mandatory for this endpoint and cannot be disabled." Reasoning cannot be switched off for this model there, so the rule picks the lighter model.
+- **Lowest effort, checked by hand only.** `{"reasoning":{"effort":"minimal"}}` is accepted, but a two-word test prompt took 2.4 to 2.9 s, so it would still miss 2,500 ms. The 45 claims were not run with it.
+- **The choice: `LLM_MODEL=google/gemini-2.5-flash-lite`, with `LLM_EXTRA_JSON` unset.** It answers every claim in time. Its costs are the same as before: one conflict (m13) and wider quantifiers (see the rerun below).
+- **`claims/demo.json`** was recorded again with it (key 7dcbac70). All 6 replies arrived in 598 to 876 ms with finish reason "stop". 5 claims take their fields from the model, and "Maputo was flooded" stays on the parser (off the list). The verdicts are the same as before.
+- **Published claims:** none run. `claims/real_claims.json` was still `[]` on disk.
 
 ## Done, 12 Nov: fixes after the first claim run (after fixes, not a clean test)
 

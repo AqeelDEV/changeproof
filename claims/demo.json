@@ -11,7 +11,7 @@
   "chokwe was under water on 17 january": {
    "status": "ok",
    "content": "```json\n{\"place\": \"Chókwè\", \"polarity\": \"positive\", \"date_kind\": \"day\", \"date_from\": \"2026-01-17\", \"date_to\": \"2026-01-17\", \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 1.0}\n```",
-   "ms": 653,
+   "ms": 876,
    "finish": "stop",
    "tokens": 84,
    "reasoning_tokens": 0
@@ -19,7 +19,7 @@
   "xai xai nao alagou": {
    "status": "ok",
    "content": "```json\n{\"place\": \"Xai Xai\", \"polarity\": \"negative\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 1.0}\n```",
-   "ms": 761,
+   "ms": 613,
    "finish": "stop",
    "tokens": 64,
    "reasoning_tokens": 0
@@ -27,7 +27,7 @@
   "xai xai was under water on 25 jan": {
    "status": "ok",
    "content": "```json\n{\"place\": \"Xai-Xai\", \"polarity\": \"positive\", \"date_kind\": \"day\", \"date_from\": \"2026-01-25\", \"date_to\": \"2026-01-25\", \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 1.0}\n```",
-   "ms": 645,
+   "ms": 734,
    "finish": "stop",
    "tokens": 85,
    "reasoning_tokens": 0
@@ -35,7 +35,7 @@
   "homes were destroyed in chokwe": {
    "status": "ok",
    "content": "```json\n{\"place\": \"Chókwè\", \"polarity\": \"positive\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"damage\", \"quantifier\": null, \"confidence\": 1.0}\n```",
-   "ms": 729,
+   "ms": 737,
    "finish": "stop",
    "tokens": 64,
    "reasoning_tokens": 0
@@ -43,7 +43,7 @@
   "maputo was flooded": {
    "status": "ok",
    "content": "```json\n{\"place\": \"Maputo\", \"polarity\": \"positive\", \"date_kind\": \"none\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 1.0}\n```",
-   "ms": 690,
+   "ms": 650,
    "finish": "stop",
    "tokens": 62,
    "reasoning_tokens": 0
@@ -51,7 +51,7 @@
   "massingir ficou debaixo de agua ontem": {
    "status": "ok",
    "content": "```json\n{\"place\": \"Massingir\", \"polarity\": \"positive\", \"date_kind\": \"relative\", \"date_from\": null, \"date_to\": null, \"claim_type\": \"flood\", \"quantifier\": null, \"confidence\": 1.0}\n```",
-   "ms": 591,
+   "ms": 598,
    "finish": "stop",
    "tokens": 63,
    "reasoning_tokens": 0

@@ -111,14 +111,12 @@ export default function App({ areas, optical }: { areas: Stats[]; optical: Recor
             ))}
           </select>
         </label>
-        <span className="banner">
-          NISAR {area.release} data, as of {area.as_of_label}
-        </span>
         <a href="/globe">See the globe</a>
         <button type="button" className="tour-btn" onClick={() => go(0)}>
           Take the tour
         </button>
       </header>
+      <p className="passline">as of {area.as_of_label}. NISAR {area.release} data.</p>
       <main>
         <div className="map-col">
           {step !== null && (

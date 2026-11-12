@@ -1,93 +1,116 @@
-:root {
-  --ink: #14181f; --paper: #fbfaf7; --card: #fff; --line: #dcd8cf; --muted: #5b616b;
-  --water: #1f78ff; --ref: #e5382d; --amber: #f0b429; --header: 64px;
-  --serif: Georgia, "Times New Roman", serif; --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
-}
+@import "./tokens.css";
+
+/* The checker is the Report surface (docs/DESIGN.md): sand page, paper cards, ink text. The header and the tour bar are
+   the Space surface. Water blue, red and amber are data colours, so nothing in the interface uses them. */
+:root { --card: var(--paper); --line: var(--rule); --muted: var(--ink-soft); --amber: #f0b429; }
 * { box-sizing: border-box; }
-body { margin: 0; font: 14px/1.5 system-ui, "Segoe UI", sans-serif; color: var(--ink); background: var(--paper); }
+body { margin: 0; height: 100dvh; display: flex; flex-direction: column; font: 15px/1.5 var(--sans); color: var(--ink); background: var(--sand); }
 button, select, input { font: inherit; }
-button { cursor: pointer; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 4px; padding: 4px 10px; }
+input { accent-color: var(--ink); }
+button { cursor: pointer; border: 1px solid var(--edge); background: var(--paper); color: var(--ink); border-radius: 4px; padding: 5px 12px; transition: border-color .12s linear; }
 button:hover:not(:disabled) { border-color: var(--ink); }
 button:disabled { opacity: .5; cursor: default; }
-button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
-a { color: #0b57d0; }
+:focus-visible { outline: 2px solid var(--signal-deep); outline-offset: 2px; }
+a { color: var(--ink); text-underline-offset: 2px; }
 
-header { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center; padding: 8px 16px; min-height: var(--header); background: var(--ink); color: #fff; }
+header { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center; padding: 10px 16px 8px; background: var(--space); color: var(--paper); }
 .brand { margin-right: auto; flex: 1 1 240px; } /* the tagline wraps before the controls drop to a second row */
-header a { color: #fff; }
-header h1 { font: 700 20px/1.1 var(--serif); margin: 0; letter-spacing: .2px; }
-.brand p { margin: 2px 0 0; font-size: 12.5px; color: #c9ced6; }
-header select { padding: 3px 6px; border-radius: 4px; border: 0; max-width: 260px; }
-.banner { background: #fff3cd; color: #4d3b00; border: 1px solid #e0c36a; padding: 2px 8px; border-radius: 3px; font-size: 12.5px; }
-.tour-btn { background: var(--water); border-color: var(--water); color: #fff; font-weight: 600; }
-.tour-btn:hover:not(:disabled) { border-color: #fff; }
+header a { color: var(--paper); text-underline-offset: 3px; }
+header h1 { font: 600 24px/1.1 var(--serif); margin: 0; }
+.brand p { margin: 2px 0 0; font-size: 13px; color: var(--space-soft); }
+header select { padding: 5px 8px; border-radius: 4px; border: 1px solid var(--edge-space); background: var(--paper); color: var(--ink); max-width: 260px; }
+header :focus-visible, .passline :focus-visible, .tour :focus-visible { outline-color: var(--signal); }
+.tour-btn { background: var(--sand); border-color: var(--sand); color: var(--ink); font-weight: 600; padding: 6px 14px; }
+.tour-btn:hover:not(:disabled) { border-color: var(--paper); }
+/* The pass line: a thin rule in the signal colour, broken by the time of the pass. */
+.passline { display: flex; align-items: center; gap: 10px; margin: 0; padding: 0 16px 9px; background: var(--space); color: var(--paper); font-size: 13px; }
+.passline::before, .passline::after { content: ""; height: 2px; background: var(--signal); }
+.passline::before { width: 28px; }
+.passline::after { flex: 1; }
 
-main { display: grid; grid-template-columns: minmax(0, 1fr) 430px; height: calc(100dvh - var(--header)); }
+main { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 430px; }
 .map-col { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
 .map-wrap { position: relative; flex: 1; min-height: 320px; }
 .map { position: absolute; inset: 0; background: #e9e6df; }
-.controls { position: absolute; top: 10px; right: 10px; z-index: 1000; background: var(--card); padding: 6px 10px 8px; border: 1px solid #bbb; border-radius: 6px; max-width: 250px; box-shadow: 0 1px 6px rgba(0,0,0,.2); font-size: 13px; }
-.controls label { display: block; }
+.controls { position: absolute; top: 10px; right: 10px; z-index: 1000; background: var(--paper); padding: 8px 12px 10px; border: 1px solid var(--edge); border-radius: 4px; max-width: 250px;
+  box-shadow: 0 1px 0 rgba(20, 26, 46, .25), 0 10px 24px -14px rgba(20, 26, 46, .45); font-size: 13px; }
+.controls label { display: block; padding: 1px 0; }
 .controls input[type="range"] { width: 100%; }
-.controls hr { border: 0; border-top: 1px solid var(--line); margin: 6px 0; }
+.controls hr { border: 0; border-top: 1px solid var(--rule); margin: 8px 0; }
 .controls-toggle { border: 0; padding: 0; font-weight: 600; background: none; width: 100%; text-align: left; }
-.swatch { display: inline-block; width: 12px; height: 12px; margin-right: 4px; vertical-align: middle; border: 1px solid #777; }
+/* A legend row: the swatch in its own column, so a long name wraps under itself and not under the swatch. */
+.controls .tag > div { display: grid; grid-template-columns: 16px 1fr; gap: 5px; margin-top: 4px; line-height: 1.35; }
+.controls .tag .swatch { margin: 2px 0 0; }
+.swatch { display: inline-block; width: 12px; height: 12px; margin-right: 4px; vertical-align: middle; border: 1px solid var(--edge); }
 .swatch.dot { border-radius: 50%; border: 2px solid var(--ink); }
 .swipe-line { position: absolute; top: 0; bottom: 0; width: 2px; background: #fff; box-shadow: 0 0 2px #000; z-index: 500; pointer-events: none; }
-.side-label { position: absolute; bottom: 24px; z-index: 600; background: rgba(20,24,31,.8); color: #fff; padding: 2px 8px; font-size: 12px; pointer-events: none; white-space: nowrap; }
+.side-label { position: absolute; bottom: 24px; z-index: 600; background: var(--space); color: var(--paper); padding: 2px 8px; font-size: 12px; pointer-events: none; white-space: nowrap; }
 
-.tour { display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 10px 14px; background: #fff8e1; border-bottom: 2px solid var(--amber); }
-.tour b { font: 700 15px var(--serif); }
-.tour p { margin: 2px 0 0; max-width: 70ch; }
+/* The tour bar speaks for the instrument, so it is on the Space surface. Amber belongs to a verdict. */
+.tour { display: flex; gap: 14px; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--space-raised); color: var(--paper); }
+.tour b { font: 600 18px/1.25 var(--serif); }
+.tour p { margin: 3px 0 0; max-width: 70ch; }
 .tour-nav { display: flex; gap: 6px; flex: none; }
-.primary { background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 600; }
-.strip { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 6px 12px; background: var(--card); border-top: 1px solid var(--line); }
-.chip { border-radius: 999px; padding: 2px 10px; font-size: 12.5px; }
-.chip.on { background: var(--ink); color: #fff; border-color: var(--ink); }
-.chip.after { border: 1px dashed var(--muted); color: var(--muted); }
+.tour button { background: none; color: var(--paper); border-color: var(--edge-space); }
+.tour button:hover:not(:disabled) { border-color: var(--paper); }
+.primary { background: var(--ink); border-color: var(--ink); color: var(--paper); font-weight: 600; }
+.tour .primary { background: var(--sand); border-color: var(--sand); color: var(--ink); }
+.strip { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px 12px; background: var(--paper); border-top: 1px solid var(--rule); }
+.chip { border-radius: 4px; padding: 3px 10px; font-size: 13px; }
+.chip.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.chip.after { border: 1px dashed var(--edge); color: var(--ink-soft); }
 
-aside { overflow-y: auto; border-left: 1px solid var(--line); background: var(--paper); }
-.tabs { display: flex; position: sticky; top: 0; z-index: 5; background: var(--paper); border-bottom: 1px solid var(--line); }
-.tabs button { flex: 1; border: 0; border-bottom: 3px solid transparent; border-radius: 0; background: none; padding: 9px 4px; color: var(--muted); font-weight: 600; }
-.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--water); }
+aside { overflow-y: auto; border-left: 1px solid var(--rule); background: var(--sand); }
+.tabs { display: flex; position: sticky; top: 0; z-index: 5; background: var(--sand); border-bottom: 1px solid var(--rule); }
+.tabs button { flex: 1; border: 0; border-bottom: 3px solid transparent; border-radius: 0; background: none; padding: 10px 4px; color: var(--ink-soft); font-size: 14px; font-weight: 600; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); }
 .tab-claim, .tab-panel { padding: 6px 16px 24px; }
-aside h2 { font: 700 15px var(--serif); margin: 16px 0 4px; }
-aside h3 { font-size: 13px; margin: 10px 0 2px; }
+aside h2 { font: 600 20px/1.25 var(--serif); margin: 18px 0 6px; }
+aside h3 { font-size: 13px; margin: 12px 0 2px; }
 aside table { border-collapse: collapse; width: 100%; }
-aside td { padding: 2px 4px; vertical-align: top; border-bottom: 1px solid #eeeae2; }
-aside td:first-child { color: var(--muted); }
+aside td { padding: 3px 4px; vertical-align: top; border-bottom: 1px solid var(--rule); }
+aside td:first-child { color: var(--ink-soft); }
 aside ul { padding-left: 18px; margin: 4px 0; }
 .limits li { margin-bottom: 6px; }
-.mono { font-family: var(--mono); font-size: 11px; word-break: break-all; margin: 2px 0; }
-.tag { color: var(--muted); font-size: 12px; }
+.mono { font-family: var(--mono); font-size: 11.5px; line-height: 1.4; word-break: break-all; margin: 2px 0; }
+.tag { color: var(--ink-soft); font-size: 13px; }
 
-.claims form { display: flex; gap: 6px; }
-.claims input { flex: 1; min-width: 0; padding: 8px 10px; border: 1px solid #9aa0a6; border-radius: 4px; background: var(--card); }
-.claims form button { background: var(--ink); color: #fff; border-color: var(--ink); font-weight: 600; padding: 4px 16px; }
-.presets { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0; }
-.presets button { font-size: 12px; text-align: left; border-radius: 999px; }
-.result { border: 1px solid var(--line); border-left: 6px solid var(--muted); border-radius: 6px; padding: 10px 14px; margin: 10px 0; background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+.claims form { display: flex; gap: 8px; }
+.claims input { flex: 1; min-width: 0; padding: 9px 12px; border: 1px solid var(--edge); border-radius: 4px; background: var(--paper); color: var(--ink); }
+.claims form button { background: var(--ink); color: var(--paper); border-color: var(--ink); font-weight: 600; padding: 5px 18px; }
+.presets { display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0; }
+/* Serif italic in quotes is always somebody's claim: a preset, a published claim and the quote on a card look the same. */
+.presets button { text-align: left; padding: 3px 8px; font: italic 400 14px/1.3 var(--serif); }
+.presets button::before { content: "“"; }
+.presets button::after { content: "”"; }
+/* The verdict card: solid paper, a hard edge and a real shadow, with a stripe in the verdict's own colour. */
+.result { border: 1px solid var(--ink); border-left: 6px solid var(--ink-soft); border-radius: 2px; padding: 14px 18px; margin: 12px 0; background: var(--paper);
+  box-shadow: 0 1px 0 rgba(20, 26, 46, .25), 0 10px 24px -14px rgba(20, 26, 46, .45); }
 .r-supported { border-left-color: #2e8b47; }
 .r-contradicted { border-left-color: #c62828; }
 .r-not-observable { border-left-color: #888; }
 .r-not-provable, .r-not-supported { border-left-color: #c99a00; }
-.result p { margin: 4px 0; }
-.quote { font: italic 16px/1.35 var(--serif); }
+.result p { margin: 6px 0; }
+.quote { font: italic 400 20px/1.35 var(--serif); }
 .headline { font-weight: 600; }
-.verdict { display: inline-block; padding: 2px 12px; border-radius: 4px; font: 700 17px var(--serif); text-transform: capitalize; border: 1px solid; }
+.verdict { display: inline-flex; align-items: center; gap: 8px; padding: 3px 14px 3px 10px; border-radius: 3px; font: 600 28px/1.1 var(--serif); border: 1px solid; }
+/* The mark: the checker's disk as the radar found it, so a verdict never rests on colour alone. */
+.g-mark { width: 16px; height: 16px; flex: none; }
 .v-supported { background: #d9f2df; color: #145a26; border-color: #2e8b47; }
 .v-contradicted { background: #fbdcdc; color: #8a1414; border-color: #c62828; }
 .v-not-observable { background: #e6e6e6; color: #333; border-color: #888; border-style: dashed; }
 .v-not-provable, .v-not-supported { background: #fff1cc; color: #6b4e00; border-color: #c99a00; }
-.actions { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
-.actions button { font-size: 12.5px; }
-details { margin-top: 8px; }
+/* The as-of stamp: its own line, with the signal on its left edge. */
+.stamp, .banner { margin: 6px 0; padding-left: 10px; border-left: 2px solid var(--signal-deep); color: var(--ink-soft); font-size: 13px; }
+.actions { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+.actions button { font-size: 13px; }
+details { margin-top: 10px; }
 summary { cursor: pointer; font-weight: 600; }
-.published button { display: block; width: 100%; text-align: left; margin: 4px 0; padding: 6px 10px; font: italic 13.5px var(--serif); }
-.published button .tag { display: block; font: 12px system-ui, sans-serif; }
+.published button { display: block; width: 100%; text-align: left; margin: 6px 0; padding: 8px 12px; font: italic 400 16px/1.3 var(--serif); }
+.published button .tag { display: block; font: 400 13px/1.45 var(--sans); }
 
 .cloud-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-.cloud-grid figure { margin: 0; font-size: 11px; line-height: 1.3; }
+.cloud-grid figure { margin: 0; font-size: 11.5px; line-height: 1.3; }
 .cloud-grid img { width: 100%; aspect-ratio: 1607 / 1370; object-fit: contain; background: #9aa0a6; display: block; }
 .radar-card svg { width: 100%; height: auto; display: block; }
 .radar-card li { margin-bottom: 5px; }
@@ -95,19 +118,27 @@ summary { cursor: pointer; font-weight: 600; }
 .print-only { display: none; }
 
 @media (max-width: 860px) {
-  main { grid-template-columns: 1fr; height: auto; }
+  body { height: auto; }
+  main { grid-template-columns: 1fr; }
   .map-wrap { min-height: 58vh; flex: none; }
   aside { border-left: 0; overflow: visible; }
   .tour { flex-direction: column; align-items: stretch; }
   .controls { max-width: 200px; }
+  .side-label { bottom: 62px; } /* the map credits wrap to three lines here; the date labels sit above them */
 }
 
 /* Printing gives the evidence report: only the checked claim. The print button opens its sections first. */
 @media print {
-  header, .map-col, .tabs, .tab-panel, .no-print { display: none !important; }
-  main { display: block; height: auto; }
-  aside { border: 0; overflow: visible; }
+  body { display: block; height: auto; background: #fff; font-size: 11pt; }
+  header, .passline, .map-col, .tabs, .tab-panel, .no-print { display: none !important; }
+  main { display: block; }
+  aside { border: 0; overflow: visible; background: none; }
   .tab-claim { display: block !important; padding: 0; }
-  .result { border: 0; box-shadow: none; padding: 0; }
-  .print-only { display: block; }
+  .result { border: 0; box-shadow: none; padding: 0; background: none; }
+  .print-only { display: block; font: 600 18pt/1.2 var(--serif); margin: 0 0 10pt; }
+  .quote { font-size: 15pt; }
+  .verdict { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  summary { margin-top: 12pt; font: 600 13pt/1.25 var(--serif); list-style: none; }
+  h3, summary { break-after: avoid; }
+  tr, li { break-inside: avoid; }
 }

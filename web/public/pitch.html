@@ -4,13 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ChangeProof pitch</title>
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/fonts/fonts.css">
 <style>
-:root{--bg:#0b0e14;--fg:#f4f6fa;--mute:#b4bccb;--water:#1f78ff;--cop:#e5382d;--line:#2a3140;--ok:#2fa866;--grey:#8a93a5}
+/* The Space surface of docs/DESIGN.md: navy, paper type, the three families, one thin signal line. */
+:root{--bg:#0a1024;--fg:#fbf8f1;--mute:#a9b0c6;--water:#1f78ff;--cop:#e5382d;--line:#6c7699;--grey:#a9b0c6;--signal:#b79cff;--serif:"Newsreader",Georgia,"Times New Roman",serif}
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;overflow:hidden}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font-family:"Atkinson Hyperlegible Next",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;overflow:hidden}
 section{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:6vh 7vw;gap:3vh}
 section.on{display:flex}
+h1,h2{font-family:var(--serif);font-weight:600;letter-spacing:-.02em}
 h1{font-size:clamp(40px,7vw,96px);margin:0;line-height:1.05}
+.pass{display:flex;align-items:center;gap:.7em;max-width:none;font-size:clamp(16px,1.8vw,26px);color:var(--mute)}
+.pass::before,.pass::after{content:"";height:2px;background:var(--signal)}
+.pass::before{width:2em}.pass::after{flex:1}
 h2{font-size:clamp(30px,4.6vw,64px);margin:0;line-height:1.1}
 p,li{font-size:clamp(20px,2.7vw,38px);line-height:1.35;margin:0;max-width:34em}
 ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:1.6vh}
@@ -19,20 +26,23 @@ ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:1.6vh}
 .row{display:flex;gap:3vw;align-items:flex-start;flex-wrap:wrap}
 figure{margin:0;display:flex;flex-direction:column;gap:1vh}
 figcaption{font-size:clamp(16px,1.8vw,26px);color:var(--mute)}
-.img{position:relative;height:46vh;aspect-ratio:1/1;border:2px solid var(--line);background:#000}
+.img{position:relative;height:46vh;aspect-ratio:1/1;border:1px solid var(--line);background:#000}
 .img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .claims{display:flex;flex-direction:column;gap:2vh}
-.claim{display:flex;align-items:center;gap:2vw;border:2px solid var(--line);border-radius:10px;padding:2vh 2vw}
-.claim span.t{flex:1;font-size:clamp(18px,2.4vw,34px);line-height:1.3}
-.badge{font-weight:700;font-size:clamp(16px,2vw,28px);padding:.4em .8em;border-radius:8px;white-space:nowrap;color:#fff}
-.b-ok{background:var(--ok)}.b-no{background:#3b4560;border:2px solid var(--grey)}.b-np{background:#5a3b6e;border:2px solid #b48ad0}
+.claim{display:flex;align-items:center;gap:2vw;border:1px solid var(--line);border-radius:2px;padding:2vh 2vw}
+.claim span.t{flex:1;font-family:var(--serif);font-style:italic;font-size:clamp(18px,2.4vw,34px);line-height:1.3}
+/* The app's own badges: the same text, tint and border for each verdict, and the same mark before the word. */
+.badge{display:inline-flex;align-items:center;gap:.4em;font:600 clamp(16px,2vw,28px)/1.1 var(--serif);padding:.35em .7em .35em .55em;border-radius:3px;white-space:nowrap;border:2px solid}
+.mk{width:.7em;height:.7em;flex:none}
+.b-ok{background:#d9f2df;color:#145a26;border-color:#2e8b47}.b-no{background:#e6e6e6;color:#333;border-color:#888;border-style:dashed}.b-np{background:#fff1cc;color:#6b4e00;border-color:#c99a00}
 .nums{display:flex;gap:3vw;flex-wrap:wrap}
-.num{border:2px solid var(--line);border-radius:10px;padding:2vh 2vw}
-.num b{display:block;font-size:clamp(40px,6vw,88px);line-height:1}
+.num{border:1px solid var(--line);border-radius:2px;padding:2vh 2vw}
+.num b{display:block;font-size:clamp(40px,6vw,88px);line-height:1;font-variant-numeric:tabular-nums}
 .num small{font-size:clamp(16px,1.9vw,26px);color:var(--mute)}
 #n{position:fixed;right:2vw;bottom:2vh;font-size:clamp(14px,1.6vw,22px);color:var(--mute)}
 #hint{position:fixed;left:2vw;bottom:2vh;font-size:clamp(14px,1.4vw,20px);color:var(--grey)}
-a{color:var(--water)}
+a{color:var(--fg);text-underline-offset:.15em}
+:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 .tight li{font-size:clamp(16px,2vw,28px)}
 .side{flex:1;min-width:14em}
 .img.sm{height:30vh}
@@ -41,7 +51,7 @@ a{color:var(--water)}
 .links{font-size:clamp(16px,1.9vw,26px)}
 .src{font-size:clamp(12px,1.3vw,18px);color:var(--grey)}
 .vt{border-collapse:collapse;font-size:clamp(14px,1.8vw,26px)}
-.vt th,.vt td{border:2px solid var(--line);padding:.3em .7em;text-align:left}
+.vt th,.vt td{border:1px solid var(--line);padding:.3em .7em;text-align:left}
 .vt td{font-weight:700}
 @media (max-width:700px){section{padding:4vh 16px;overflow-y:auto;justify-content:flex-start}.img,.img.sm{height:auto;width:min(100%,46vh)}figure{width:100%}}
 </style>
@@ -51,6 +61,7 @@ a{color:var(--water)}
 <section class="on">
   <h1>ChangeProof</h1>
   <p>Type a flood claim. Get a verdict from NISAR radar, and a clear answer when the data cannot settle it.</p>
+  <p class="pass">as of 17 Jan 2026, 03:42 UTC. NISAR Beta data.</p>
   <p class="mute">Dancing with the SARs. NASA Space Apps 2026, Dubai. NISAR data is Beta.</p>
 </section>
 
@@ -83,9 +94,9 @@ a{color:var(--water)}
 <section>
   <h2>The claim check</h2>
   <div class="claims">
-    <div class="claim"><span class="t">"The flood waters of the Limpopo river have engulfed the town of Chokwe" (AIM, 17 Jan)</span><span class="badge b-ok">Supported</span></div>
-    <div class="claim"><span class="t">"Xai-Xai was under water on 25 Jan"</span><span class="badge b-no">Not observable</span></div>
-    <div class="claim"><span class="t">"Homes were destroyed in Chókwè"</span><span class="badge b-np">Not provable</span></div>
+    <div class="claim"><span class="t">"The flood waters of the Limpopo river have engulfed the town of Chokwe" (AIM, 17 Jan)</span><span class="badge b-ok"><svg class="mk" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6" fill="currentColor"/></svg>Supported</span></div>
+    <div class="claim"><span class="t">"Xai-Xai was under water on 25 Jan"</span><span class="badge b-no"><svg class="mk" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.25" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2.6 2.1"/></svg>Not observable</span></div>
+    <div class="claim"><span class="t">"Homes were destroyed in Chókwè"</span><span class="badge b-np"><svg class="mk" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 2a6 6 0 0 0 0 12z" fill="currentColor"/></svg>Not provable</span></div>
   </div>
   <p class="mute">Always "as of 17 Jan 2026, 03:42 UTC". Fixed rules decide. The optional language model only fills fields.</p>
 </section>
@@ -94,7 +105,7 @@ a{color:var(--water)}
   <h2>Validation</h2>
   <div class="nums sm">
     <div class="num"><b>0.521</b><small>tuned rule, held-out area (AOI05)</small></div>
-    <div class="num"><b class="w">0.572</b><small>LightGBM, one clean test</small></div>
+    <div class="num"><b>0.572</b><small>LightGBM, one clean test</small></div>
     <div class="num"><b>42 of 45</b><small>frozen test claims, parser alone</small></div>
   </div>
   <ul class="tight">
@@ -126,7 +137,7 @@ a{color:var(--water)}
     <li><b>Plugged into the system.</b> Forecasters predict, ChangeProof verifies (for example Google Flood Hub). The same claim checker, with new detectors for earthquake damage, landslides and tsunami flooding.</li>
     <li>It does not replace Copernicus or OPERA.</li>
   </ul>
-  <p class="links">Live: <a href="https://changeproof-dusky.vercel.app">changeproof-dusky.vercel.app</a> · Code (MIT): <a href="https://github.com/AqeelDEV/changeproof">github.com/AqeelDEV/changeproof</a></p>
+  <p class="links">Live: <a href="https://changeproof-dusky.vercel.app">changeproof-dusky.vercel.app</a>. Code (MIT): <a href="https://github.com/AqeelDEV/changeproof">github.com/AqeelDEV/changeproof</a></p>
 </section>
 
 <div id="hint">arrows, space or click</div>

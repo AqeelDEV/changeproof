@@ -9,7 +9,7 @@ import type { CanvasSource, GeoJSONSource, ImageSource, Map as GlMap, StyleSpeci
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./globe.css";
 import tileSets from "./tiles.json";
-import { meaningOf } from "../ClaimPanel";
+import { Mark, meaningOf } from "../ClaimPanel";
 import { checkClaim, PRESETS, runCheck } from "../../lib/checkClaim";
 import { shownVerdict } from "../../lib/claims/verdict.ts";
 import { showNumber } from "../../lib/report";
@@ -100,19 +100,6 @@ const STYLE: StyleSpecification = {
     { id: "disk", type: "line", source: "disk", paint: { "line-color": "#fbf8f1", "line-width": 2, "line-dasharray": [2, 1.5] } },
   ],
 };
-
-function Mark({ v }: { v: string }) {
-  const ringed = { cx: 8, cy: 8, r: 5.25, fill: "none", stroke: "currentColor", strokeWidth: 1.5 };
-  return (
-    <svg className="g-mark" viewBox="0 0 16 16" aria-hidden="true">
-      {v === "supported" && <circle cx="8" cy="8" r="6" fill="currentColor" />}
-      {v === "not supported" && <circle {...ringed} />}
-      {v === "not provable" && <><circle {...ringed} /><path d="M8 2a6 6 0 0 0 0 12z" fill="currentColor" /></>}
-      {v === "contradicted" && <><circle cx="8" cy="8" r="4.25" fill="currentColor" /><path d="M1 15L15 1" stroke="currentColor" strokeWidth="1.5" /></>}
-      {v === "not observable" && <circle {...ringed} strokeDasharray="2.6 2.1" />}
-    </svg>
-  );
-}
 
 export default function Globe({ areas }: { areas: GlobeArea[] }) {
   const root = useRef<HTMLDivElement>(null), mapEl = useRef<HTMLDivElement>(null), input = useRef<HTMLInputElement>(null);
@@ -430,7 +417,7 @@ export default function Globe({ areas }: { areas: GlobeArea[] }) {
     const go = () => { location.href = `/?claim=${encodeURIComponent(result?.claim ?? "")}`; };
     if (reduced() || !map.current) return go();
     lock(true);
-    gsap.set(q(".g-cover"), { backgroundColor: "#fbfaf7" }); // the detailed map's page colour
+    gsap.set(q(".g-cover"), { backgroundColor: "#f1eadc" }); // the detailed map's page colour (sand)
     gsap.timeline({ onComplete: go })
       .to(cam.current, { pitch: 0, duration: 0.6, ease: "power2.inOut", onUpdate: apply }) // level out: the detailed map looks straight down
       .to(q(".g-cover"), { autoAlpha: 1, duration: 0.4 }, 0.3);
@@ -494,7 +481,7 @@ export default function Globe({ areas }: { areas: GlobeArea[] }) {
           <>
             <p className="quote">“{result.claim}”</p>
             <p><span className={`verdict v-${cls}`}><Mark v={shown} />{label}</span></p>
-            <p className="g-stamp">as of {result.as_of}, NISAR Beta data</p>
+            <p className="stamp">as of {result.as_of}, NISAR Beta data</p>
             <p className="tag">{meaningOf(result)}</p>
             {figures && <div className="g-two">{figures}</div>}
             <p className="headline">{result.headline}</p>

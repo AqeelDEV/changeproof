@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import App from "./App";
 import { PRESETS, runCheck } from "../lib/checkClaim";
+import { plainReason } from "../lib/report";
 import { formatUtc, buildingsLimit, VERDICTS, PATHS, MODEL_STATUSES, type Optical, type Stats } from "./types";
 
 const DATA = path.join(process.cwd(), "public", "data");
@@ -46,6 +47,8 @@ async function checkPresets() {
     if (r.as_of !== "17 Jan 2026, 03:42 UTC" || !r.headline.includes(`as of ${r.as_of}`)) fail("as_of missing from the headline");
     if (r.fields.place && r.evidence?.place.id !== r.fields.place.id) fail("evidence is for another place");
     if (/accura/i.test(JSON.stringify(r))) fail('says "accuracy"; use "agreement"');
+    // The card rewords the sentence that carries the hectares; a sentence it no longer recognises would show the old wording.
+    if (r.reasons.some((x) => x.includes("with NISAR data (") && plainReason(x, "X") === x)) fail("plainReason does not match the checker's sentence");
   }
 }
 

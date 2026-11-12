@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { checkClaim, PRESETS, PUBLISHED, type ClaimOpts, type PublishedClaim } from "../lib/checkClaim";
-import { dateRead, NUMBER_LABELS, reportMarkdown, showNumber } from "../lib/report";
+import { dateRead, NUMBER_LABELS, plainReason, reportMarkdown, showNumber } from "../lib/report";
 import { shownVerdict } from "../lib/claims/verdict.ts";
-import type { ClaimPlace, ClaimRequest, ClaimResult, Stats } from "./types";
+import { formatDay, type ClaimPlace, type ClaimRequest, type ClaimResult, type Stats } from "./types";
 
 const MEANING: Record<string, string> = {
   supported: "The data shows it, inside the time and area NISAR covered.",
@@ -20,6 +20,20 @@ export const meaningOf = (r: ClaimResult): string => {
   const shown = shownVerdict(r.verdict, r.fields.polarity);
   return MEANING[shown === "not provable" && r.verdict === "supported" ? "not provable, dry" : shown];
 };
+
+/** The mark before a verdict word: the checker's disk as the radar found it. It matches the place dots on the map. */
+export function Mark({ v }: { v: string }) {
+  const ringed = { cx: 8, cy: 8, r: 5.25, fill: "none", stroke: "currentColor", strokeWidth: 1.5 };
+  return (
+    <svg className="g-mark" viewBox="0 0 16 16" aria-hidden="true">
+      {v === "supported" && <circle cx="8" cy="8" r="6" fill="currentColor" />}
+      {v === "not supported" && <circle {...ringed} />}
+      {v === "not provable" && <><circle {...ringed} /><path d="M8 2a6 6 0 0 0 0 12z" fill="currentColor" /></>}
+      {v === "contradicted" && <><circle cx="8" cy="8" r="4.25" fill="currentColor" /><path d="M1 15L15 1" stroke="currentColor" strokeWidth="1.5" /></>}
+      {v === "not observable" && <circle {...ringed} strokeDasharray="2.6 2.1" />}
+    </svg>
+  );
+}
 
 const optsOf = (c: PublishedClaim): ClaimOpts => ({ published: c.published, date: c.refers_to ?? undefined, place_hint: c.place_hint });
 
@@ -97,15 +111,13 @@ export default function ClaimPanel({ areas, request, onPlace }: {
               {source.source}, published {source.published}. <a href={source.link} target="_blank" rel="noreferrer">Source</a>
             </p>
           )}
-          <p>
-            <span className={`verdict v-${shown.replace(" ", "-")}`}>{shown}</span>{" "}
-            <span className="tag">as of {result.as_of}, NISAR Beta data</span>
-          </p>
+          <p><span className={`verdict v-${shown.replace(" ", "-")}`}><Mark v={shown} />{shown.charAt(0).toUpperCase() + shown.slice(1)}</span></p>
+          <p className="stamp">as of {result.as_of}, NISAR Beta data</p>
           <p className="tag">{meaning}</p>
           <p className="headline">{result.headline}</p>
           <ul>
             {result.reasons.map((r) => (
-              <li key={r}>{r}</li>
+              <li key={r}>{plainReason(r, place?.name ?? "the place")}</li>
             ))}
           </ul>
           <div className="actions no-print">
@@ -127,9 +139,9 @@ export default function ClaimPanel({ areas, request, onPlace }: {
             <summary>How the claim was read</summary>
             <table>
               <tbody>
-                <tr><td>Place</td><td>{place ? `${place.name} (${place.area}), ${place.buffer_m / 1000} km around it` : "none matched"}</td></tr>
+                <tr><td>Place</td><td>{place ? `${place.name}, ${place.buffer_m / 1000} km around it, in ${area?.name ?? place.area}` : "none matched"}</td></tr>
                 <tr><td>Says</td><td>{f.polarity === "negative" ? "it did not happen" : "it happened"}</td></tr>
-                <tr><td>Date</td><td>{dateRead(f)}</td></tr>
+                <tr><td>Date</td><td>{dateRead(f).replace(/^day: /, "").replace(/\d{4}-\d{2}-\d{2}/g, formatDay)}</td></tr>
                 <tr><td>Type</td><td>{f.claim_type}</td></tr>
                 <tr><td>Amount</td><td>{f.quantifier ?? "none"}</td></tr>
               </tbody>

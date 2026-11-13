@@ -29,7 +29,7 @@ const CHOKWE: Bounds = [32.9, -24.62, 33.12, -24.44];
 interface Step { title: string; text: (areas: Stats[]) => string; area: string; tab: Tab; focus: Bounds | null; view: Partial<MapState>; claim?: string }
 const STEPS: Step[] = [
   {
-    title: "The free optical images we checked were cloud",
+    title: "The free optical images we checked were too cloudy to use",
     text: () => "The nearest optical images of the flood, on 19 and 20 January 2026, show cloud (see the panel). NISAR's radar passed on 17 January and saw the ground. This is its image.",
     area: "aoi01", tab: "evidence", focus: null, view: { radarOn: true, pol: "hh", split: 0, classes: {}, placesOn: false, left: null },
   },
@@ -55,7 +55,7 @@ const STEPS: Step[] = [
   },
   {
     title: "What NISAR cannot say",
-    text: () => "The Beta data on ascending track 114 ends on 17 January, and the next pass in the catalogue is 22 June, so a claim about 25 January is not observable. Now try “Homes were destroyed in Chókwè”: radar cannot show damage, so it is not provable. Export the report for either.",
+    text: () => "The Beta data on ascending track 114 ends on 17 January, and the next NISAR data over our areas in the catalogue is from 18 June, so a claim about 25 January is not observable. Now try “Homes were destroyed in Chókwè”: radar cannot show damage, so it is not provable. Export the report for either.",
     area: "aoi01", tab: "claim", focus: null, view: { radarOn: true, split: 0, classes: { "water_new.png": true }, placesOn: true },
     claim: "Xai-Xai was under water on 25 Jan",
   },

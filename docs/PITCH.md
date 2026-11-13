@@ -6,7 +6,7 @@ Live site: https://changeproof-dusky.vercel.app. Code: https://github.com/AqeelD
 
 The tour has five steps. Each step below gives the time, what to click and what to say. Keep the pace slow. Practise the click path five times.
 
-### 0:00 to 0:35. Step 1: optical saw cloud, radar saw the flood
+### 0:00 to 0:35. Step 1: the free optical images we checked were too cloudy to use, radar saw the flood
 
 Click: open https://changeproof-dusky.vercel.app and press "Take the tour". Step 1 opens the Evidence tab with the cloud panel beside the 17 Jan radar image. Point at the two optical images, then at the map.
 
@@ -41,7 +41,7 @@ Say:
 Click: press "Next". Step 5 runs "Xai-Xai was under water on 25 Jan" by itself. Then press the preset "Homes were destroyed in Chókwè". Then press "Export report (.md)".
 
 Say:
-"Now what NISAR cannot say. 'Xai-Xai was under water on 25 January': not observable. The Beta data on ascending track 114 ends on 17 January, and the next pass in the catalogue is 22 June. 'Homes were destroyed in Chókwè': not provable. Radar open-water detection says nothing about damage. The evidence report lists the granule IDs, the numbers and the limits."
+"Now what NISAR cannot say. 'Xai-Xai was under water on 25 January': not observable. The Beta data on ascending track 114 ends on 17 January, and the next NISAR data over our areas in the catalogue is from 18 June. 'Homes were destroyed in Chókwè': not provable. Radar open-water detection says nothing about damage. The evidence report lists the granule IDs, the numbers and the limits."
 
 ### 2:45 to 3:00. Close
 
@@ -102,13 +102,13 @@ The claim checker could: its place, date and coverage gates and its fixed rules 
 NASA's catalogue, as of 13 November 2026, has no NISAR pass on our ascending track (114) between 17 January and 22 June 2026, and no pass covering any of our three areas from 21 January to 17 June. One descending pass on 20 January covers part of AOI05, but its only earlier image on that track is from 3 December in a different mode, so we do not use it. The 17 January pass is the only flood-time look we use. With NISAR's routine 12-day repeat, the same pipeline would track each pass.
 
 16. **What happens with more satellites?**
-NISAR plus Sentinel-1 already give a look every two to three days on average over our areas, with gaps of up to about a week (September to November 2026 catalogue). ALOS-4 (JAXA, launched July 2024, 14-day repeat) is not counted in that. ESA's Copernicus ROSE-L (planned for around 2028) would add more L-band. More looks mean fewer "not observable" verdicts, a better chance of catching the flood peak, tracking the draining, and checking whether trigger forecasts came true. The claim checker does not depend on the sensor: a new radar needs a new detector, not a new tool.
+NISAR plus Sentinel-1 already give a look every two to three days on average over our areas, with gaps of up to about a week (September to November 2026 catalogue). ESA's Copernicus ROSE-L (planned for around 2028) would add more L-band. More looks mean fewer "not observable" verdicts, a better chance of catching the flood peak, tracking the draining, and checking whether trigger forecasts came true. The claim checker does not depend on the sensor: a new radar needs a new detector, not a new tool.
 
 ## C. 30-second video shot list
 
 | Time | Shot | Caption or voice |
 |---|---|---|
-| 0:00 to 0:04 | Cloud card: Landsat 20 Jan and the 19 Jan Sentinel-2 image, all white | "The free optical images we checked were cloud." |
+| 0:00 to 0:04 | Cloud card: Landsat 20 Jan and the 19 Jan Sentinel-2 image, all white | "The free optical images we checked were too cloudy to use." |
 | 0:04 to 0:09 | Radar swipe 5 Jan to 17 Jan at Chókwè | "NISAR radar saw the flood." |
 | 0:09 to 0:14 | New water in blue, Copernicus outline in red, IoU 0.574 in the stats panel | "Checked against Copernicus." |
 | 0:14 to 0:21 | Claim typed: the AIM sentence, verdict "supported", 42% | "Type a claim. Get a verdict." |

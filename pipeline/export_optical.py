@@ -96,7 +96,7 @@ def main():
              "source": "Landsat 9 Collection 2 Level-2, USGS, preview from Microsoft Planetary Computer",
              "product_id": LANDSAT_ID, "pixel_m": lpix, "cloud": lfig},
         ],
-        "note": "The nearest free optical images we checked (19 and 20 Jan) were cloud. Radar saw through.",
+        "note": "The nearest free optical images we checked (19 and 20 Jan) were too cloudy to use. Radar saw through.",
     }
     (WEB / "optical.json").write_text(json.dumps(out, indent=1), encoding="utf-8")
     for im in out["images"]:

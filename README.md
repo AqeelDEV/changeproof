@@ -8,7 +8,7 @@ We do not claim a better flood map than Copernicus. Copernicus is our reference.
 
 ## Why
 
-- **The free optical images we checked (Landsat 9, Sentinel-2 HLS, 17 to 20 Jan) were cloud.** Landsat 9 on 20 Jan 2026 was 95% cloud (scene metadata). Landsat on 19 Jan was 99.98 to 100% cloud, and Sentinel-2 on 17 Jan, four hours after NISAR, was 100% cloud. The 19 Jan Sentinel-2 image (HLS) shows thick cloud over our main area. Radar sees through cloud.
+- **The free optical images we checked (Landsat 9, Sentinel-2 HLS, 17 to 20 Jan) were too cloudy to use.** Landsat 9 on 20 Jan 2026 was 95% cloud (scene metadata). Landsat on 19 Jan was 99.98 to 100% cloud, and Sentinel-2 on 17 Jan, four hours after NISAR, was 100% cloud. The 19 Jan Sentinel-2 image (HLS) shows thick cloud over our main area. Radar sees through cloud.
 - **A map is not a verdict.** Copernicus and OPERA publish flood maps. A map does not tell a journalist whether a sentence is true, or whether the data could ever settle it. ChangeProof does that last step.
 - **Claims spread faster than checks.** A fact-checker holding "Xai-Xai was under water on 25 Jan" needs to know that the Beta data on ascending track 114 ends on 17 Jan and that, as of 13 Nov 2026, the next pass in the catalogue is 22 June, so the data cannot say.
 
@@ -16,7 +16,7 @@ We do not claim a better flood map than Copernicus. Copernicus is our reference.
 
 - Slide between NISAR HH and HV images for 5 and 17 Jan 2026 (before and after).
 - Switch on overlays: detected new water, the Copernicus observed flood, and a coverage map.
-- Open the cloud card to see the optical images of 19 and 20 Jan, which were cloud.
+- Open the cloud card to see the optical images of 19 and 20 Jan, which were too cloudy to use.
 - Read stats and limits for each of the three areas.
 - Type a claim and get a verdict, with the reasons and the numbers behind it.
 - Pick one of 11 published claims from news and UN reports.

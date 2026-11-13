@@ -29,7 +29,7 @@ const CHOKWE: Bounds = [32.9, -24.62, 33.12, -24.44];
 interface Step { title: string; text: (areas: Stats[]) => string; area: string; tab: Tab; focus: Bounds | null; view: Partial<MapState>; claim?: string }
 const STEPS: Step[] = [
   {
-    title: "Optical satellites saw cloud",
+    title: "The free optical images we checked were cloud",
     text: () => "The nearest optical images of the flood, on 19 and 20 January 2026, show cloud (see the panel). NISAR's radar passed on 17 January and saw the ground. This is its image.",
     area: "aoi01", tab: "evidence", focus: null, view: { radarOn: true, pol: "hh", split: 0, classes: {}, placesOn: false, left: null },
   },
@@ -55,7 +55,7 @@ const STEPS: Step[] = [
   },
   {
     title: "What NISAR cannot say",
-    text: () => "NISAR last passed on 17 January, so a claim about 25 January is not observable. Now try “Homes were destroyed in Chókwè”: radar cannot show damage, so it is not provable. Export the report for either.",
+    text: () => "The Beta data on ascending track 114 ends on 17 January, and the next pass in the catalogue is 22 June, so a claim about 25 January is not observable. Now try “Homes were destroyed in Chókwè”: radar cannot show damage, so it is not provable. Export the report for either.",
     area: "aoi01", tab: "claim", focus: null, view: { radarOn: true, split: 0, classes: { "water_new.png": true }, placesOn: true },
     claim: "Xai-Xai was under water on 25 Jan",
   },
@@ -185,7 +185,7 @@ export default function App({ areas, optical }: { areas: Stats[]; optical: Recor
                   <li key={l}>{l}</li>
                 ))}
                 <li>
-                  NASA&apos;s catalogue, checked on 12 Nov 2026, lists no NISAR pass on track 114 between 17 Jan and 22 Jun 2026, and
+                  NASA&apos;s catalogue, as of 13 Nov 2026, lists no NISAR pass on ascending track 114 between 17 Jan and 22 Jun 2026, and
                   no pass covering any of the three areas from 21 Jan to 17 Jun. A descending pass on 20 Jan covers part of AOI05 but
                   is not used, so 17 Jan is the only flood-time look here.
                 </li>

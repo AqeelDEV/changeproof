@@ -8,15 +8,15 @@ We do not claim a better flood map than Copernicus. Copernicus is our reference.
 
 ## Why
 
-- **Optical was clouded out.** Landsat 9 on 20 Jan 2026 was 95% cloud (scene metadata). Landsat on 19 Jan was 99.98 to 100% cloud, and Sentinel-2 on 17 Jan, four hours after NISAR, was 100% cloud. The 19 Jan Sentinel-2 image (HLS) shows thick cloud over our main area. Radar sees through cloud.
+- **The free optical images we checked (Landsat 9, Sentinel-2 HLS, 17 to 20 Jan) were cloud.** Landsat 9 on 20 Jan 2026 was 95% cloud (scene metadata). Landsat on 19 Jan was 99.98 to 100% cloud, and Sentinel-2 on 17 Jan, four hours after NISAR, was 100% cloud. The 19 Jan Sentinel-2 image (HLS) shows thick cloud over our main area. Radar sees through cloud.
 - **A map is not a verdict.** Copernicus and OPERA publish flood maps. A map does not tell a journalist whether a sentence is true, or whether the data could ever settle it. ChangeProof does that last step.
-- **Claims spread faster than checks.** A fact-checker holding "Xai-Xai was under water on 25 Jan" needs to know that NISAR's last public pass on this track was 17 Jan, so the data cannot say.
+- **Claims spread faster than checks.** A fact-checker holding "Xai-Xai was under water on 25 Jan" needs to know that the Beta data on ascending track 114 ends on 17 Jan and that, as of 13 Nov 2026, the next pass in the catalogue is 22 June, so the data cannot say.
 
 ## What you can do in the app
 
 - Slide between NISAR HH and HV images for 5 and 17 Jan 2026 (before and after).
 - Switch on overlays: detected new water, the Copernicus observed flood, and a coverage map.
-- Open the cloud card to see the optical images of 19 and 20 Jan that were clouded out.
+- Open the cloud card to see the optical images of 19 and 20 Jan, which were cloud.
 - Read stats and limits for each of the three areas.
 - Type a claim and get a verdict, with the reasons and the numbers behind it.
 - Pick one of 11 published claims from news and UN reports.
@@ -49,7 +49,7 @@ NISAR data is Beta: ASF says it is [not fully calibrated](https://nisar-docs.asf
   - Source: [ASF](https://nisar-docs.asf.alaska.edu/gcov/) and the [NISAR Cookbook](https://asfopensarlab.github.io/NISAR_Cookbook/search-stream-nisar-asf-search/).
 - **Copernicus EMS, activation EMSR857.** The `observedEventA` layers only, never the modelled headline figures. [Activation](https://mapping.emergency.copernicus.eu/activations/EMSR857/) and [news](https://mapping.emergency.copernicus.eu/news/flood-in-mozambique-emsr857/).
   - AOI05 and AOI06: Sentinel-1, 17 Jan, 03:18 and 03:19 UTC.
-  - AOI01: COSMO-SkyMed, 18 Jan (87,857.6 ha observed), scored only where it agrees with the first estimate from Sentinel-1 on 16 Jan (20,126.9 ha observed).
+  - AOI01: COSMO-SkyMed Second Generation, 18 Jan (87,857.6 ha observed), scored only where it agrees with the first estimate from Sentinel-1 on 16 Jan (20,126.9 ha observed).
 - **OPERA DSWx-S1** for 5 and 17 Jan, for water before the flood. [OPERA products](https://www.jpl.nasa.gov/go/opera/products/). OPERA has no NISAR water product for January 2026.
 - **JRC Global Surface Water**, for permanent water and land with no water on record.
 - **HLS (Sentinel-2) and OPERA DSWx-HLS**, 19 Jan, for the optical check. [NASA CMR](https://cmr.earthdata.nasa.gov/search/granules.json?short_name=HLSS30&version=2.0&bounding_box=32.7,-25.2,33.7,-24.4&temporal=2026-01-14T00:00:00Z,2026-01-30T23:59:59Z).
@@ -101,7 +101,7 @@ Tests:
 ## Limits
 
 - **Beta data.** Not fully calibrated. We use relative change and per-area normalisation.
-- **Last pass is 17 Jan 2026, 03:42 UTC.** The flood kept rising after that, and Copernicus saw a larger flood on AOI01 on 20 Jan (127,755.1 ha). Every verdict is "as of" 17 Jan. NASA's catalogue, checked on 12 Nov 2026, lists no NISAR pass on track 114 between 17 Jan and 22 Jun 2026, and no pass covering any of the three areas from 21 Jan to 17 Jun. A descending pass on 20 Jan covers part of AOI05 but is not used, so 17 Jan is the only flood-time look here.
+- **The Beta data on ascending track 114 ends on 17 Jan 2026, 03:42 UTC.** The flood kept rising after that, and Copernicus saw a larger flood on AOI01 on 20 Jan (127,755.1 ha). Every verdict is "as of" 17 Jan. NASA's catalogue, as of 13 Nov 2026, lists no NISAR pass on ascending track 114 between 17 Jan and 22 Jun 2026 (the next pass is 22 June), and no pass covering any of the three areas from 21 Jan to 17 Jun. A descending pass on 20 Jan covers part of AOI05 but is not used, so 17 Jan is the only flood-time look here.
 - **Open water only.** Flooded trees and crops, and flooded buildings, can look bright in radar and are missed. Pixels where HH rose by more than 3 dB are not scored.
 - **Buildings.** The count can be too high or too low, and says nothing about damage.
 - **Some new water may not be flood.** On AOI01, part of the water in field grids near Xai-Xai may be irrigation. 13,174 ha (17%) of AOI01's new water was already dark on 5 Jan.
@@ -164,7 +164,7 @@ Code: MIT, see `LICENSE`. Copyright 2026 Aqeel Jameel.
 Data credits:
 
 - NISAR data: NASA and ISRO, distributed by the Alaska Satellite Facility (ASF). Beta release.
-- Copernicus Emergency Management Service (EMSR857) and ESA Sentinel-1. COSMO-SkyMed data are from ASI via Copernicus EMS.
+- Copernicus Emergency Management Service (EMSR857) and ESA Sentinel-1. COSMO-SkyMed Second Generation data (the AOI01 map of 18 Jan) are from ASI via Copernicus EMS.
 - OPERA DSWx-S1 and DSWx-HLS (NASA JPL), HLS (NASA and USGS), Landsat (USGS).
 - JRC Global Surface Water (European Commission Joint Research Centre).
 - OpenStreetMap contributors, ODbL.

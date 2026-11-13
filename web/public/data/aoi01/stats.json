@@ -305,7 +305,7 @@
   "limits": [
     "NISAR Beta data: not fully calibrated. The 17 Jan scene is about 3 dB brighter overall, so each area's median over land with no water on record (JRC 0%) is removed before the classifier sees it.",
     "Agreement with Copernicus, not accuracy, and a lower bound: no Copernicus map was made on the NISAR morning here. The reference maps are from about 11 hours before (Sentinel-1, C-band) and 35 hours after (COSMO-SkyMed, X-band) the NISAR pass, so part of their difference may be the sensor, not the flood.",
-    "NISAR's last pass on this track was 17 Jan 03:42 UTC. Copernicus observed a larger flood here on 20 Jan (127,755.1 ha), after that pass.",
+    "The Beta data on ascending track 114 ends on 17 Jan 03:42 UTC, and as of 13 Nov 2026 the next pass in the catalogue is 22 June. Copernicus observed a larger flood here on 20 Jan (127,755.1 ha), after that pass.",
     "Pixels where HH rose by more than 3 dB (possible flooded vegetation) are not scored. This method only finds open water.",
     "Permanent water (JRC occurrence >= 50%) is never counted as flood.",
     "A 2-pixel band along the Copernicus mapped-area edge is not scored. Flood polygon edges are scored.",

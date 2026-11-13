@@ -208,7 +208,7 @@ Truth:
 
 - The globe's surface is the real NASA VIIRS image of 17 January 2026, with its own time in the caption (early afternoon, hours after NISAR's pass). Nothing on screen says what the sky was at 03:42.
 - The NISAR image appears only where NISAR looked. No cloud-free image sits under it.
-- Parts of the daily image that are dark or streaked stay as they are; nothing is filled in or retouched. The opening view is centred so that Africa, not the Atlantic seams, is in front, and the caption says what remains: "Pale streaks are where one orbit meets the next. The far north is dark: no daylight there in January."
+- Parts of the daily image that are dark or streaked stay as they are; nothing is filled in or retouched. The opening view is centred so that Africa, not the Atlantic seams, is in front, and the caption says what remains: "Pale streaks are where one orbit meets the next. The far north is dark: too little daylight there in January for the image."
 - The line about the radar is always "Radar sees through cloud. NISAR passed at 03:42 UTC."
 - When the data cannot see, the picture says so: a date that is not covered means no sweep, and the cloud stays.
 - Decoration (stars, the air glow, the sweep line) is plain, dim and never on the ground as if it were data.

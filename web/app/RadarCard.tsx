@@ -96,12 +96,12 @@ export default function RadarCard({ area }: { area: Stats }) {
           about 91% of what the classifier uses.
         </li>
         <li>
-          NISAR's L-band wave is about 24 cm long, against about 6 cm for Sentinel-1's C-band. It passes through leaves more
+          NISAR's L-band wave is about 24 cm long, against about 5.5 cm for Sentinel-1's C-band. It passes through leaves more
           easily, and smooth dry soil also looks dark to it. That is one reason NISAR and Copernicus disagree in places.
         </li>
         <li>
-          NISAR returns every 12 days. Its last public pass on this track was 17 Jan 2026, so every verdict here is "as of"
-          that pass.
+          NISAR returns every 12 days. The Beta data on ascending track 114 ends on 17 Jan 2026, and as of 13 Nov 2026 the next
+          pass in the catalogue is 22 June, so every verdict here is "as of" 17 Jan.
         </li>
       </ul>
       {area.series && <SeriesChart series={area.series} />}

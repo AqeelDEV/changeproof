@@ -68,18 +68,18 @@ a{color:var(--fg);text-underline-offset:.15em}
 <section>
   <h2>The problem</h2>
   <ul class="tight">
-    <li>Forecasts triggered early action: INGD activated anticipatory action for the southern basins, the Limpopo among them, on 6 to 8 Jan 2026, and the Government declared a national Red Alert on 16 Jan.</li>
+    <li>Forecasts triggered early action: INGD activated Anticipatory Actions for the southern basins, the Limpopo among them, on 6 to 8 Jan 2026, and the Government declared a national Red Alert on 16 Jan (both dates from IFRC MDRMZ027).</li>
     <li>ChangeProof is the step after the forecast: where the water went and which claims are true. Next, checking whether trigger forecasts came true.</li>
   </ul>
   <div class="row">
     <figure><div class="img sm"><img src="data/aoi01/landsat_20260120.webp" alt="Landsat 9 on 20 Jan 2026, covered in cloud"></div><figcaption>Landsat 9, 20 Jan: 95% cloud</figcaption></figure>
     <figure><div class="img sm"><img src="data/aoi01/hls_20260119.webp" alt="Sentinel-2 HLS on 19 Jan 2026, thick cloud"></div><figcaption>Sentinel-2 (HLS), 19 Jan: thick cloud</figcaption></figure>
     <ul class="tight side">
-      <li>Optical satellites were clouded out. Radar sees through cloud.</li>
+      <li>The free optical images we checked (Landsat 9, Sentinel-2 HLS, 17 to 20 Jan) were cloud. Radar sees through cloud.</li>
       <li>Claims spread faster than checks. A map is not a verdict.</li>
     </ul>
   </div>
-  <p class="src">Sources: <a href="https://go-api.ifrc.org/api/DownloadFile/94244/MDRMZ027%20OS">IFRC Emergency Appeal MDRMZ027, operational strategy</a>; <a href="https://www.anticipation-hub.org/global-overview/countries/mozambique/time-to-act-how-mozambiques-government-and-wfp-are-turning-early-warnings-into-life-saving-action">WFP, anticipatory action in Mozambique, Dec 2025 to Mar 2026</a>.</p>
+  <p class="src">Sources: <a href="https://go-api.ifrc.org/api/DownloadFile/94244/MDRMZ027%20OS">IFRC Emergency Appeal MDRMZ027, operational strategy</a> (source of the 6 to 8 Jan and 16 Jan dates); <a href="https://www.anticipation-hub.org/global-overview/countries/mozambique/time-to-act-how-mozambiques-government-and-wfp-are-turning-early-warnings-into-life-saving-action">Anticipation Hub, Mozambique's government and WFP, anticipatory action, Dec 2025 to Mar 2026</a>.</p>
 </section>
 
 <section>
@@ -123,7 +123,7 @@ a{color:var(--fg);text-underline-offset:.15em}
   <h2>Limits, said out loud</h2>
   <ul>
     <li>NISAR data is Beta, not fully calibrated.</li>
-    <li>The last pass is 17 Jan 2026, 03:42 UTC. The flood kept rising.</li>
+    <li>The Beta data on ascending track 114 ends on 17 Jan 2026, 03:42 UTC, and as of 13 Nov 2026 the next pass in the catalogue is 22 June. The flood kept rising.</li>
     <li>Open water only. Flooded trees and buildings can be missed.</li>
     <li>Buildings: the count can be too high or too low, and says nothing about damage.</li>
   </ul>
@@ -132,7 +132,7 @@ a{color:var(--fg);text-underline-offset:.15em}
 <section>
   <h2>What is next</h2>
   <ul class="next">
-    <li><b>More looks.</b> Every 12-day NISAR pass, plus JAXA's ALOS-4 and ESA's ROSE-L at L-band and Sentinel-1 at C-band, so the gap between looks falls from 12 days to a few. OPERA DSWx-NI, once released, adds flooded vegetation. Next: a 2026 flood with routine 12-day NISAR coverage, for the full rise-and-drain series and a second independent test.</li>
+    <li><b>More looks.</b> NISAR plus Sentinel-1 already give a look every two to three days on average over our areas, with gaps of up to about a week (September to November 2026 catalogue). JAXA's ALOS-4 is not counted in that, and ESA's ROSE-L (planned for around 2028) would add more L-band. Next: a 2026 flood with routine 12-day NISAR coverage, for the full rise-and-drain series and a second independent test.</li>
     <li><b>Smarter models.</b> Fine-tune a foundation model (Prithvi-EO-2.0 or TerraMind) on checked floods. With a long record, a time-series model such as TimesFM could estimate drain rates, checked by each new pass.</li>
     <li><b>Plugged into the system.</b> Forecasters predict, ChangeProof verifies (for example Google Flood Hub). The same claim checker, with new detectors for earthquake damage, landslides and tsunami flooding.</li>
     <li>It does not replace Copernicus or OPERA.</li>

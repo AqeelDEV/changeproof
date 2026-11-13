@@ -55,7 +55,8 @@ AREAS = {
                          "the NISAR morning here. The reference maps are from about 11 hours before (Sentinel-1, "
                          "C-band) and 35 hours after (COSMO-SkyMed, X-band) the NISAR pass, so part of their "
                          "difference may be the sensor, not the flood.",
-                         "NISAR's last pass on this track was 17 Jan 03:42 UTC. Copernicus observed a larger flood "
+                         "The Beta data on ascending track 114 ends on 17 Jan 03:42 UTC, and as of 13 Nov 2026 the next "
+                         "pass in the catalogue is 22 June. Copernicus observed a larger flood "
                          "here on 20 Jan (127,755.1 ha), after that pass."]},
 }
 LEGEND_AOI01 = {2: "valid, outside the area both Copernicus maps cover, or where the 16 and 18 Jan maps disagree"}

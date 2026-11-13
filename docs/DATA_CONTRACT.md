@@ -44,7 +44,7 @@ Areas: `aoi05` (frame 166), `aoi06` and `aoi01` (frame 165). `aoi01` is Copernic
 
 | File | Areas | Type | Content |
 |---|---|---|---|
-| `label_emsr857_aoi01_fep_flood_30m.tif` | aoi01 | uint8, nodata 255 | Copernicus first-estimate observed layer, Sentinel-1, 16 Jan 16:22 UTC. Same codes as the main label. The `aoi01` main label is the delineation from COSMO-SkyMed, 18 Jan 14:55 UTC |
+| `label_emsr857_aoi01_fep_flood_30m.tif` | aoi01 | uint8, nodata 255 | Copernicus first-estimate observed layer, Sentinel-1, 16 Jan 16:22 UTC. Same codes as the main label. The `aoi01` main label is the delineation from COSMO-SkyMed Second Generation, 18 Jan 14:55 UTC |
 | `dswx_s1_wtr_<yyyymmdd>_30m.tif` | all | uint8, nodata 255 | OPERA DSWx-S1 WTR layer, 5 and 17 Jan, tiles mosaicked. OPERA class codes as published (not yet checked here: read them from the file metadata or the product spec before use) |
 | `jrc_occurrence_30m.tif` | all | uint8, nodata 255 | JRC Global Surface Water occurrence 1984 to 2021, percent of observations with water (0 to 100). The long-term permanent water reference |
 | `hls_20260119_<band>_30m.tif` | aoi01 | int16, nodata -9999 (`fmask`: uint8, nodata 255) | HLS S30 tile T36JWT, 19 Jan, bands b02, b03, b04, b8a, b11 (reflectance x 10000) and fmask. The tile starts at 33.0° E, so the west of `aoi01` has no data |

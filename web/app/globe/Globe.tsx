@@ -510,7 +510,7 @@ export default function Globe({ areas }: { areas: GlobeArea[] }) {
       </div>
 
       <p className="g-credit">
-        Cloud image: NASA VIIRS on Suomi NPP, 17 January 2026, early afternoon. Pale streaks are where one orbit meets the next. The far north is dark: no daylight there in January. Radar: NISAR
+        Cloud image: NASA VIIRS on Suomi NPP, 17 January 2026, early afternoon. Pale streaks are where one orbit meets the next. The far north is dark: too little daylight there in January for the image. Radar: NISAR
         Beta data, NASA and ISRO, 17 January 2026, 03:42 UTC.
       </p>
       <div className="g-cover" />

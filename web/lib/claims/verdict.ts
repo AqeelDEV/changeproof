@@ -53,9 +53,9 @@ function dateGate(f: Fields, asOf: string): { ok: boolean; note: string } {
   const look = `NISAR looked on ${asOf}`;
   switch (f.date_kind) {
     case "none":
-      return { ok: true, note: `The claim gives no date; it is judged as of NISAR's look on ${asOf}, the last pass on this track.` };
+      return { ok: true, note: `The claim gives no date; it is judged as of NISAR's look on ${asOf}, the last pass in the Beta data on ascending track 114.` };
     case "relative":
-      return { ok: true, note: `The claim gives a relative date${f.date_text ? ` ("${f.date_text}")` : ""} that cannot be fixed to a day; it is judged as of NISAR's look on ${asOf}, the last pass on this track.` };
+      return { ok: true, note: `The claim gives a relative date${f.date_text ? ` ("${f.date_text}")` : ""} that cannot be fixed to a day; it is judged as of NISAR's look on ${asOf}, the last pass in the Beta data on ascending track 114.` };
     case "day":
       if (JUDGED_DAYS.includes(f.date_from!)) return { ok: true, note: `The claim refers to ${day(f.date_from!)}; ${look}.` };
       return { ok: false, note: `The claim refers to ${day(f.date_from!)}; NISAR looked on 5 and 17 Jan 2026 only (5 Jan is the "before" image), so that day was not observed.`
